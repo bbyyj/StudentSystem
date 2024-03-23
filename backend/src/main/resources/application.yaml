@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: spring-security
+  #  jpa:
+  #    # Provide database platform that is being used
+  #    database-platform: org.hibernate.dialect.H2Dialect
+  #    hibernate:
+  #      # New database is created when application starts and destroyed when application is stopped
+  #      ddl-auto: create-drop
+  #    # Show sql when spring data jpa performs query
+  #    show-sql: true
+  #    properties:
+  #      hibernate:
+  #        # Format queries
+  #        format_sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/eas_db?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: yangyt66
+token:
+  signing:
+    key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351
