@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.dao.request.SignUpRequest;
-import com.example.backend.dao.request.SigninRequest;
+import com.example.backend.dao.request.AdminSignUpRequest;
+import com.example.backend.dao.request.AdminSigninRequest;
 import com.example.backend.dao.response.JwtAuthenticationResponse;
 import com.example.backend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    @PostMapping("/signup")
-    public JwtAuthenticationResponse signup(@RequestBody SignUpRequest request) {
+    @PostMapping("/signupAdmin")//需要注册/导入新账号吗？
+    public JwtAuthenticationResponse signup(@RequestBody AdminSignUpRequest request) {
         return authenticationService.signup(request);
     }
 
-    @PostMapping("/signin")
-    public JwtAuthenticationResponse signin(@RequestBody SigninRequest request) {
-        return authenticationService.signin(request);
+    @PostMapping("/signinAdmin")
+    public JwtAuthenticationResponse signin(@RequestBody AdminSigninRequest request) {
+        return authenticationService.signin(request);//string token
     }
 }

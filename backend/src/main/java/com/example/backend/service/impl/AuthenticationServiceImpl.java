@@ -1,11 +1,11 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.dao.request.SignUpRequest;
-import com.example.backend.dao.request.SigninRequest;
+import com.example.backend.dao.request.AdminSignUpRequest;
+import com.example.backend.dao.request.AdminSigninRequest;
 import com.example.backend.dao.response.JwtAuthenticationResponse;
-import com.example.backend.entities.Role;
-import com.example.backend.entities.User;
-import com.example.backend.repository.UserRepository;
+import com.example.backend.entities.AdminRole;
+import com.example.backend.entities.Admin;
+import com.example.backend.repository.AdminRepository;
 import com.example.backend.service.AuthenticationService;
 import com.example.backend.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -17,27 +17,34 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserRepository userRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     @Override
-    public JwtAuthenticationResponse signup(SignUpRequest request) {
-        var user = User.builder().firstName(request.getFirstName()).lastName(request.getLastName())
-                .email(request.getEmail()).password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER).build();
-        userRepository.save(user);
-        var jwt = jwtService.generateToken(user);
+    public JwtAuthenticationResponse signup(AdminSignUpRequest request) {
+        var admin = Admin.builder()
+                .netId(request.getNetId())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .adminRole(request.getAdminRole())
+                .isUndergraduate(request.isUndergraduate())
+                .admissionYear(request.getAdmissionYear())
+                .classId(request.getClassId())
+                .tid(request.getTid())
+                .name(request.getName())
+                .build();
+        adminRepository.save(admin);
+        var jwt = jwtService.generateToken(admin);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 
     @Override
-    public JwtAuthenticationResponse signin(SigninRequest request) {
+    public JwtAuthenticationResponse signin(AdminSigninRequest request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
-        var jwt = jwtService.generateToken(user);
+                new UsernamePasswordAuthenticationToken(request.getNetId(), request.getPassword()));
+        var admin = adminRepository.findByNetId(request.getNetId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid netId or password."));
+        var jwt = jwtService.generateToken(admin);
         return JwtAuthenticationResponse.builder().token(jwt).build();
     }
 }

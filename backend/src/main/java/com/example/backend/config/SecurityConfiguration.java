@@ -1,6 +1,6 @@
 package com.example.backend.config;
 
-import com.example.backend.service.UserService;
+import com.example.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +23,15 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final UserService userService;
+    private final AdminService adminService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/api/v1/auth/**").permitAll();
+                    request.requestMatchers("/auth/**").permitAll();
+                    request.requestMatchers("/topAdmin/**").hasAnyAuthority("TOP_ADMIN");
+                    request.requestMatchers("/headTeacher/**").hasAnyAuthority("HEAD_TEACHER");
                     request.requestMatchers("/api/v1/resource/**").hasAnyAuthority("ADMIN");
-
                         })
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
@@ -46,7 +47,7 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService.userDetailsService());
+        authProvider.setUserDetailsService(adminService.adminDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

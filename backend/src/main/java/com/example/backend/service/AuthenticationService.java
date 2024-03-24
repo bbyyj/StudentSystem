@@ -1,11 +1,11 @@
 package com.example.backend.service;
 
-import com.example.backend.dao.request.SignUpRequest;
-import com.example.backend.dao.request.SigninRequest;
+import com.example.backend.dao.request.AdminSignUpRequest;
+import com.example.backend.dao.request.AdminSigninRequest;
 import com.example.backend.dao.response.JwtAuthenticationResponse;
 
 public interface AuthenticationService {
-    JwtAuthenticationResponse signup(SignUpRequest request);
+    JwtAuthenticationResponse signup(AdminSignUpRequest request);
 
-    JwtAuthenticationResponse signin(SigninRequest request);
+    JwtAuthenticationResponse signin(AdminSigninRequest request);
 }

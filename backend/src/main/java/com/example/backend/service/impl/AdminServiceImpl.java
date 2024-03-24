@@ -1,7 +1,7 @@
 package com.example.backend.service.impl;
 
-import com.example.backend.repository.UserRepository;
-import com.example.backend.service.UserService;
+import com.example.backend.repository.AdminRepository;
+import com.example.backend.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+public class AdminServiceImpl implements AdminService {
+    private final AdminRepository adminRepository;
     @Override
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService adminDetailsService() {
         return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) {
-                return userRepository.findByEmail(username)
+            public UserDetails loadUserByUsername(String netId) {
+                return adminRepository.findByNetId(netId)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
         };
