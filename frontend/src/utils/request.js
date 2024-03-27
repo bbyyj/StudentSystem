@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // 封装一个axios实例
-const http = axios.create({
+const request = axios.create({
     // 通用请求的地址前缀
     baseURL: '/api',
     // 超时时间
@@ -9,7 +9,7 @@ const http = axios.create({
 })
 
 // 请求拦截器
-http.interceptors.request.use(function (config) {
+request.interceptors.request.use(function (config) {
     // 在发送请求之前做什么
     return config;
 }, function (error) {
@@ -18,7 +18,7 @@ http.interceptors.request.use(function (config) {
 })
 
 // 添加响应拦截器
-http.interceptors.response.use(function (response) {
+request.interceptors.response.use(function (response) {
     // 对响应数据做什么
     return response;
 }, function (error) {
@@ -26,4 +26,4 @@ http.interceptors.response.use(function (response) {
     return Promise.reject(error);
 })
 
-export default http
+export default request
