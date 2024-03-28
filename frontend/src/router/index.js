@@ -4,7 +4,7 @@ import Main from '../Views/Main'
 // import Home from '../Views/Home.vue'
 // import Mall from '../Views/Mall.vue'
 // import User from '../Views/User.vue'
-// import CompetitionAward from '../Views/CompetitionAward.vue'
+// import InfoDetail from '../Views/InfoDetail.vue'
 // import PageTwo from '../Views/PageTwo.vue'
 import Login from '../Views/Login.vue'
 import Cookie from 'js-cookie'
@@ -23,7 +23,7 @@ const routes = [
             // { path: '/home', name: 'home', component: Home }, // 首页
             // { path: '/user', name: 'user', component: User }, // 用户管理
             // { path: '/mall', name: 'mall', component: Mall }, // 商品管理
-            // { path: '/competition', name: 'competition', component: CompetitionAward }, // 页面1
+            // { path: '/competition', name: 'competition', component: InfoDetail }, // 页面1
             // { path: '/page2', name: 'page2', component: PageTwo }, // 页面2
         ]
     },

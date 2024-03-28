@@ -35,18 +35,18 @@ export default {
                             icon: 'location',
                             children: [
                                 {
-                                    path: '/competition',
+                                    path: '/info/competition',
                                     name: 'competition',
                                     label: '比赛获奖',
                                     icon: 'setting',
-                                    url: 'CompetitionAward.vue'
+                                    url: 'InfoDetail.vue'
                                 },
                                 {
-                                    path: '/page2',
-                                    name: 'page2',
-                                    label: '页面2',
+                                    path: '/info/paper',
+                                    name: 'paper',
+                                    label: '论文发表',
                                     icon: 'setting',
-                                    url: 'PageTwo.vue'
+                                    url: 'InfoDetail.vue'
                                 }
                             ]
                         }
