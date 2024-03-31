@@ -31,7 +31,13 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login
-    }
+    },
+    {
+        // 管理员跳到的每个学生综测详情页面
+        path: '/compAssDetail/:studentId',
+        name: 'compAssDetail',
+        component: () => import('@/Views/compAssDetail.vue'),
+    },
 ]
 
 const router = new VueRouter({
