@@ -49,13 +49,40 @@ export default {
                                     url: 'InfoDetail.vue'
                                 }
                             ]
+                        },
+                        {
+                            label: '综测',
+                            icon: 'location',
+                            children: [
+                                {
+                                    path: '/compAssessment/compAssManage',
+                                    name: 'compAssManage',
+                                    label: '综测管理',
+                                    icon: 'setting',
+                                    url: 'compAssManage.vue'
+                                },
+                                {
+                                    path: '/compAssessment/compAssBegin',
+                                    name: 'compAssBegin',
+                                    label: '综测发布',
+                                    icon: 'setting',
+                                    url: 'compAssBegin.vue'
+                                },
+                                {
+                                    path: '/compAssessment/compAssReview',
+                                    name: 'compAssReview',
+                                    label: '综测审核',
+                                    icon: 'setting',
+                                    url: 'compAssReview.vue'
+                                },
+                            ]
                         }
                     ],
                     token: Mock.Random.guid(),
                     message: '获取成功'
                 }
             }
-        } else if (username === 'xiaoxiao' && password === 'xiaoxiao') {
+        } else if (username === 'student' && password === 'student') {
             return {
                 code: 20000,
                 data: {
@@ -73,6 +100,19 @@ export default {
                             label: '商品管理',
                             icon: 'video-play',
                             url: 'Mall.vue'
+                        },
+                        {
+                            label: '综测',
+                            icon: 'location',
+                            children: [
+                                {
+                                    path: '/compAssessment/compAssCommit',
+                                    name: 'compAssManage',
+                                    label: '综测提交',
+                                    icon: 'setting',
+                                    url: 'compAssCommit.vue'
+                                },
+                            ]
                         }
                     ],
                     token: Mock.Random.guid(),
