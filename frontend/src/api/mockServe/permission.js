@@ -31,22 +31,22 @@ export default {
                             url: 'User.vue'
                         },
                         {
-                            label: '其他',
+                            label: '资料审查',
                             icon: 'location',
                             children: [
                                 {
-                                    path: '/page1',
-                                    name: 'page1',
-                                    label: '页面1',
+                                    path: '/info/competition',
+                                    name: 'competition',
+                                    label: '比赛获奖',
                                     icon: 'setting',
-                                    url: 'PageOne.vue'
+                                    url: 'InfoDetail.vue'
                                 },
                                 {
-                                    path: '/page2',
-                                    name: 'page2',
-                                    label: '页面2',
+                                    path: '/info/paper',
+                                    name: 'paper',
+                                    label: '论文发表',
                                     icon: 'setting',
-                                    url: 'PageTwo.vue'
+                                    url: 'InfoDetail.vue'
                                 }
                             ]
                         }

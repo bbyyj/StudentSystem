@@ -2,6 +2,7 @@ import Mock from 'mockjs'
 import homeMock from '../api/mockServe/home'
 import user from './user'
 import permission from './mockServe/permission'
+import infoTest from "@/api/mockServe/infoTest";
 
 // 定义mock拦截
 Mock.mock('/api/home/getData',homeMock)
@@ -14,3 +15,5 @@ Mock.mock('/api/user/del','post',user.deleteUser)
 
 // 登录权限
 Mock.mock(/api\/permission\/getMenu/,'post',permission.getMenu)
+
+Mock.mock(/\/api\/infoExamine\/loadingData/,'post',infoTest.getLoadingData)

@@ -9,7 +9,7 @@ const MenuData= [
     {
       path: '/mall',
       name: 'mall',
-      label: '商品管理',
+      label: '商品',
       icon: 'video-play',
       url: 'MallManage/MallManage'
     },
@@ -21,15 +21,15 @@ const MenuData= [
       url: 'UserManage/UserManage'
     },
     {
-      label: '其他',
+      label: '资料审查',
       icon: 'location',
       children: [
         {
-          path: '/page1',
-          name: 'page1',
-          label: '页面1',
+          path: '/competition',
+          name: 'competition',
+          label: '比赛获奖',
           icon: 'setting',
-          url: 'Other/PageOne'
+          url: 'Info/CompetitionAward'
         },
         {
           path: '/page2',
