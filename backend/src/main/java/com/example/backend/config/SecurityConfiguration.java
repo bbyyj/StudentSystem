@@ -1,6 +1,7 @@
 package com.example.backend.config;
 
 import com.example.backend.service.AdminService;
+import com.example.backend.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,17 +25,25 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AdminService adminService;
+    private final StudentService studentService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> {
+                    //先不设置权限
+//                    request.requestMatchers("/auth/signupAdmin").hasAnyAuthority("TOP_ADMIN");//顶层管理员注册班主任
+//                    request.requestMatchers("/auth/signupStudent").hasAnyAuthority("TOP_ADMIN");//顶层管理员导入学生账号
                     request.requestMatchers("/auth/**").permitAll();
-                    request.requestMatchers("/topAdmin/**").hasAnyAuthority("TOP_ADMIN");
-                    request.requestMatchers("/headTeacher/**").hasAnyAuthority("HEAD_TEACHER");
-                    request.requestMatchers("/api/v1/resource/**").hasAnyAuthority("ADMIN");
+                    request.requestMatchers("/topAdmin/**").hasAnyAuthority("TOP_ADMIN");//总管理员
+                    request.requestMatchers("/headTeacher/**").hasAnyAuthority("HEAD_TEACHER");//班主任
+                    request.requestMatchers("/monitor/**").hasAnyAuthority("MONITOR");//班长
+                    request.requestMatchers("/notMonitor/**").hasAnyAuthority("NOT_MONITOR");//其他同学
+//                    request.requestMatchers("/api/v1/resource/**").hasAnyAuthority("ADMIN");
                         })
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
+                .authenticationProvider(adminAuthenticationProvider())
+                .authenticationProvider(studentAuthenticationProvider())
+                .addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
@@ -45,9 +54,17 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider adminAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(adminService.adminDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationProvider studentAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(studentService.studentDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
