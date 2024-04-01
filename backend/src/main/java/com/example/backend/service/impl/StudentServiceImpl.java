@@ -29,9 +29,6 @@ import java.io.IOException;
 import java.time.Year;
 
 
-
-
-
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
@@ -95,5 +92,10 @@ public class StudentServiceImpl implements StudentService {
 
     private void saveStudentsToDatabase(List<Student> students) {
         studentRepository.saveAll(students);
+    }
+
+    public List<Student> getAllStudent() {
+        System.out.println("-----------------------place 3------------------");
+        return studentRepository.findAll();
     }
 }

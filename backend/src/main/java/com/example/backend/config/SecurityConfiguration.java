@@ -34,10 +34,10 @@ public class SecurityConfiguration {
 //                    request.requestMatchers("/auth/signupAdmin").hasAnyAuthority("TOP_ADMIN");//顶层管理员注册班主任
 //                    request.requestMatchers("/auth/signupStudent").hasAnyAuthority("TOP_ADMIN");//顶层管理员导入学生账号
                     request.requestMatchers("/auth/**").permitAll();
-                    request.requestMatchers("/topAdmin/**").hasAnyAuthority("TOP_ADMIN");//总管理员
-                    request.requestMatchers("/headTeacher/**").hasAnyAuthority("HEAD_TEACHER");//班主任
-                    request.requestMatchers("/monitor/**").hasAnyAuthority("MONITOR");//班长
-                    request.requestMatchers("/notMonitor/**").hasAnyAuthority("NOT_MONITOR");//其他同学
+//                    request.requestMatchers("/topAdmin/**").hasAnyAuthority("TOP_ADMIN");//总管理员
+//                    request.requestMatchers("/headTeacher/**").hasAnyAuthority("HEAD_TEACHER");//班主任
+//                    request.requestMatchers("/monitor/**").hasAnyAuthority("MONITOR");//班长
+//                    request.requestMatchers("/notMonitor/**").hasAnyAuthority("NOT_MONITOR");//其他同学
 //                    request.requestMatchers("/api/v1/resource/**").hasAnyAuthority("ADMIN");
                         })
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
