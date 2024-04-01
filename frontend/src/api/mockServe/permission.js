@@ -68,13 +68,6 @@ export default {
                                     icon: 'setting',
                                     url: 'compAssBegin.vue'
                                 },
-                                {
-                                    path: '/compAssessment/compAssReview',
-                                    name: 'compAssReview',
-                                    label: '综测审核',
-                                    icon: 'setting',
-                                    url: 'compAssReview.vue'
-                                },
                             ]
                         }
                     ],
