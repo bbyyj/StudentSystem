@@ -1,2 +1,3 @@
 # StudentSystem
-springboot+vue
+springboot+vue2
+
