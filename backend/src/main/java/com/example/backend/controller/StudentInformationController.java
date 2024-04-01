@@ -2,8 +2,9 @@ package com.example.backend.controller;
 
 import com.example.backend.dao.response.JwtAuthenticationResponse;
 import com.example.backend.dao.response.StudentListResponse;
-import com.example.backend.service.StudentService;
+//import com.example.backend.service.StudentService;
 import com.example.backend.entities.Student;
+import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class StudentInformationController {
 
-    private final StudentService studentService;
+    private final UserService studentService;
 
 //    @PostMapping("/topAdmin/importDormitory")
 //    public JwtAuthenticationResponse importDormitory(@RequestBody StudentSigninRequest request) {

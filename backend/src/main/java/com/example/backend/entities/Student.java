@@ -36,7 +36,7 @@ public class Student implements UserDetails {
     @Column(name = "admission_year")
     private Year admissionYear; //入学年份
     @Column(name = "class_id")
-    private int classId; //班级
+    private Integer classId; //班级
 
 
     private String name;//姓名

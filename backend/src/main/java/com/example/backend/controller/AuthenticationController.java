@@ -6,8 +6,9 @@ import com.example.backend.dao.request.StudentSignUpRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.response.JwtAuthenticationResponse;
 import com.example.backend.service.AuthenticationService;
-import com.example.backend.service.StudentService;
+//import com.example.backend.service.StudentService;
 
+import com.example.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final StudentService studentService;
+    private final UserService studentService;
     @PostMapping("/signupAdmin")//单个老师注册
     public JwtAuthenticationResponse signupAdmin(@RequestBody AdminSignUpRequest request) {
         return authenticationService.signupAdmin(request);
