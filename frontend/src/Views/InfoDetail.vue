@@ -2,12 +2,18 @@
   <div>
     <div class="competition-award">
       <div class="filter-search">
-        <el-button @click="clearFilter" class="filter-del-btn">清除过滤器</el-button>
-        <el-input size="mini" v-model="search" class="search-input" placeholder="输入关键字搜索"/>
+        <el-input placeholder="请输入内容" v-model="params.search" class="search-with-select" size="mini" clearable>
+          <el-select v-model="params.select" slot="prepend" placeholder="请选择" ref="select" filterable>
+            <el-option v-for="(column, index) in tableColumns" :label="column.label" v-if="index > 0 && index < 5" :value=index></el-option>
+          </el-select>
+          <el-button slot="append" icon="el-icon-search"></el-button>
+        </el-input>
+
+        <el-button @click="clearFilter" type="primary" size="mini" class="filter-del-btn">清除过滤器</el-button>
       </div>
 
 <!--      展开项-->
-      <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange"">
+      <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="table-expand" size="mini">
@@ -66,14 +72,14 @@ export default {
     return {
       params: {
         pageNum: 1,   // 前往第几页
-        pageSize: 5   // 每页显示的条数
+        pageSize: 5,   // 每页显示的条数
+        search: '',
+        select: '',
       },
       total: 0,
 
       tableData: [],
       textVisible: false,
-      search: '',
-
       tableColumns: [],
     }
   },
@@ -87,6 +93,9 @@ export default {
       this.updateTableColumns();
       this.loadingData();
       this.clearFilter();
+
+      this.$set(this.params, 'select', null)
+
     },
   },
   methods: {
@@ -216,19 +225,28 @@ export default {
   font-size: 12px;
 }
 
-.filter-del-btn{
-  font-size: 13px;
-  padding: 10px;
-  background-color: #f0f9eb;
-  color: #0b151f;
-
-  margin-right: 20px;
-}
 .filter-search{
   display: flex;
 }
-.search-input{
-  width: 300px;
+.search-with-select{
+  width: 400px;
 }
 
+.filter-del-btn{
+  margin-left: 10px;
+}
+
+.el-select .el-input {
+  width: 130px;
+}
+.el-select-dropdown{
+  background-color: #ffffff;
+}
+.el-select-dropdown__item{
+  font-size: 12px;
+}
+
+.search-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
 </style>

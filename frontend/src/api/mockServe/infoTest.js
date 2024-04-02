@@ -1,7 +1,7 @@
 export default {
     getLoadingData: config => {
         const name  = JSON.parse(config.body).routeName;
-
+        // 后端加上筛选逻辑
         if(name === 'competition'){
             return {
                 code: 200,
