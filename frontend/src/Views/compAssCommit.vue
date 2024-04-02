@@ -62,7 +62,7 @@
 
 
         <!-- 抽屉组件用于添加新条目 -->
-        <el-drawer title="添加综测信息" :visible.sync="drawerVisible" direction="rtl" size="30%">
+        <el-drawer title="添加综测信息" :visible.sync="drawerVisible" direction="rtl" size="30%"  @close="handleDrawerClose">
             <p>请完整填写综测信息，便于管理员进行审查</p>
             <el-form :model="newItem" :disabled="disabled" :rules="rules" ref="newItemForm">
                 <el-form-item label="时间" prop="time">
@@ -98,8 +98,10 @@
 
             </el-form>
             <div class="drawer-footer">
-                <el-button @click="drawerVisible = false">取消</el-button>
-                <el-button v-if="!disabled" type="primary" @click="addItem">添加</el-button>
+                <el-button @click="drawerVisible = false; isEditing = false;">取消</el-button>
+                <el-button v-if="!disabled" type="primary" @click="addItem">
+                    {{ isEditing ? '修改' : '添加' }}
+                </el-button>
             </div>
         </el-drawer>
     </div>
@@ -111,30 +113,42 @@ export default {
     components: { customUpload },
     data() {
         return {
-            disabled: false,
+            disabled: false, // 添加综测按钮是否可用
+            isEditing:false, // 编辑模式
             // 表头数据
             application: {
                 studentName: "", // 姓名
                 studentID: "", // 学号
-                score: null,  // 综测分数——设置为自动计算
+                score: "",  // 综测分数——设置为自动计算
                 list: [
                     {
+                        id:1,
                         time: "2023-10-01", // TIME aaaa-bb-cc -format
                         category1: "社会工作类", // CATEGORY1
                         category2: "院团委副书记", // CATEGORY2
                         remark: "软件工程学院", // REMARK
-                        singleScore: "5.0", // score
+                        singleScore: "1.5", // score
+                        fileUrl: "", // 附件url
+                    },
+                    {
+                        id:2,
+                        time: "2023-10-02", // TIME aaaa-bb-cc -format
+                        category1: "政治思想道德类", // CATEGORY1
+                        category2: "全国三好学生", // CATEGORY2
+                        remark: "无", // REMARK
+                        singleScore: "1.5", // score
                         fileUrl: "", // 附件url
                     }
                 ], // 申请的综测列表
             },
             // 新填写的综测信息
             newItem: {
+                id: "",
                 time: "", // TIME
                 category1: "", // CATEGORY1
                 category2: "", // CATEGORY2
                 remark: "", // REMARK
-                singleScore: "5.0", // score
+                singleScore: "", // score
                 fileUrl: "", // 附件url
             },
             // 综测大类别信息——后端返回
@@ -142,26 +156,25 @@ export default {
                 {
                     id: 1,
                     label: "社会工作类",
-                    value: ""
+                    value: "社会工作类"
                 },
                 {
                     id: 2,
                     label: "政治思想道德类",
-                    value: ""
+                    value: "政治思想道德类"
                 }
-
             ],
             // 综测加分条件——后端返回
             ChildrenCategory: [
                 {
                     id: 1,
                     label: "院团委副书记",
-                    value: ""
+                    value: "院团委副书记"
                 },
                 {
                     id: 2,
                     label: "全国三好学生",
-                    value: ""
+                    value: "全国三好学生"
                 }],
             // 抽屉是否显示bool
             drawerVisible: false,
@@ -169,10 +182,11 @@ export default {
             // 新增综测信息的校验规则
             rules: {
                 time: [{ required: true, message: "请选择时间", trigger: "blur" }],
-                category1: [{ required: true, message: "请选择综测大类别", trigger: "blur" }],
-                category2: [{ required: true, message: "请选择加分条件", trigger: "blur" }],
+                category1: [{ required: true, message: "请选择综测大类别", trigger: ['blur', 'change'] }],
+                category2: [{ required: true, message: "请选择加分条件", trigger: ['blur', 'change'] }],
                 remark: [{ required: true, message: "请输入详细说明", trigger: "blur" }],
             },
+
             // 整体表头信息的校验规则
             applicationRules: {
                 studentID: [{ required: true, message: "请输入学号", trigger: "blur" }],
@@ -192,12 +206,14 @@ export default {
                 // todo
             ]
         },
+
         // 获取每个综测大类别下的加分条件--后端接口
         getChildrenCategory() {
             this.childrenCategory = [
                 // todo
             ]
         },
+
         // 获取两个类别定位下的综测分数——后端接口
         getSingleScore() {
             // todo
@@ -208,6 +224,7 @@ export default {
             }
             return "";
         },
+        // 抽屉的添加按钮
         addItem() {
             if (this.disabled) return;
             this.$refs.newItemForm.validate((valid) => {
@@ -229,7 +246,8 @@ export default {
                     }
                     this.resetNewItem();
                     this.handleScore();
-                    this.drawerVisible = false;
+                    this.drawerVisible = false; // 关闭抽屉
+                    this.isEditing = false; // 关闭编辑模式
                 } else {
                     console.log("表单校验未通过");
                     return false;
@@ -240,7 +258,6 @@ export default {
         handleScore() {
             // 处理总分
             this.application.score = this.application.list.reduce((prev, item) => {
-                console.log("item:",item)
                 return prev +item.singleScore;
             }, 0);
         },
@@ -248,6 +265,7 @@ export default {
             // 重置newItem
             this.newItem = { time: "", category1: "", category2: "", remark: "", singleScore: null };
         },
+        // 点击提交申请的逻辑
         submitApplication() {
             if (this.disabled) {
                 console.log("撤销申请");
@@ -264,9 +282,15 @@ export default {
                 }
             });
         },
+        // 处理每个条目右侧的编辑按钮
         handleEdit(item) {
-            this.newItem = { ...item };
-            this.drawerVisible = true;
+            this.newItem = { ...item };  // 数据绑定
+            this.drawerVisible = true; // 显示抽屉
+            this.isEditing = true; // 抽屉中是编辑按钮
+        },
+        // 处理按钮
+        handleDrawerClose() {
+            this.isEditing = false; // 重置编辑状态
         },
     },
     mounted() {
