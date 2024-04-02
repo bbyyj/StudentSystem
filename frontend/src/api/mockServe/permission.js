@@ -95,6 +95,40 @@ export default {
                             url: 'Mall.vue'
                         },
                         {
+                            path: '/student/info',
+                            name: 'stufentInfo',
+                            label: '个人信息',
+                            icon: 'video-play',
+                            url: 'StudentInfo.vue'
+                        },
+                        {
+                            label: '资料提交',
+                            icon: 'location',
+                            children: [
+                                {
+                                    path: '/InfoSubmission/Competitions',
+                                    name: 'CompetitionSubmission',
+                                    label: '比赛获奖',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Papers',
+                                    name: 'PaperSubmission',
+                                    label: '论文发表',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Patents',
+                                    name: 'PatentSubmission',
+                                    label: '专利发明',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                            ]
+                        },
+                        {
                             label: '综测',
                             icon: 'location',
                             children: [
