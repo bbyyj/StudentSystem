@@ -41,7 +41,16 @@
             </el-table-column>
 
             <el-table-column prop="fileUrl" label="附件">
+                <template #default="scope">
+                    <div v-if="scope.row.fileUrl">
+                        <!-- 检查URL是否指向图片 -->
+                        <img v-if="isImage(scope.row.fileUrl)" :src="scope.row.fileUrl" alt="附件" style="width: 100px; height: auto; cursor: pointer;" @click="showImgDialog(scope.row.fileUrl)" />
+                        <!-- 对于PDF，显示一个可点击的链接 -->
+                        <a v-else :href="scope.row.fileUrl" target="_blank">查看文件</a>
+                    </div>
+                </template>
             </el-table-column>
+
 
             <el-table-column label="操作">
                 <template #default="scope">
@@ -104,6 +113,12 @@
                 </el-button>
             </div>
         </el-drawer>
+
+        <!-- 图片预览对话框 -->
+        <el-dialog :visible.sync="imgDialogVisible" :before-close="handleClose">
+            <img :src="currentImgUrl" alt="预览图片" style="width: 100%;" />
+        </el-dialog>
+
     </div>
 </template>
 
@@ -113,6 +128,9 @@ export default {
     components: { customUpload },
     data() {
         return {
+            imgDialogVisible: false, // 控制图片预览对话框的显示
+            currentImgUrl: '', // 当前预览的图片URL
+
             disabled: false, // 添加综测按钮是否可用
             isEditing:false, // 编辑模式
             // 表头数据
@@ -128,7 +146,7 @@ export default {
                         category2: "院团委副书记", // CATEGORY2
                         remark: "软件工程学院", // REMARK
                         singleScore: 1.5, // score
-                        fileUrl: "", // 附件url
+                        fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png", // 附件url
                     },
                     {
                         id:2,
@@ -137,7 +155,7 @@ export default {
                         category2: "全国三好学生", // CATEGORY2
                         remark: "无", // REMARK
                         singleScore: 1.5, // score
-                        fileUrl: "", // 附件url
+                        fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png", // 附件url
                     }
                 ], // 申请的综测列表
             },
@@ -200,6 +218,18 @@ export default {
         },
     },
     methods: {
+        // 查看图片附件
+        showImgDialog(url) {
+            this.currentImgUrl = url;
+            this.imgDialogVisible = true;
+        },
+        handleClose(done) {
+            done();
+        },
+        // 判断附件格式
+        isImage(fileUrl) {
+            return /\.(jpeg|jpg|png)$/i.test(fileUrl);
+        },
         // 获取综测大类别--后端接口
         getRootCategory() {
             this.RootCategory = [
@@ -248,6 +278,7 @@ export default {
                     this.handleScore();  // 添加完该项之后 计算分数
                     this.drawerVisible = false; // 关闭抽屉
                     this.isEditing = false; // 关闭编辑模式
+                    console.log("this.newItem.fileUrl:",this.newItem.fileUrl)
                 } else {
                     console.log("表单校验未通过");
                     return false;
@@ -263,7 +294,7 @@ export default {
         },
         resetNewItem() {
             // 重置newItem
-            this.newItem = { time: "", category1: "", category2: "", remark: "", singleScore: null };
+            this.newItem = { time: "", category1: "", category2: "", remark: "", singleScore: null,  fileUrl: "" };
         },
         // 点击提交申请的逻辑
         submitApplication() {
