@@ -117,8 +117,8 @@ export default {
             isEditing:false, // 编辑模式
             // 表头数据
             application: {
-                studentName: "", // 姓名
-                studentID: "", // 学号
+                studentName: "乔羿童", // 姓名
+                studentID: "21311111", // 学号
                 score: "",  // 综测分数——设置为自动计算
                 list: [
                     {
@@ -127,7 +127,7 @@ export default {
                         category1: "社会工作类", // CATEGORY1
                         category2: "院团委副书记", // CATEGORY2
                         remark: "软件工程学院", // REMARK
-                        singleScore: "1.5", // score
+                        singleScore: 1.5, // score
                         fileUrl: "", // 附件url
                     },
                     {
@@ -136,7 +136,7 @@ export default {
                         category1: "政治思想道德类", // CATEGORY1
                         category2: "全国三好学生", // CATEGORY2
                         remark: "无", // REMARK
-                        singleScore: "1.5", // score
+                        singleScore: 1.5, // score
                         fileUrl: "", // 附件url
                     }
                 ], // 申请的综测列表
@@ -244,8 +244,8 @@ export default {
                             id: new Date().getTime(),
                         });
                     }
-                    this.resetNewItem();
-                    this.handleScore();
+                    this.resetNewItem(); // 清空每一项
+                    this.handleScore();  // 添加完该项之后 计算分数
                     this.drawerVisible = false; // 关闭抽屉
                     this.isEditing = false; // 关闭编辑模式
                 } else {
@@ -258,7 +258,7 @@ export default {
         handleScore() {
             // 处理总分
             this.application.score = this.application.list.reduce((prev, item) => {
-                return prev +item.singleScore;
+                return prev + item.singleScore;
             }, 0);
         },
         resetNewItem() {
@@ -294,10 +294,12 @@ export default {
         },
     },
     mounted() {
-        // handleScore();
         // 初始渲染
         // this.getRootCategory();
         // this.getChildrenCategory();
+
+        // 加载出数据之后就进行分数计算
+        this.handleScore();
     },
 };
 </script>
