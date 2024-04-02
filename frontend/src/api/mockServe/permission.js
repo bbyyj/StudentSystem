@@ -126,6 +126,34 @@ export default {
                                     icon: 'setting',
                                     url: 'InfoSubmission.vue'
                                 },
+                                {
+                                    path: '/InfoSubmission/Softwares',
+                                    name: 'SoftwareSubmission',
+                                    label: '软件著作权发明',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Monographs',
+                                    name: 'MonographSubmission',
+                                    label: '专著出版',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Exchange',
+                                    name: 'ExchangeSubmission',
+                                    label: '校外交流',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Volunteerism',
+                                    name: 'VolunteerismSubmission',
+                                    label: '志愿服务',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
                             ]
                         },
                         {
