@@ -4,7 +4,7 @@
       <div class="filter-search">
         <el-input placeholder="请输入内容" v-model="params.search" class="search-with-select" size="mini" clearable>
           <el-select v-model="params.select" slot="prepend" placeholder="请选择" ref="select" filterable>
-            <el-option v-for="(column, index) in tableColumns" :label="column.label" v-if="index > 0 && index < 5" :value=index></el-option>
+            <el-option v-for="(column, index) in tableColumns" :label="column.label" :key="index" v-if="index > 0 && index < 5" :value=index></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="loadingData"></el-button>
         </el-input>
@@ -31,21 +31,6 @@
                          :filter-multiple=false :filter-method="filterHandle"></el-table-column>
         <el-table-column v-for="(column, index) in tableColumns" :key="index" :prop="column.prop" :label="column.label" v-if="index > 0 && index < 5"></el-table-column>
 
-<!--        <div @click.stop>-->
-<!--          <el-table-column label="操作" fixed="right">-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-popconfirm v-if="scope.row.submitState === '待审核'" title="该记录审核通过？" confirm-button-text='是的'-->
-<!--                             cancel-button-text='存在问题，不通过' @cancel="deleteItems(scope.row.id)" @confirm="putItems(scope.row.id)">-->
-<!--                <el-button type="info" slot="reference" size="mini" class="btn-examined">审核</el-button>-->
-<!--              </el-popconfirm>-->
-
-<!--              <el-popconfirm v-else-if="scope.row.submitState === '已审核'" title="确认删除？" @confirm="deleteItems()">-->
-<!--                <el-button type="danger" slot="reference" size="mini" class="btn-examined">删除</el-button>-->
-<!--              </el-popconfirm>-->
-<!--              <el-button @click="showRichText(scope.row.textMessage)" type="primary" size="mini" class="btn-examined">查看附件</el-button>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
-<!--        </div>-->
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-popconfirm v-if="scope.row.submitState === '待审核'" title="该记录审核通过？" confirm-button-text='是的'

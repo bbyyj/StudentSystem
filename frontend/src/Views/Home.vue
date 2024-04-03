@@ -19,7 +19,7 @@
             <el-card style="margin-top: 20px;">
                 <el-table :data="TableData" style="width: 100%">
                     <!-- 这里的val,key对应的是对象里的 -->
-                    <el-table-column v-for="(value, key) in TableLabel" :prop="key" :label="value">
+                    <el-table-column v-for="(value, key) in TableLabel" :prop="key" :label="value" :key="key">
                     </el-table-column>
                 </el-table>
             </el-card>

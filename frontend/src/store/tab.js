@@ -35,8 +35,18 @@ export default {
         },
         // 设置不同用户的菜单
         setMenu(state, val) {
-            state.menu = val
-            Cookie.set('menu', JSON.stringify(val))
+            state.menu = val;
+            state.tabList = [   // 实现切换权限复原tag
+                {
+                    path: '/',
+                    name: 'home',
+                    label: '首页',
+                    icon: 's-home',
+                    url: 'Home/Home'
+                }
+            ];
+
+            Cookie.set('menu', JSON.stringify(val));
         },
         // 动态添加路由
         addMenu(state, router) {
