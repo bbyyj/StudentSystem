@@ -9,6 +9,8 @@ export default {
                     tableData: [{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -26,6 +28,8 @@ export default {
                     },{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -43,6 +47,8 @@ export default {
                     },{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -60,6 +66,8 @@ export default {
                     },{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -77,6 +85,8 @@ export default {
                     },{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -94,6 +104,8 @@ export default {
                     },{
                         id: '12987125',
                         studentName: '好滋好味鸡蛋仔',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         studentID: "11111",
                         achievmentType: '成果类别',
                         achivementTime: '获得时间，2019-09-09',
@@ -121,6 +133,8 @@ export default {
                         id: '12987125',
                         studentName: '发表人姓名',
                         studentID: '发表人学号',
+                        studentGrade: '2019级',
+                        studentClass: '获奖人班级',
                         authorType: '作者类型',
                         allAuthorName: '全部作者姓名',
                         corresAuthorName: '通讯作者姓名',

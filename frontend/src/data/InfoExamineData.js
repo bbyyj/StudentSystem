@@ -3,11 +3,13 @@ const InfoExamineData=[
         name: '比赛获奖',
 
         studentName: '获奖人姓名',
+        studentGrade: '获奖人年级',
         competitionName: '比赛名称',
         achievementGrade: '成果级别',
         achievementRank: '成果等级',
 
         studentID: '获奖人学号',
+        studentClass: '获奖人班级',
         achievmentType: '成果类别',
         achivementTime: '获得时间',
         achievementName: '成果名称',
@@ -19,7 +21,9 @@ const InfoExamineData=[
         name: '论文发表',
 
         studentName: '发表人姓名',
+        studentGrade: '发表人年级',
         studentID: '发表人学号',
+        studentClass: '获奖人班级',
         authorType: '作者类型',
         allAuthorName: '全部作者姓名',
         corresAuthorName: '通讯作者姓名',

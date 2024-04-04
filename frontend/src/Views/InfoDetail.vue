@@ -9,7 +9,7 @@
           <el-button slot="append" icon="el-icon-search" @click="loadingData"></el-button>
         </el-input>
 
-        <el-button @click="clearFilter" type="primary" size="mini" class="filter-del-btn">清除过滤器</el-button>
+        <el-button @click="clearAll" type="primary" size="mini" class="filter-del-btn">清空</el-button>
       </div>
 
       <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick">
@@ -34,7 +34,7 @@
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
             <el-popconfirm v-if="scope.row.submitState === '待审核'" title="该记录审核通过？" confirm-button-text='是的'
-                           cancel-button-text='存在问题，不通过' @cancel="deleteItems(scope.row.id)" @confirm="putItems(scope.row.id)">
+                           cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="putItems(scope.row.id)">
               <el-button type="info" slot="reference" size="mini" class="btn-examined" @click.native.stop>审核</el-button>
             </el-popconfirm>
 
@@ -57,6 +57,19 @@
         <div v-html="this.tableData.textMessage" class="w-e-text"></div>
       </el-dialog>
 
+<!--      审核不通过界面-->
+      <el-dialog title="不通过理由" :visible.sync="rejectVisible" width="30%">
+        <el-form>
+          <el-form-item label="请输入拒绝的理由">
+            <el-input type="textarea" v-model="rejectReason" rows="5" placeholder="请输入理由"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="rejectVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitRejectReason">确定</el-button>
+        </span>
+      </el-dialog>
+
     </div>
 
 
@@ -73,13 +86,15 @@ export default {
       params: {
         pageNum: 1,   // 前往第几页
         pageSize: 5,   // 每页显示的条数
-        search: '',
-        select: '',
+        search: '', // 输入的搜索内容
+        select: '', // 选择的搜索项
       },
       total: 0,
 
       tableData: [],
       textVisible: false,
+      rejectVisible: false,
+      rejectReason:'',
       tableColumns: [],
     }
   },
@@ -99,20 +114,6 @@ export default {
     },
   },
   methods: {
-    updateTableColumns() {  // 根据路由填入对应表项
-      if (InfoExamineData.length > 0) {
-        let firstData = null;
-
-        if(this.$route.name === 'competition'){
-          firstData = InfoExamineData[0];
-        }else if(this.$route.name === 'paper'){
-          firstData = InfoExamineData[1];
-        }
-
-        this.tableColumns = Object.keys(firstData).map(key => ({ prop: key, label: firstData[key] }));
-
-      }
-    },
     loadingData(){
       // console.log("search");
       request.post('/infoExamine/loadingData', {routeName: this.$route.name,params: this.params}).then(response => {
@@ -123,45 +124,106 @@ export default {
           this.$message.error(response.data.message);
         }
       })
-      this.tableData.forEach(val => {
+
+      this.tableData.forEach(val => { // 开启展开行用
         this.$set(val, "expanded", false);
       });
     },
-    handleRowClick(row) {
-      row.expanded = !row.expanded;
-      this.$refs.filterTable.toggleRowExpansion(row, row.expanded);
+    deleteItems(id){
+      console.log("确认删除记录");
+      // request.put("/examine/del"+id,{routeName: this.$route.name}).then(res => {
+      //   if (res.code === '200') {
+      //     this.$message.success("删除成功");
+      //     this.loadingData();
+      //   } else {
+      //     this.$message.error(res.errorMessage);
+      //   }
+      // })
     },
-    showRichText(data){
+    putItems(id){
+      console.log("审核通过");
+      // request.post("/examine/pass"+id,{routeName: this.$route.name}).then(res => {
+      //   if (res.code === '200') {
+      //     this.$message.success("操作成功");
+      //     this.loadingData();
+      //   } else {
+      //     this.$message.error(res.errorMessage);
+      //   }
+      // })
+
+    },
+    submitRejectReason(id){ // 提交拒绝理由
+      console.log("审核不通过-提交拒绝理由");
+      // request.post("/examine/"+id,{routeName: this.$route.name, reason: this.rejectReason}).then(res => {
+      //   if (res.code === '200') {
+      //     this.$message.success("操作成功");
+      //     this.loadingData();
+      //     this.rejectVisible = false;
+      //     this.rejectReason = "";
+      //   } else {
+      //     this.$message.error(res.errorMessage);
+      //   }
+      // })
+      this.rejectVisible = false;
+    },
+    showRichText(data){ // 展示附件
       this.tableData.textMessage = data;
       if(data == null){
         this.tableData.textMessage = "暂无信息！";
       }
       this.textVisible = true;
     },
-    handleSizeChange(pageSize) {
+
+
+    updateTableColumns() {  // 根据路由填入对应表项
+      if (InfoExamineData.length > 0) {
+        let firstData = null;
+        if(this.$route.name === 'competition'){
+          firstData = InfoExamineData[0];
+        }else if(this.$route.name === 'paper'){
+          firstData = InfoExamineData[1];
+        }
+
+        this.tableColumns = Object.keys(firstData).map(key => ({ prop: key, label: firstData[key] }));
+
+      }
+    },
+    clearAll() {  // 清空
+      this.$refs.filterTable.clearFilter();
+      this.params = {
+        pageNum: 1,   // 前往第几页
+        pageSize: 5,   // 每页显示的条数
+        search: '', // 输入的搜索内容
+        select: '', // 选择的搜索项
+      }
+      this.rejectReason = "";
+
+      this.loadingData();
+    },
+    showDialogReject(){ // 展示审核后拒绝理由界面
+      this.rejectReason = "";
+      this.rejectVisible = true;
+    },
+    handleRowClick(row) { // 处理展开行
+      row.expanded = !row.expanded;
+      this.$refs.filterTable.toggleRowExpansion(row, row.expanded);
+    },
+    handleSizeChange(pageSize) {  // 处理分页
       this.params.pageSize = pageSize;
       this.loadingData();
     },
-    handleCurrentChange(pageNum) {
+    handleCurrentChange(pageNum) {  // 处理分页
       this.params.pageNum = pageNum;
       this.loadingData();
     },
-
-    deleteItems(id){
-      console.log("审核打回");
-    },
-    putItems(id){
-      console.log("审核通过");
-    },
-
-    sortByState(a, b){
+    sortByState(a, b){  // 表中审核状态排序
       if(a.submitState == '待审核'){
         return -1;
       } else{
         return 1;
       }
     },
-    RowState({row, rowIndex}){
+    RowState({row, rowIndex}){  // 表中审核状态颜色
       if(row.submitState == '待审核'){
         return 'warning-row';
       }else if(row.submitState == '已审核'){
@@ -169,14 +231,11 @@ export default {
       }
       return '';
     },
-    filterHandle(value, row, column){
+    filterHandle(value, row, column){ // 表中审核状态筛选
       return row.submitState === value;
     },
-    filterChange() {
+    filterChange() {  //根据选择修改总条数
       this.total = this.$refs.filterTable.tableData.length;
-    },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
     },
   }
 }
