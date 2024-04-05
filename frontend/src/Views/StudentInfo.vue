@@ -52,24 +52,28 @@
       return {
         //基本信息
         items1: [
-          { model: 'name', label: '姓名：' },
-          { model: 'type', label: '学生类别：' },
-          { model: 'sex', label: '性别：' },
-          { model: 'nation', label: '民族：' },
-          { model: 'sid', label: '学号：' },
-          { model: 'id', label: '身份证号：' },
-          { model: 'birthday', label: '出生年月：' },
-          { model: 'class', label: '班级：' },
-          { model: 'categories', label: '培养层次：' }
+          { model: 'admissionYear', label: '入学年份'},
+          { model: 'class_id', label: '班级'},
+          { model: 'name', label: '姓名' },
+          { model: 'type', label: '学生类别' },
+          { model: 'sex', label: '性别' },
+          { model: 'nation', label: '民族' },
+          { model: 'sid', label: '学号' },
+          { model: 'pid', label: '身份证号' },
+          { model: 'birthday', label: '出生年月' },
+          { model: 'is_undergraduate', label: '培养层次' },
+          { model: 'politics', label: '政治面貌'},
+          { model: 'native_place', label: '籍贯'},
+          { model: 'dormitory', label: '宿舍' },
         ],
         //联系方式
         items2: [
-          { model: 'pnumber', label: '个人联系电话：' },
-          { model: 'address', label: '详细家庭住址：' },
-          { model: 'ecnumber', label: '紧急联系人电话：' },
-          { model: 'econtact', label: '紧急联系人：' },
-          { model: 'email', label: '邮箱：' },
-          { model: 'wechat', label: '微信：' }
+          { model: 'phone', label: '个人联系电话' },
+          { model: 'address', label: '详细家庭住址' },
+          { model: 'urgent_Phone', label: '紧急联系人电话' },
+          { model: 'urgent_Name', label: '紧急联系人' },
+          { model: 'email', label: '邮箱' },
+          { model: 'wechat', label: '微信' }
         ],
         info: {
           name: '张三',
@@ -158,7 +162,6 @@
 
 .elinput{
     max-block-size: 10px;
-    
 }
 .ftype{
     font-size: small;
