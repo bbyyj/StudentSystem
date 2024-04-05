@@ -9,7 +9,5 @@ import java.util.List;
 
 public interface UserService {
     UserDetailsService userDetailsService();
-    ResponseEntity<String> uploadExcelFile(MultipartFile file);
 
-    List<Student> getAllStudent();
 }

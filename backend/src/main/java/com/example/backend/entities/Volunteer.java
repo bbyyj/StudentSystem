@@ -19,6 +19,9 @@ public class Volunteer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "sid")
+    private String sid; // 学生学号
+
     @Column(name = "organization")
     private String organization; // 志愿组织团体（全称）
 
@@ -36,4 +39,15 @@ public class Volunteer {
 
     @Column(name = "time")
     private int time; // 志愿服务时长（X小时）
+
+    @Column(name = "url")
+    private String url; // 材料链接
+
+    @Column(name = "check_status")
+    private String check_status; // 审核状态
+
+    @Column(name = "check_msg")
+    private String check_msg; // 审核意见
+
+
 }

@@ -70,8 +70,8 @@ public class Paper {
     @Column(name = "sci_level")
     private String sci; // 中科院分区
 
-    @Column(name = "index")
-    private String index; // 期刊收录情况:CSSCI / CSCD / SCI / SSCI / EI / A&HCI / 其他
+    @Column(name = "include")
+    private String include; // 期刊收录情况:CSSCI / CSCD / SCI / SSCI / EI / A&HCI / 其他
 
     @Column(name = "publisher")
     private String publisher; // 出版单位
@@ -80,12 +80,25 @@ public class Paper {
     private String language; // 论文语言
 
     @Column(name = "is_internation")
-    private String is_internation; // 是否国际合作论文
+    private Boolean is_internation; // 是否国际合作论文
 
     @Column(name = "is_institution")
-    private String is_institution; // 是否本单位合作论文
+    private Boolean is_institution; // 是否本单位合作论文
 
     @Column(name = "remark")
     private String remark; // 备注
+
+    @Column(name = "sid")
+    private String sid; // 学生学号
+
+    @Column(name = "url")
+    private String url; // 材料链接
+
+    @Column(name = "check_status")
+    private String check_status; // 审核状态
+
+    @Column(name = "check_msg")
+    private String check_msg; // 审核意见
+
 }
 

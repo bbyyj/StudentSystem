@@ -48,6 +48,7 @@ public class Student implements UserDetails {
     private String politics;//政治面貌
     private String dormitory;
     @Column(name = "native_place")
+    private String nativePlace;
     private String phone;
     private String address;
     @Column(name = "urgent_phone")

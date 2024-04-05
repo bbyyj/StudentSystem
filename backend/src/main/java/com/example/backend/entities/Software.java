@@ -36,4 +36,17 @@ public class Software {
 
     @Column(name = "remark")
     private String remark; // 备注
+
+    @Column(name = "url")
+    private String url; // 材料链接
+
+    @Column(name = "check_status")
+    private String check_status; // 审核状态
+
+    @Column(name = "check_msg")
+    private String check_msg; // 审核意见
+
+    @Column(name = "sid")
+    private String sid; // 学生学号
+
 }
