@@ -24,11 +24,11 @@ export default {
                             url: 'Mall.vue'
                         },
                         {
-                            path: '/user',
-                            name: 'user',
-                            label: '用户管理',
+                            path: '/studentmanage',
+                            name: 'studentmanage',
+                            label: '学生信息管理',
                             icon: 'user',
-                            url: 'User.vue'
+                            url: 'StudentManage.vue'
                         },
                         {
                             label: '资料审查',
@@ -98,7 +98,7 @@ export default {
                             path: '/student/info',
                             name: 'stufentInfo',
                             label: '个人信息',
-                            icon: 'video-play',
+                            icon: 'user',
                             url: 'StudentInfo.vue'
                         },
                         {

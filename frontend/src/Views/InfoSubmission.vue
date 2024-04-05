@@ -1,5 +1,14 @@
 <template>
-    <h1> 资料提交界面</h1>
+    <div>
+        <el-card>
+        <el-form>
+            <h1> 资料提交界面</h1>
+        </el-form>    
+        </el-card>
+        
+        
+    </div>
+    
 </template>
 
 <script>
