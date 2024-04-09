@@ -18,8 +18,19 @@
       </el-col>
 
       <el-col span="8" >
-        <el-button type="primary" round>批量导入</el-button>
-        <el-button type="primary" round>单个导入</el-button>
+        <el-popover
+          placement="bottom"
+          width="aoto"
+          trigger="click">
+          <el-upload 
+            action="https://jsonplaceholder.typicode.com/posts/"  multiple="false" :limit="1" :on-exceed="handleExceed" 
+            :on-error="handleError" :file-list="fileList" show-file-list="true" accept="xlsx" :before-upload="validateExcelFile">
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
+          </el-upload>
+          <el-button slot="reference" type="primary" round @click="importStudents">批量导入</el-button>
+        </el-popover>
+        <el-button type="primary" round @ckick="addStudent">单个导入</el-button>
       </el-col>
     </el-row>
 
@@ -148,17 +159,37 @@ export default {
     async searchStudents() {
       
     },
+    addStudent() {
+      // 单个学生导入
+      this.dialogVisible = true;
+    },
+    importStudents() {
+      // 批量导入
+    },
     editStudent(row) {
-      // 编辑逻辑
+      // 编辑
       this.dialogVisible = true;
     },
     deleteStudent(row) {
-      // 删除逻辑
+      // 删除
     },
     saveStudent(){
       this.dialogVisible = false;
+    },
+    handleExceed() {
+        this.$message.warning(`只能上传单个文件！`);
+    },
+    handleError() {
+        this.$message.error(`上传失败，请重试！`);
+    },
+    validateExcelFile(file) {
+      const isValid = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'; // .xlsx MIME type
+      if (!isValid) {
+        this.$message.error('只能上传.xlsx格式的Excel文件！');
+        return false; // 返回false阻止文件上传
+      }
+      return true;
     }
-    
   }
   
 };
