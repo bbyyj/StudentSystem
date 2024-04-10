@@ -1,4 +1,5 @@
 import request from '../utils/request'
+import axios from "axios";
 
 // 请求首页数据,直接把这个对象导出
 export const getData = () => {
@@ -26,4 +27,9 @@ export const updateUser = (data) => {
 // 登录权限
 export const getMenu = (data) => {
     return request.post('/permission/getMenu',data)
+}
+
+// 请求全部综测细则
+export  const getAllRuleDetail = () => {
+    return axios.get('https://mock.apifox.com/m2/4212159-3852880-default/162417372')
 }

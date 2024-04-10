@@ -1,41 +1,43 @@
 <template>
-  <div>
-    <el-card class="box-card" shadow="never">
-      <el-form @submit.native.prevent="handleSearch" inline>
-        <el-form-item>
-          <el-input placeholder="请输入标题进行搜索" v-model="searchTerms" clearable @clear="handleSearch"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-button type="primary" @click="handleCreateRoot">新增综测大类别</el-button>
+    <div>
+        <el-card class="box-card" shadow="never">
+            <el-form @submit.native.prevent="handleSearch" inline>
+                <el-form-item>
+                    <el-input placeholder="请输入标题进行搜索" v-model="searchTerms" clearable @clear="handleSearch"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="handleSearch">搜索</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+        <el-button type="primary" @click="handleCreateRoot">新增综测大类</el-button>
 
-    <el-tree :data="filteredTreeData" node-key="id" :default-expand-all="true" :props="defaultProps"
-      :render-content="renderContent"></el-tree>
+        <el-tree :data="filteredTreeData" node-key="id" :default-expand-all="false" :props="defaultProps"
+                 :render-content="renderContent"></el-tree>
 
-      
-    <!-- dialog -->
-    <el-dialog :title="dialogTitle" :visible.sync="showDialog">
-      <el-form :model="currentItem">
-        <el-form-item label="加分条件">
-          <el-input v-model="currentItem.title"></el-input>
-        </el-form-item>
-        <el-form-item v-if="this.handleType !== ''" label="分值">
-          <el-input v-model.number="currentItem.score"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取消</el-button>
-        <el-button type="primary" @click="saveItem">保存</el-button>
-      </div>
-    </el-dialog>
+        <!-- dialog -->
+        <el-dialog :title="dialogTitle" :visible.sync="showDialog">
+            <el-form :model="currentItem">
+                <el-form-item label="加分条件">
+                    <el-input v-model="currentItem.title"></el-input>
+                </el-form-item>
+                <el-form-item v-if="this.handleType !== ''" label="分值">
+                    <el-input v-model.number="currentItem.score"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancel">取消</el-button>
+                <el-button type="primary" @click="saveItem">保存</el-button>
+            </div>
+        </el-dialog>
 
-  </div>
+    </div>
 </template>
 
 <script>
+import {getAllRuleDetail} from "@/api";
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -44,18 +46,18 @@ export default {
       treeData: [
         {
           title: "社会工作类",
-          id: 1,
+          rid: 1,
           level: 1,
-          children: [{ title: "院团委副书记", score: 3.0, id: 11, level: 2 },
-          { title: "班委委员", score: 0.5, id: 12, level: 2 },
+          children: [{ title: "院团委副书记", score: 3.0, tid: 11},
+          { title: "班委委员", score: 0.5, tid: 12},
           ],
         },
         {
           title: "政治思想道德类",
-          id: 2,
+          rid: 2,
           level: 1,
-          children: [{ title: "全国三好学生", score: 1.5, id: 21, level: 2 },
-          { title: "班委委员", score: 0.5, id: 22, level: 2 },] 
+          children: [{ title: "全国三好学生", score: 1.5, tid: 21},
+          { title: "班委委员", score: 0.5, tid: 22},]
         }
 
       ], 
@@ -135,43 +137,88 @@ export default {
     },
 
     // 删除当前节点
-    handleDelete(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex((d) => d.id === data.id);
-      children.splice(index, 1);
-    },
+      handleDelete(node, data) {
+          this.$confirm('确定要删除吗?', '警告', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              // 假设后端删除节点的接口为 `/api/delete-node`
+              axios.post('https://mock.apifox.com/m2/4212159-3852880-default/162124197', { id: data.id }).then(response => {
+                  // 处理后端返回的成功响应
+                  const parent = node.parent;
+                  const children = parent.data.children || parent.data;
+                  const index = children.findIndex(d => d.id === data.id);
+                  children.splice(index, 1);
+                  this.$message({
+                      type: 'success',
+                      message: '删除成功!'
+                  });
+              }).catch(error => {
+                  // 处理可能的错误响应
+                  this.$message({
+                      type: 'error',
+                      message: '删除失败: ' + error.message
+                  });
+              });
+          }).catch(() => {
+              this.$message({
+                  type: 'info',
+                  message: '已取消删除'
+              });
+          });
+      },
 
     // 保存修改
-    saveItem() {
-      // 根据接口实现
-      if (this.currentNode) {
-        // 添加或编辑子节点
-        if (this.currentItem.id) {
-          // 编辑节点
-          Object.assign(this.currentNode, this.currentItem);
-        } else {
-          // 新增子节点
-          this.currentItem.id = Date.now(); // 假设ID由后端生成
-          if (!this.currentNode.children) {
-            this.$set(this.currentNode, "children", []);
-          }
-          this.currentNode.children.push(this.currentItem);
-        }
-      } else {
-        // 添加根节点
-        this.currentItem.id = Date.now(); // 假设ID由后端生成
-        this.treeData.push(this.currentItem);
-      }
-      this.showDialog = false;
-    },
+      saveItem() {
+          this.$confirm('保存前请再次确认所填写的信息，然后点击确定', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'info'
+          }).then(() => {
+              // 假设后端保存节点的接口为 `/api/save-node`
+              axios.post('/api/save-node', this.currentItem).then(response => {
+                  // 处理后端返回的成功响应
+                  if (this.currentNode) {
+                      if (this.currentItem.id) {
+                          Object.assign(this.currentNode, this.currentItem);
+                      } else {
+                          this.currentItem.id = response.data.id; // 假设后端返回新生成的ID
+                          if (!this.currentNode.children) {
+                              this.$set(this.currentNode, 'children', []);
+                          }
+                          this.currentNode.children.push(this.currentItem);
+                      }
+                  } else {
+                      this.currentItem.id = response.data.id;
+                      this.treeData.push(this.currentItem);
+                  }
+                  this.showDialog = false;
+                  this.$message({
+                      type: 'success',
+                      message: '保存成功!'
+                  });
+              }).catch(error => {
+                  // 处理可能的错误响应
+                  this.$message({
+                      type: 'error',
+                      message: '保存失败: ' + error.message
+                  });
+              });
+          }).catch(() => {
+              this.$message({
+                  type: 'info',
+                  message: '已取消保存'
+              });
+          });
+      },
 
     renderContent(h, { node, data }) {
       return (
-        <span>
-          <span>
+        <span class ="custom-tree-node">
+          <span >
             {`${node.label}` }
-            {data.score ? ` ${data.score}分` : ""}
+            {data.score ? <span className="score">{` ${data.score}分`}</span> : ""}
           </span>
 
           {data.level === 1 ? (
@@ -192,8 +239,8 @@ export default {
             </el-button>
           )}
 
-          
-          {data.level === 1 ? (
+
+          { data.level === 1 ? (
             <el-button
               size="mini"
               type="text"
@@ -223,6 +270,30 @@ export default {
   mounted() {
     // 初始渲染
     this.handleSearch();
+    // 请求全部综测细则
+    getAllRuleDetail()
+    .then(response => {
+        if(response.data.code===200){
+            console.log("成功请求到数据")
+        }
+        else{
+            console.log("网络错误")
+        }
+    })
+    .catch(error => {
+        console.error('请求错误:', error);
+    });
+
   },
 };
 </script>
+
+<style>
+.custom-tree-node {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-right: 8px;
+}
+</style>
