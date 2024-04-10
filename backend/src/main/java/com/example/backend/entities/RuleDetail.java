@@ -22,5 +22,7 @@ public class RuleDetail {
     @Column(name = "score")
     private float score;
     @Column(name = "detail")
-    private String detail;
+    private String title;
+    @Column(name = "lvl")
+    private int level;
 }

@@ -23,5 +23,7 @@ public interface RuleTypeRepository extends JpaRepository<RuleType, Integer> {
     @Modifying
     @Query("update RuleType set type = ?1 where type = ?2")
     void updateTypeByName(String newtype, String oldtype);
+    @Query("select tid from RuleType ")
+    List<Integer> findAllIds();
 
 }
