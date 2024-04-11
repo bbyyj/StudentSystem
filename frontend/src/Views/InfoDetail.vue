@@ -106,8 +106,8 @@ export default {
   watch: {
     $route(to, from) {
       this.updateTableColumns();
-      this.loadingData();
-      this.clearFilter();
+      // this.loadingData();
+      this.clearAll();
 
       this.$set(this.params, 'select', null)
 
@@ -182,6 +182,16 @@ export default {
           firstData = InfoExamineData[0];
         }else if(this.$route.name === 'paper'){
           firstData = InfoExamineData[1];
+        }else if(this.$route.name === 'patent'){
+          firstData = InfoExamineData[2];
+        }else if(this.$route.name === 'software'){
+          firstData = InfoExamineData[3];
+        }else if(this.$route.name === 'monograph'){
+          firstData = InfoExamineData[4];
+        }else if(this.$route.name === 'exchange'){
+          firstData = InfoExamineData[5];
+        }else if(this.$route.name === 'volunteer'){
+          firstData = InfoExamineData[6];
         }
 
         this.tableColumns = Object.keys(firstData).map(key => ({ prop: key, label: firstData[key] }));
@@ -249,7 +259,7 @@ export default {
   font-size: 0;
 }
 .table-expand label {
-  width: 120px;
+  width: 140px;
   color: #99a9bf;
 
   font-size: 12px;

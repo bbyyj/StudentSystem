@@ -40,14 +40,44 @@ export default {
                                     label: '比赛获奖',
                                     icon: 'setting',
                                     url: 'InfoDetail.vue'
-                                },
-                                {
+                                }, {
                                     path: '/info/paper',
                                     name: 'paper',
                                     label: '论文发表',
                                     icon: 'setting',
                                     url: 'InfoDetail.vue'
+                                },{
+                                    path: '/info/patent',
+                                    name: 'patent',
+                                    label: '专利发明',
+                                    icon: 'setting',
+                                    url: 'InfoDetail.vue'
+                                },{
+                                    path: '/info/software',
+                                    name: 'software',
+                                    label: '软件著作权发明',
+                                    icon: 'setting',
+                                    url: 'InfoDetail.vue'
+                                },{
+                                    path: '/info/monograph',
+                                    name: 'monograph',
+                                    label: '专著出版',
+                                    icon: 'setting',
+                                    url: 'InfoDetail.vue'
+                                },{
+                                    path: '/info/exchange',
+                                    name: 'exchange',
+                                    label: '赴校外交流',
+                                    icon: 'setting',
+                                    url: 'InfoDetail.vue'
+                                },{
+                                    path: '/info/volunteer',
+                                    name: 'volunteer',
+                                    label: '志愿服务',
+                                    icon: 'setting',
+                                    url: 'InfoDetail.vue'
                                 }
+
                             ]
                         },
                         {
