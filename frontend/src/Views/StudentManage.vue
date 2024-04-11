@@ -22,10 +22,16 @@
           placement="bottom"
           width="aoto"
           trigger="click">
+          <el-radio-group v-model="radio" size="mini" style="margin-bottom: 5px;">
+            <el-radio-button label="1" >批量生成学生账号</el-radio-button>
+            <el-radio-button label="2" >仅更新资料库</el-radio-button>
+          </el-radio-group>
+          
           <el-upload 
             action="https://jsonplaceholder.typicode.com/posts/"  multiple="false" :limit="1" :on-exceed="handleExceed" 
             :on-error="handleError" :file-list="fileList" show-file-list="true" accept="xlsx" :before-upload="validateExcelFile">
-            <el-button size="small" type="primary">点击上传</el-button>
+            <el-button size="small" type="plain">点击上传</el-button>
+            
             <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
           </el-upload>
           <el-button slot="reference" type="primary" round @click="importStudents">批量导入</el-button>
@@ -152,7 +158,8 @@ export default {
       },
       dialogVisible: false,
       searchvalue: '',
-      searchKeyword: ''
+      searchKeyword: '',
+      radio: '1'
     };
   },
   methods: {
