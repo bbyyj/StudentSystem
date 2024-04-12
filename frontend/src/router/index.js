@@ -19,12 +19,18 @@ const routes = [
         component: Main,
         redirect: '/home', // 重定向
         children: [
-            // 子路由
-            // { path: '/home', name: 'home', component: Home }, // 首页
-            // { path: '/user', name: 'user', component: User }, // 用户管理
-            // { path: '/mall', name: 'mall', component: Mall }, // 商品管理
-            // { path: '/competition', name: 'competition', component: InfoDetail }, // 页面1
-            // { path: '/page2', name: 'page2', component: PageTwo }, // 页面2
+            {
+                // 管理员跳到的每个学生综测详情页面
+                path: '/compAssDetail/:studentId',
+                name: 'compAssDetail',
+                component: () => import('@/Views/compAssDetail.vue'),
+            },
+            {
+                // 管理员跳到的每个不同年份的综测审核页面
+                path: '/compAssReview/:compAssId/:compAssName',
+                name: 'compAssReview',
+                component: () => import('@/Views/compAssReview.vue'),
+            }
         ]
     },
     {
@@ -32,18 +38,18 @@ const routes = [
         name: 'login',
         component: Login
     },
-    {
-        // 管理员跳到的每个学生综测详情页面
-        path: '/compAssDetail/:studentId',
-        name: 'compAssDetail',
-        component: () => import('@/Views/compAssDetail.vue'),
-    },
-    {
-        // 管理员跳到的每个不同年份的综测审核页面
-        path: '/compAssReview/:compAssId/:compAssName',
-        name: 'compAssReview',
-        component: () => import('@/Views/compAssReview.vue'),
-    }
+    // {
+    //     // 管理员跳到的每个学生综测详情页面
+    //     path: '/compAssDetail/:studentId',
+    //     name: 'compAssDetail',
+    //     component: () => import('@/Views/compAssDetail.vue'),
+    // },
+    // {
+    //     // 管理员跳到的每个不同年份的综测审核页面
+    //     path: '/compAssReview/:compAssId/:compAssName',
+    //     name: 'compAssReview',
+    //     component: () => import('@/Views/compAssReview.vue'),
+    // }
 ]
 
 const router = new VueRouter({
