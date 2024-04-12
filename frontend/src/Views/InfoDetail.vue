@@ -10,11 +10,13 @@
         </el-input>
 
         <el-button @click="clearAll" type="primary" size="mini" class="filter-del-btn">清空</el-button>
+        <el-button type="success" size="mini" class="filter-del-btn" @click="expData">批量导出</el-button>
       </div>
 
-      <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick">
+      <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick"
+                @selection-change="handleSelectionChange" :row-key="getRowKeys">
 <!--      展开项-->
-        <el-table-column type="expand">
+        <el-table-column type="expand" width="1">
           <template slot-scope="props">
             <el-form label-position="left" inline class="table-expand" size="mini">
               <el-form-item v-for="(column, index) in tableColumns" :label="column.label" :key="index" v-if="index > 0">
@@ -23,6 +25,8 @@
             </el-form>
           </template>
         </el-table-column>
+
+        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
 
 <!--        表格里的其他项-->
         <el-table-column label="ID" prop="id"></el-table-column>
@@ -96,6 +100,7 @@ export default {
       rejectVisible: false,
       rejectReason:'',
       tableColumns: [],
+      multipleSelection: [],
     }
   },
 
@@ -173,7 +178,24 @@ export default {
       }
       this.textVisible = true;
     },
+    expData() { // 批量导出数据
+      if(this.multipleSelection.length === 0){
+        this.$message.warning("请勾选待导出项！");
+        return;
+      }
+      // 全选全部待完善
+      this.$message.success("批量导出成功");
 
+
+      // request.put("/examine/delbatch", this.multipleSelection).then(res => {
+      //   if (res.code === '200') {
+      //     this.$message.success("批量导出成功");
+      //     this.$refs.selection.clearSelection();
+      //   } else {
+      //     this.$message.error(res.errorMessage);
+      //   }
+      // })
+    },
 
     updateTableColumns() {  // 根据路由填入对应表项
       if (InfoExamineData.length > 0) {
@@ -246,6 +268,12 @@ export default {
     },
     filterChange() {  //根据选择修改总条数
       this.total = this.$refs.filterTable.tableData.length;
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    getRowKeys(row){
+      return row.id;
     },
   }
 }
@@ -324,4 +352,8 @@ export default {
 .search-with-select .el-input-group__prepend {
   background-color: #fff;
 }
+.el-table__expand-icon {
+  visibility:hidden !important;
+}
+
 </style>
