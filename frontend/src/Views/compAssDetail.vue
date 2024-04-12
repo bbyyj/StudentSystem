@@ -60,7 +60,17 @@
                 <el-table-column prop="b" label="加分条件"></el-table-column>
                 <el-table-column prop="c" label="备注"></el-table-column>
                 <el-table-column prop="d" label="分值"></el-table-column>
-                <el-table-column prop="e" label="附件"></el-table-column>
+
+                <el-table-column prop="fileUrl" label="附件">
+                    <template #default="scope">
+                        <div v-if="scope.row.fileUrl">
+                            <!-- 检查URL是否指向图片 -->
+                            <img v-if="isImage(scope.row.fileUrl)" :src="scope.row.fileUrl" alt="附件" style="width: 100px; height: auto; cursor: pointer;" @click="showImgDialog(scope.row.fileUrl)" />
+                            <!-- 对于PDF，显示一个可点击的链接 -->
+                            <a v-else :href="scope.row.fileUrl" target="_blank">查看文件</a>
+                        </div>
+                    </template>
+                </el-table-column>
 
                 <el-table-column label="操作">
                     <template #default="scope">
@@ -117,6 +127,11 @@
             </el-col>
         </el-row>
 
+        <!-- 图片预览对话框 -->
+        <el-dialog :visible.sync="imgDialogVisible" :before-close="handleClose">
+            <img :src="currentImgUrl" alt="预览图片" style="width: 100%;" />
+        </el-dialog>
+
     </div>
 </template>
 
@@ -124,6 +139,9 @@
 export default {
     data() {
         return {
+            imgDialogVisible: false, // 控制图片预览对话框的显示
+            currentImgUrl: '', // 当前预览的图片URL
+
             searchTerms: {
                 a: "",
                 b: "",
@@ -139,8 +157,8 @@ export default {
                 score: "5.0",
                 remark:"无",
                 list: [
-                    { a: "社会工作类", b: "院团委副书记", c: "软件工程学院院团委副书记", d: "3.0分" },
-                    { a: "政治思想道德类", b: "全国三好学生", c: "无", d: "1.5分" },
+                    { a: "社会工作类", b: "院团委副书记", c: "软件工程学院院团委副书记", d: "3.0分",fileUrl:"https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png"  },
+                    { a: "政治思想道德类", b: "全国三好学生", c: "无", d: "1.5分",fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E9%99%84%E4%BB%B61.%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%A62023%E5%B9%B4%E5%BA%A6%E6%B0%91%E4%B8%BB%E8%AF%84%E8%AE%AE%E5%85%9A%E5%91%98%E7%99%BB%E8%AE%B0%E8%A1%A8.pdf" },
                     { a: "政治思想道德类", b: "校级马研班、青马班获评优秀学员", c: "无", d: "0.8分" },
                     { a: "社会工作类", b: "班委委员", c: "软件工程学院2021级3班文体委员", d: "0.5分" },
                 ],
@@ -154,6 +172,20 @@ export default {
         };
     },
     methods: {
+        // 查看图片附件
+        showImgDialog(url) {
+            this.currentImgUrl = url;
+            this.imgDialogVisible = true;
+        },
+
+        handleClose(done) {
+            done();
+        },
+
+        // 判断附件格式
+        isImage(fileUrl) {
+            return /\.(jpeg|jpg|png)$/i.test(fileUrl);
+        },
         cancelReject() {
             this.showDialogReject = false; // 控制拒绝理由对话框的显示
             this.rejectReason = ""; // 存储用户输入的拒绝理由
