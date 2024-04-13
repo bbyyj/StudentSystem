@@ -31,5 +31,5 @@ export const getMenu = (data) => {
 
 // 请求全部综测细则
 export  const getAllRuleDetail = () => {
-    return axios.get('https://mock.apifox.com/m2/4212159-3852880-default/162417372')
+    return axios.get("https://mock.apifox.com/m2/4212159-0-default/162417372");
 }
