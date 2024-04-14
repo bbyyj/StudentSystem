@@ -87,14 +87,14 @@ export default {
                                 {
                                     path: '/compAssessment/compAssManage',
                                     name: 'compAssManage',
-                                    label: '综测管理',
+                                    label: '综测表',
                                     icon: 'setting',
                                     url: 'compAssManage.vue'
                                 },
                                 {
                                     path: '/compAssessment/compAssBegin',
                                     name: 'compAssBegin',
-                                    label: '综测发布',
+                                    label: '综测评审',
                                     icon: 'setting',
                                     url: 'compAssBegin.vue'
                                 },
