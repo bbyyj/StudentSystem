@@ -63,7 +63,7 @@
                 <!-- 自定义列 -->
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary" @click="gotoReview(scope.row)">审核</el-button>
+                        <el-button type="primary" @click="gotoReview(scope.row)">查看</el-button>
                         <el-button @click="handleEdit(scope.row)">编辑</el-button>
                         <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
                     </template>
@@ -71,16 +71,19 @@
 
             </el-table>
             <!-- 分页 -->
-            <div class="pager">
+            <!-- <div class="pager">
                 <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
                 </el-pagination>
-            </div>
+            </div> -->
+
         </div>
     </div>
 </template>
 
 <script>
 import { createUser, deleteUser, updateUser } from '../api/index'
+import { getAllCompAssBegin, addCompAssBegin , deleteCompAssBegin , editCompAssBegin } from '../api/index'
+
 
 export default {
     data() {
@@ -146,12 +149,15 @@ export default {
                     // 提交数据
                     if (this.modalType === 0) {
                         // 新增
-                        createUser(this.form).then(() => {
+                        addCompAssBegin(this.form).then(() => {
+                            console.log("新增综测")
+                            // 重新进行请求新的内容
                             this.getList()
                         })
                     } else {
                         // 编辑
-                        updateUser(this.form).then(() => {
+                        editCompAssBegin(this.form).then(() => {
+                            // 重新进行请求新的内容
                             this.getList()
                         })
                     }
@@ -182,7 +188,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 // 删除操作:根据后端接口,参数是对象,id是唯一标识符
-                deleteUser({ id: index.id }).then(() => {
+                deleteCompAssBegin({ id: index.id }).then(() => {
                     this.$message({
                         type: 'success',
                         message: '删除成功!'
@@ -224,6 +230,7 @@ export default {
     mounted() {
         // 挂载时获取当前页面的综测信息
         this.getList()
+        getAllCompAssBegin();
     }
 }
 </script>

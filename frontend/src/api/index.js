@@ -132,3 +132,63 @@ export const deleteRule = (rid) => {
       throw error;
     });
 };
+
+
+// 获取当前全部综测发布的内容
+export const getAllCompAssBegin = () => {
+  console.log("获取当前全部综测发布的内容")
+  return axios.get("https://mock.apifox.com/m2/4212159-0-default/162417372");
+};
+
+
+// 新增综测
+// post 传入{综测名称，综测开始时间，综测结束时间} 返回状态码等
+// publish_time，begin_time，finish_time
+export const addCompAssBegin = (pName, begin_time, finish_time) => {
+  console.log("新增综测")
+  const requestBody = {
+    pName: pName,
+  };
+  return axios
+    .post("https://mock.apifox.com/m2/4212159-0-default/162417375", requestBody)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error making POST request:", error);
+      throw error;
+    });
+};
+
+
+// 删除综测
+// delete 传入{综测pid}  返回状态码等
+export const deleteCompAssBegin = (pid) => {
+  console.log("删除综测")
+  return axios
+    .delete(`https://mock.apifox.com/m2/4212159-0-default/162417377?rid=${pid}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error making DELETE request:", error);
+      throw error;
+    });
+};
+
+
+// 修改综测 
+//put 传入{综测pid，综测名称，综测开始时间，综测结束时间} 返回状态码等
+export const editCompAssBegin = (rid, newRuleName, newScore) => {
+  console.log("修改综测")
+  const requestBody = {
+    name: newRuleName,
+    score: newScore,
+  };
+  return axios
+    .put(
+      `https://mock.apifox.com/m2/4212159-0-default/162417376?rid=${pid}`,
+      requestBody
+    )
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error making PUT request:", error);
+      throw error;
+    });
+};
