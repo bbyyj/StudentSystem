@@ -18,7 +18,7 @@
     <!-- dialog -->
     <el-dialog :title="dialogTitle" :visible.sync="showDialog">
       <el-form :model="currentItem">
-        <el-form-item label="加分条件">
+        <el-form-item :label="dialogLabel">
           <el-input v-model="currentItem.title"></el-input>
         </el-form-item>
         <el-form-item v-if="this.handleType !== ''" label="分值">
@@ -36,13 +36,20 @@
 
 <script>
 import { getAllRuleDetail } from "@/api";
+import { addNewRuleType } from "@/api";
+import { addNewRule } from "@/api";
+import { editRuleType } from "@/api";
+import { editRule } from "@/api";
+import { deleteRuleType } from "@/api";
+import { deleteRule } from "@/api";
+
 import axios from "axios";
 
 export default {
   data() {
     return {
       searchTerms: "",
-      // 后端返回数据格式
+      // 后端返回树状结构数据
       treeData: [],
 
       // 接口数据
@@ -53,9 +60,10 @@ export default {
 
       showDialog: false, // 是否显示dialog
       dialogTitle: "", // dialog复用
+      dialogLabel:"", // label复用
       currentItem: {},  // 当前内容
       currentNode: null, // 当前选中节点
-      handleType: "", // 是否为叶子
+      handleType: "", // 操作类型 add or edit
       filteredTreeData: [], // 前端过滤
     };
   },
@@ -86,37 +94,41 @@ export default {
     },
     // 创建新的综测大类
     handleCreateRoot() {
-      this.handleType = "";
+      this.handleType = "add";  // 添加模式
       this.dialogTitle = "新增综测大类别";
+      this.dialogLabel="新综测大类别名称";
       this.currentItem = { title: "", level: 1 }; // 清空当前项目信息
       this.currentNode = null; // 明确设置当前节点为null
       this.showDialog = true; // 显示对话框
     },
     // 创建新的加分条件
     handleAdd(node) {
-      this.handleType = "add";
+      this.handleType = "add"; // 添加模式
       this.dialogTitle = "新增加分条件";
+      this.dialogLabel = "加分条件";
       this.showDialog = true;
       this.currentItem = { title: "", score: null, level: 2 };
       this.currentNode = node;
     },
 
-    // 编辑根节点（不显示分值） 
+    // 编辑综测大类
     handleEditRoot(node) {
-      this.handleType = "";
+      this.handleType = "edit"; // 编辑模式
       this.dialogTitle = "编辑综测大类别";
+      this.dialogLabel = "综测大类别名称";
       this.showDialog = true;
       this.currentItem = { ...node };
-      this.currentNode = node;
+      this.currentNode = node; // 设置当前综测大类节点
     },
 
-    // 编辑当前加分条件 （显示分值）
+    // 编辑当前加分条件
     handleEditLeaf(node) {
-      this.handleType = "edit";
+      this.handleType = "edit"; // 编辑模式
       this.dialogTitle = "编辑加分条件";
+      this.dialogLabel = "加分条件";
       this.showDialog = true;
       this.currentItem = { ...node };
-      this.currentNode = node;
+      this.currentNode = node; // 设置当前综测大类节点
     },
 
     // 删除当前节点
@@ -126,13 +138,28 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        // 假设后端删除节点的接口为 `/api/delete-node`
-        axios.post('https://mock.apifox.com/m2/4212159-3852880-default/162124197', { id: data.id }).then(response => {
-          // 处理后端返回的成功响应
+        let apiPromise;
+        if (data.level === 1) {
+          // 删除综测大类别
+          console.log("删除综测大类别成功")
+          // 调用后端接口
+          apiPromise = deleteRuleType(data.id);
+        } else {
+          // 删除加分条件
+          console.log("删除加分条件成功")
+          // 调用后端接口
+          apiPromise = deleteRule(data.id);
+        }
+        console.log(apiPromise)
+
+        apiPromise.then(() => {
+          // 成功处理逻辑：从父节点的子列表中移除该节点
           const parent = node.parent;
-          const children = parent.data.children || parent.data;
-          const index = children.findIndex(d => d.id === data.id);
-          children.splice(index, 1);
+          const children = parent ? parent.data.children : this.treeData; // Fallback to root if no parent
+          const index = children.findIndex(child => child.id === data.id);
+          if (index > -1) {
+            children.splice(index, 1);
+          }
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -152,50 +179,60 @@ export default {
       });
     },
 
-    // 保存修改
+    // 增加 / 修改当前节点
     saveItem() {
-      this.$confirm('保存前请再次确认所填写的信息，然后点击确定', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info'
-      }).then(() => {
-        // 假设后端保存节点的接口为 `/api/save-node`
-        axios.post('/api/save-node', this.currentItem).then(response => {
-          // 处理后端返回的成功响应
-          if (this.currentNode) {
-            if (this.currentItem.id) {
-              Object.assign(this.currentNode, this.currentItem);
-            } else {
-              this.currentItem.id = response.data.id; // 假设后端返回新生成的ID
-              if (!this.currentNode.children) {
-                this.$set(this.currentNode, 'children', []);
-              }
-              this.currentNode.children.push(this.currentItem);
-            }
-          } else {
-            this.currentItem.id = response.data.id;
-            this.treeData.push(this.currentItem);
-          }
-          this.showDialog = false;
+      let apiPromise;
+      // 添加节点模式
+      if (this.handleType === "add") {
+        if (this.currentNode==null) {
+          // 新增综测大类别
+          console.log("新增综测大类别成功")
+          // 调用后端接口
+          apiPromise = addNewRuleType(this.currentItem.title);
+        } else {
+          // 新增加分条件
+          console.log("新增加分条件成功")
+          // 调用后端接口
+          apiPromise = addNewRule(this.currentItem.title, this.currentItem.score);
+        }
+      } 
+      
+      // 编辑节点模式
+      else if (this.handleType === "edit") {
+        console.log(this.currentNode.level)
+        if (this.currentNode.level === 1) {
+          // 修改综测大类别
+          console.log("修改综测大类别成功")
+          // 调用后端接口
+          apiPromise = editRuleType(this.currentNode.id, this.currentItem.title);
+        } else {
+          // 修改加分条件
+          console.log("修改加分条件成功")
+          // 调用后端接口
+          apiPromise = editRule(this.currentNode.id, this.currentItem.title, this.currentItem.score);
+        }
+      }
+
+      if (apiPromise) {
+        apiPromise.then(response => {
           this.$message({
             type: 'success',
             message: '保存成功!'
           });
+          this.showDialog = false;
+          this.treeData = response.tree; // 假设服务器返回更新后的整个树
+          this.handleSearch();
         }).catch(error => {
-          // 处理可能的错误响应
           this.$message({
             type: 'error',
             message: '保存失败: ' + error.message
           });
         });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消保存'
-        });
-      });
+      }
     },
 
+
+    // 叶子节点的样式
     renderContent(h, { node, data }) {
       return (
         <span class="custom-tree-node">
