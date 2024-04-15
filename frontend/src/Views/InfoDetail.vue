@@ -30,22 +30,26 @@
 
 <!--        表格里的其他项-->
         <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="提交时间" prop="submitTime" sortable></el-table-column>
-        <el-table-column label="审核状态" prop="submitState" sortable :sort-method="sortByState" :filters="[{text: '已审核', value: '已审核'}, {text: '待审核', value: '待审核'}]"
-                         :filter-multiple=false :filter-method="filterHandle"></el-table-column>
+        <el-table-column label="提交时间" prop="submit_time" sortable></el-table-column>
+        <el-table-column label="审核状态" prop="check_status" sortable :sort-method="sortByState" :filters="[{text: '已审核', value:'1'}, {text: '待审核', value: '0'}]"
+                         :filter-multiple=false :filter-method="filterHandle">
+          <template slot-scope="scope">
+            {{ formatStatus(scope.row.check_status) }}
+          </template>
+        </el-table-column>
         <el-table-column v-for="(column, index) in tableColumns" :key="index" :prop="column.prop" :label="column.label" v-if="index > 0 && index < 5"></el-table-column>
 
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-popconfirm v-if="scope.row.submitState === '待审核'" title="该记录审核通过？" confirm-button-text='是的'
-                           cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="putItems(scope.row.id)">
+            <el-popconfirm v-if="scope.row.check_status === '0'" title="该记录审核通过？" confirm-button-text='是的'
+                           cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="submitCheck(scope.row.id,'1')">
               <el-button type="info" slot="reference" size="mini" class="btn-examined" @click.native.stop>审核</el-button>
             </el-popconfirm>
 
-            <el-popconfirm v-else-if="scope.row.submitState === '已审核'" title="确认删除？" @confirm="deleteItems()">
+            <el-popconfirm v-else-if="scope.row.check_status === '1'" title="确认删除？" @confirm="deleteItems()">
               <el-button type="danger" slot="reference" size="mini" class="btn-examined" @click.native.stop>删除</el-button>
             </el-popconfirm>
-            <el-button @click.stop="showRichText(scope.row.textMessage)" type="primary" size="mini" class="btn-examined">查看附件</el-button>
+            <el-button @click.stop="showRichText(scope.row.url)" type="primary" size="mini" class="btn-examined">查看附件</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,7 +62,7 @@
 
 <!--      附件-->
       <el-dialog title="查看附件：" :visible.sync="textVisible" width="80%">
-        <div v-html="this.tableData.textMessage" class="w-e-text"></div>
+        <img :src="currentImgUrl" alt="预览图片" />
       </el-dialog>
 
 <!--      审核不通过界面-->
@@ -70,7 +74,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="rejectVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitRejectReason">确定</el-button>
+          <el-button type="primary" @click="submitCheck(rejectID,'0')">确定</el-button>
         </span>
       </el-dialog>
 
@@ -83,6 +87,7 @@
 <script>
 import InfoExamineData from "@/data/InfoExamineData";
 import request from "@/utils/request";
+import axios from "axios";
 
 export default {
   data() {
@@ -92,15 +97,20 @@ export default {
         pageSize: 5,   // 每页显示的条数
         search: '', // 输入的搜索内容
         select: '', // 选择的搜索项
+        class: '', // 班级id
+        year: '', // 年份id
+        isUndergraduate: true, // 是否本科
       },
       total: 0,
 
       tableData: [],
       textVisible: false,
       rejectVisible: false,
+      rejectID: 0,
       rejectReason:'',
       tableColumns: [],
       multipleSelection: [],
+      currentImgUrl: '', // 当前预览的图片URL
     }
   },
 
@@ -120,11 +130,11 @@ export default {
   },
   methods: {
     loadingData(){
-      // console.log("search");
-      request.post('/infoExamine/loadingData', {routeName: this.$route.name,params: this.params}).then(response => {
-        if(response.data.code == '200'){
+      // request.post('/examine/loadingdata/${this.$route.name}', {params: this.params}).then(response => {
+      axios.post('https://mock.apifox.com/m2/4212159-3852880-default/164630561', {params: this.params}).then(response => {
+        if(response.data.code === 200){
           this.tableData = response.data.data.tableData;
-          this.total = response.data.data.total;
+          this.total = response.data.data.count;
         }else{
           this.$message.error(response.data.message);
         }
@@ -134,47 +144,37 @@ export default {
         this.$set(val, "expanded", false);
       });
     },
-    deleteItems(id){
-      console.log("确认删除记录");
-      // request.put("/examine/del"+id,{routeName: this.$route.name}).then(res => {
-      //   if (res.code === '200') {
-      //     this.$message.success("删除成功");
-      //     this.loadingData();
-      //   } else {
-      //     this.$message.error(res.errorMessage);
-      //   }
-      // })
+    deleteItems(id){  // 删除
+      // request.put('/examine/${this.$route.name}/del', {id: id}).then(res => {
+      axios.put('https://mock.apifox.com/m2/4212159-3852880-default/164842747', {id: id}).then(res => {
+        if (res.data.code === 200) {
+          this.loadingData();
+          this.$message.success(res.data.message);
+        } else {
+          this.$message.error(res.data.message);
+        }
+      })
     },
-    putItems(id){
-      console.log("审核通过");
-      // request.post("/examine/pass"+id,{routeName: this.$route.name}).then(res => {
-      //   if (res.code === '200') {
-      //     this.$message.success("操作成功");
-      //     this.loadingData();
-      //   } else {
-      //     this.$message.error(res.errorMessage);
-      //   }
-      // })
-
+    submitCheck(id,status){ // 审核
+      // request.post("/examine/${this.$route.name}/check",{id: id,status: status,msg: this.rejectReason}).then(res => {
+      axios.post("https://mock.apifox.com/m2/4212159-3852880-default/164840260",{id: id,status: status,msg: this.rejectReason}).then(res => {
+        if (res.data.code === 200) {
+          this.loadingData();
+          if(status === '0'){ // 不通过
+            this.rejectVisible = false;
+            this.rejectReason = "";
+          }
+          this.$message.success(res.data.message);
+        } else {
+          this.$message.error(res.data.code);
+        }
+      })
     },
-    submitRejectReason(id){ // 提交拒绝理由
-      console.log("审核不通过-提交拒绝理由");
-      // request.post("/examine/"+id,{routeName: this.$route.name, reason: this.rejectReason}).then(res => {
-      //   if (res.code === '200') {
-      //     this.$message.success("操作成功");
-      //     this.loadingData();
-      //     this.rejectVisible = false;
-      //     this.rejectReason = "";
-      //   } else {
-      //     this.$message.error(res.errorMessage);
-      //   }
-      // })
-      this.rejectVisible = false;
-    },
-    showRichText(data){ // 展示附件
-      this.tableData.textMessage = data;
-      if(data == null){
-        this.tableData.textMessage = "暂无信息！";
+    showRichText(url){ // 展示附件
+      this.currentImgUrl = url;
+      console.log(url);
+      if(url == null){
+        this.tableData.currentImgUrl = "暂无信息！";
       }
       this.textVisible = true;
     },
@@ -232,9 +232,10 @@ export default {
 
       this.loadingData();
     },
-    showDialogReject(){ // 展示审核后拒绝理由界面
+    showDialogReject(id){ // 展示审核后拒绝理由界面
       this.rejectReason = "";
       this.rejectVisible = true;
+      this.rejectID = id;
     },
     handleRowClick(row) { // 处理展开行
       row.expanded = !row.expanded;
@@ -248,23 +249,26 @@ export default {
       this.params.pageNum = pageNum;
       this.loadingData();
     },
+    formatStatus(status) {
+      return status === '1' ? '已审核' : '未审核';
+    },
     sortByState(a, b){  // 表中审核状态排序
-      if(a.submitState == '待审核'){
+      if(a.check_status === '0'){
         return -1;
       } else{
         return 1;
       }
     },
     RowState({row, rowIndex}){  // 表中审核状态颜色
-      if(row.submitState == '待审核'){
+      if(row.check_status === '0'){
         return 'warning-row';
-      }else if(row.submitState == '已审核'){
+      }else if(row.check_status === '1'){
         return 'success-row';
       }
       return '';
     },
     filterHandle(value, row, column){ // 表中审核状态筛选
-      return row.submitState === value;
+      return row.check_status === value;
     },
     filterChange() {  //根据选择修改总条数
       this.total = this.$refs.filterTable.tableData.length;
