@@ -1,7 +1,6 @@
 package com.example.backend.controller;
 
 import com.example.backend.dao.request.CompetitionListRequest;
-import com.example.backend.dao.request.CompetitionParams;
 import com.example.backend.dao.response.CompetitionListResponse;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +17,16 @@ import java.util.Objects;
 public class ExamineController {
     private final ExamineService examineService;
 
-    @PostMapping("/loadingdata")
+    @PostMapping("/loadingdata/competition")
     public CompetitionListResponse getCompetitionList(@RequestBody CompetitionListRequest request){
-        String search = request.getParams().getSearch();
-        String select = request.getParams().getSelect();
+        String search = request.getSearch();
+        String select = request.getSelect();
 
         if(Objects.equals(search, "") && Objects.equals(select, "")){
             return examineService.getAllCompetitionList();
         }
         return null;
     }
+
+
 }

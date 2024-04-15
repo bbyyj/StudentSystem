@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompetitionListRequest {
-    private String routeName;
-    private CompetitionParams params;
+    private int pageNum;
+    private int pageSize;
+    private String search;
+    private String select;
 }
 
 
