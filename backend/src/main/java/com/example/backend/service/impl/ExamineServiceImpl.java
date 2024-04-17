@@ -19,5 +19,10 @@ public class ExamineServiceImpl implements ExamineService {
         return new CompetitionListResponse(lc, lc.size());
     }
 
+    public CompetitionListResponse getCompetitionByStudentName(String name){
+        List<Map<String, Object>> lc = repository.getCompetitionByStudent(name);
+        return new CompetitionListResponse(lc, lc.size());
+    }
+
 
 }

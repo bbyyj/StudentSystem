@@ -25,7 +25,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             "join student s on c.sid = s.sid " +
             "where s.name = :name",
             nativeQuery = true)
-    List<Competition> getCompetitionByStudent(@Param("name") String name);
+    List<Map<String, Object>> getCompetitionByStudent(@Param("name") String name);
 
 //    @Modifying
 //    @Query(value = "", nativeQuery = true)

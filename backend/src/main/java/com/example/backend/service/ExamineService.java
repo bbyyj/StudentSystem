@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ExamineService {
     CompetitionListResponse getAllCompetitionList();
+
+    CompetitionListResponse getCompetitionByStudentName(String name);
 }

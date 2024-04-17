@@ -24,6 +24,8 @@ public class ExamineController {
 
         if(Objects.equals(search, "") && Objects.equals(select, "")){
             return examineService.getAllCompetitionList();
+        } else if (Objects.equals(select, "学生姓名") && !Objects.equals(search, "")) {
+            return examineService.getCompetitionByStudentName(search);
         }
         return null;
     }
