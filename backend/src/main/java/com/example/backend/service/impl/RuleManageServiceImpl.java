@@ -1,5 +1,6 @@
 package com.example.backend.service.impl;
 
+import com.example.backend.dao.request.RuleDetailAddRequest;
 import com.example.backend.dao.request.RuleTypeAddRequest;
 import com.example.backend.dao.response.RuleDetailListResponse;
 import com.example.backend.dao.response.RuleTypeListResponse;
@@ -43,6 +44,20 @@ public class RuleManageServiceImpl implements RuleManageService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while adding RuleType.");
         }
     }
+    public ResponseEntity<String> addRuleDetail(RuleDetailAddRequest request){
+
+        try {
+            RuleDetail ruleDetail = new RuleDetail();
+            ruleDetail.setTitle(request.getDetail());
+            ruleDetail.setScore(request.getScore());
+            ruleDetail.setTid(request.getTid());
+            ruleDetailRepository.save(ruleDetail);
+            return ResponseEntity.ok("RuleDetail added successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while adding RuleDetail.");
+        }
+    }
     public ResponseEntity<String>  deleteRuleTypeById(Integer id){
 
         try {
@@ -51,6 +66,16 @@ public class RuleManageServiceImpl implements RuleManageService {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting RuleType by id.");
+        }
+    }
+    public ResponseEntity<String>  deleteRuleDetailById(Integer id){
+
+        try {
+            ruleDetailRepository.deleteById(id);
+            return ResponseEntity.ok("RuleDetail deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting RuleDetail by id.");
         }
     }
 
@@ -67,13 +92,23 @@ public class RuleManageServiceImpl implements RuleManageService {
     public ResponseEntity<String>  updateRuleTypeById(RuleTypeAddRequest request){
 
         try {
-            System.out.println(request.getId());
-            System.out.println(request.getTypename());
+
             ruleTypeRepository.updateTypeById(request.getTypename(),request.getId());
             return ResponseEntity.ok("RuleType updated successfully");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating RuleType by id.");
+        }
+    }
+    public ResponseEntity<String>  updateRuleDetailById(RuleDetailAddRequest request){
+
+        try {
+
+            ruleDetailRepository.updateByRid(request.getId(),request.getScore(),request.getDetail());
+            return ResponseEntity.ok("RuleDetail updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating RuleDetail by id.");
         }
     }
     public ResponseEntity<String>  updateRuleTypeByName(String newtype, String oldtype){

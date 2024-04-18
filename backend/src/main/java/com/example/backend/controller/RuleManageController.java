@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dao.request.AdminSignUpRequest;
+import com.example.backend.dao.request.RuleDetailAddRequest;
 import com.example.backend.dao.request.RuleTypeAddRequest;
 import com.example.backend.dao.response.RuleDetailAllResponse;
 import com.example.backend.dao.response.RuleDetailListResponse;
@@ -39,7 +40,6 @@ public class RuleManageController {
     }
     @PutMapping("/typeManage/updateRuleTypeById")
     public ResponseEntity<String>  updateRuleTypeById(@RequestBody RuleTypeAddRequest request){
-        System.out.println(request);
         return ruleManageService.updateRuleTypeById(request);
     }
 
@@ -47,6 +47,18 @@ public class RuleManageController {
     public RuleDetailAllResponse  getAllRuleDetail(){
         List<RuleDetailListResponse>  ruleDetailList = ruleManageService.getAllRuleDetail();
         return new RuleDetailAllResponse(ruleDetailList);
+    }
+    @PostMapping("/detailManage/addRuleDetail")
+    public ResponseEntity<String> addRuleDetail(@RequestBody RuleDetailAddRequest request){
+        return ruleManageService.addRuleDetail(request);
+    }
+    @PutMapping("/detailManage/updateRuleDetailById")
+    public ResponseEntity<String>  updateRuleDetailById(@RequestBody RuleDetailAddRequest request){
+        return ruleManageService.updateRuleDetailById(request);
+    }
+    @DeleteMapping("/detailManage/deleteRuleDetailById")
+    public ResponseEntity<String>  deleteRuleDetailById(@RequestParam int rid){
+        return ruleManageService.deleteRuleDetailById(rid);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dao.request.RuleDetailAddRequest;
 import com.example.backend.dao.request.RuleTypeAddRequest;
 import com.example.backend.dao.response.RuleDetailListResponse;
 import com.example.backend.dao.response.RuleTypeListResponse;
@@ -29,5 +30,11 @@ public interface RuleManageService {
     //ruleDetail
     @Transactional
     List<RuleDetailListResponse> getAllRuleDetail();
+    @Transactional
+    ResponseEntity<String>  addRuleDetail(RuleDetailAddRequest request);
+    @Transactional
+    ResponseEntity<String>  updateRuleDetailById(RuleDetailAddRequest request);
+    @Transactional
+    ResponseEntity<String>  deleteRuleDetailById(Integer id);
 
 }

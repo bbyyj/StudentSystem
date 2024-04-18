@@ -17,11 +17,12 @@ public interface RuleDetailRepository extends JpaRepository<RuleDetail, Integer>
 //    List<RuleDetail> findAllByTid(Integer tid);
 
     @Modifying
-    @Query("update RuleDetail set score = ?3,title = ?4 where rid = ?1 and tid = ?2")
-    void updateByRid(Integer rid,Integer tid,float score,String detail);
+    @Query("update RuleDetail set score = ?2,title = ?3 where rid = ?1 ")
+    void updateByRid(Integer rid,float score,String detail);
     @Modifying
     @Query("delete from RuleDetail where rid = ?1")
     void deleteByRid(Integer rid);
+
 
 
 }
