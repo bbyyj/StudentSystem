@@ -14,6 +14,9 @@ public class CompetitionListRequest {
     private int pageSize;
     private String search;
     private String select;
+    private String classId;
+    private String year;
+    private Boolean isUndergraduate;
 }
 
 
