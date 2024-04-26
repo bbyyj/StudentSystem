@@ -1,320 +1,299 @@
 <template>
-  <div>
-    <el-card class="box-card" shadow="never">
-      <el-form @submit.native.prevent="handleSearch" inline>
-        <el-form-item>
-          <el-input placeholder="请输入标题进行搜索" v-model="searchTerms" clearable @clear="handleSearch"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-button type="primary" @click="handleCreateRoot">新增综测大类</el-button>
+  <div class="compAssTable">
+    <div class="compAssTable-header">
+      <!-- 新增按钮 -->
+      <el-button type="primary" @click="handlecreate">+ 新增综测加分条件</el-button>
 
-    <el-tree :data="filteredTreeData" node-key="id" :default-expand-all="false" :props="defaultProps"
-      :render-content="renderContent"></el-tree>
 
-    <!-- dialog -->
-    <el-dialog :title="dialogTitle" :visible.sync="showDialog">
-      <el-form :model="currentItem">
-        <el-form-item :label="dialogLabel">
-          <el-input v-model="currentItem.title"></el-input>
+
+      <!-- 对话框:点击新增或编辑才会弹出表单 -->
+      <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
+      <el-dialog :title="modalType == 0 ? '新增综测分数条件' : '编辑综测分数条件'" :visible.sync="dialogVisible" width="50%"
+        :before-close="closeDialog">
+        <!-- 表单Form -->
+        <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px">
+
+          <!-- 每一项表单域:el-form-item -->
+          <el-form-item label="综测类别" prop="RuleType">
+            <el-select v-model="form.RuleType">
+              <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
+                :label="item1.label"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="加分条件" prop="RuleType">
+            <el-input v-model="form.RuleDetail"></el-input>
+          </el-form-item>
+          <el-form-item label="加分分值" prop="RuleScore">
+            <el-input v-model="form.RuleScore"></el-input>
+          </el-form-item>
+
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="submit">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <!-- 搜索框 -->
+      <el-form :inline="true">
+        <el-form-item>
+          <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
+            <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
+              :label="item1.label"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item v-if="this.handleType !== ''" label="分值">
-          <el-input v-model.number="currentItem.score"></el-input>
+
+
+
+        <el-form-item>
+
+          <el-input v-model="searchForm.name" placeholder="请输入加分条件"></el-input>
         </el-form-item>
+
+
+
+        <el-form-item>
+
+          <el-button type="primary" @click="search">查询</el-button>
+        </el-form-item>
+
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取消</el-button>
-        <el-button type="primary" @click="saveItem">保存</el-button>
+    </div>
+
+
+
+    <div class="common-table">
+      <!-- 数据表格 -->
+      <el-table :data="tableData" stripe style="width: 100%" height="90%">
+        <el-table-column prop="RuleType" label="综测类别">
+        </el-table-column>
+        <el-table-column prop="RuleDetail" label="加分条件">
+        </el-table-column>
+        <el-table-column prop="RuleScore" label="分值">
+        </el-table-column>
+        <!-- 操作列 -->
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
+      <!-- 分页栏目 -->
+      <div class="pager">
+        <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
+        </el-pagination>
       </div>
-    </el-dialog>
-
+    </div>
   </div>
 </template>
 
 <script>
-import { getAllRuleDetail } from "@/api";
-import { addNewRuleType } from "@/api";
-import { addNewRule } from "@/api";
-import { editRuleType } from "@/api";
-import { editRule } from "@/api";
-import { deleteRuleType } from "@/api";
-import { deleteRule } from "@/api";
 
-import axios from "axios";
 
 export default {
   data() {
     return {
-      searchTerms: "",
-      // 后端返回树状结构数据
-      treeData: [],
-
-      // 接口数据
-      defaultProps: {
-        children: "children",
-        label: "title",
+      // 当前选择的综测大类
+      selectedRuleType: '',
+      // 表单绑定的数据
+      form: {
+        RuleType: '',
+        RuleDetail: '',
+        RuleScore: '',
       },
-
-      showDialog: false, // 是否显示dialog
-      dialogTitle: "", // dialog复用
-      dialogLabel:"", // label复用
-      currentItem: {},  // 当前内容
-      currentNode: null, // 当前选中节点
-      handleType: "", // 操作类型 add or edit
-      filteredTreeData: [], // 前端过滤
-    };
+      // 表单验证规则
+      rules: {
+        RuleType: [{ required: true, message: '请选择综测类别', trigger: 'blur' }],
+        RuleDetail: [{ required: true, message: '请输入加分条件', trigger: 'blur' }],
+        RuleScore: [{ required: true, message: '请输入加分分值', trigger: 'blur' }],
+      },
+      RootCategory: [
+        {
+          id: 1,
+          label: "社会工作类",
+          value: "社会工作类"
+        },
+        {
+          id: 2,
+          label: "政治思想道德类",
+          value: "政治思想道德类"
+        },
+        {
+          id: 3,
+          label: "文体、实践类",
+          value: "文体、实践类"
+        },
+        {
+          id: 4,
+          label: "学习、竞赛及科研成果",
+          value: "学习、竞赛及科研成果"
+        }
+      ],
+      // 表单是否打开
+      dialogVisible: false,
+      // 列表数据
+      tableData: [{
+        ID: 1,
+        RuleType: '政治思想道德类',
+        RuleDetail: '全国三好学生',
+        RuleScore: '1.5',
+      },
+      {
+        ID: 2,
+        RuleType: '社会工作类',
+        RuleDetail: '校学生会主席',
+        RuleScore: '3',
+      },
+      ],
+      // 打开表单:新建0,编辑1
+      modalType: 0,
+      // 分页的对象
+      pageData: {
+        page: 1,
+        limit: 20
+      },
+      // 分页页数
+      total: 0,
+      // 搜索框表单
+      searchForm: {
+        compAssName: ''
+      }
+    }
   },
   methods: {
-    handleSearch() {
-      // 关键字搜索逻辑，更新 treeData
-      if (this.searchTerms.trim()) {
-        // 如果有输入关键字
-        // 利用前端递归搜索 查找数据
-        const searchResults = []; // 用来存储搜索结果
-        const search = (nodes) => {
-          nodes.forEach((node) => {
-            if (node.title.includes(this.searchTerms)) {
-              searchResults.push(node);
-            }
-            if (node.children && node.children.length) {
-              search(node.children); // 递归搜索子节点
-            }
-          });
-        };
-        search(this.treeData);
-        // 更新 treeData 为搜索结果
-        this.filteredTreeData = searchResults;
-      } else {
-        // 如果搜索框为空，则还原最开始的 treeData
-        this.filteredTreeData = this.treeData;
-      }
+    // 获取列表数据
+    getList() {
+      // 由接口文档知传入一个对象:要返回的是当前页面数据和搜索到的数据的交集
+      // getUser({ params: { ...this.pageData, ...this.searchForm } }).then((data) => {
+      //     // this.tableData = data.data.list
+      //     // this.total = data.data.count || 0
+      // })
     },
-    // 创建新的综测大类
-    handleCreateRoot() {
-      this.handleType = "add";  // 添加模式
-      this.dialogTitle = "新增综测大类别";
-      this.dialogLabel="新综测大类别名称";
-      this.currentItem = { title: "", level: 1 }; // 清空当前项目信息
-      this.currentNode = null; // 明确设置当前节点为null
-      this.showDialog = true; // 显示对话框
+    // 表单提交
+    submit() {
+      // 要用箭头函数,若用function会报错,不知道为什么
+      this.$refs.form.validate((valid) => {
+        // 符合校验
+        if (valid) {
+          // 提交数据
+          if (this.modalType === 0) {
+            // 新增
+            addCompAssBegin(this.form).then(() => {
+              console.log("新增综测")
+              // 重新进行请求新的内容
+              this.getList()
+            })
+          } else {
+            // 编辑
+            editCompAssBegin(this.form).then(() => {
+              // 重新进行请求新的内容
+              this.getList()
+            })
+          }
+          // 清空,关闭
+          this.closeDialog()
+        }
+      })
     },
-    // 创建新的加分条件
-    handleAdd(node) {
-      this.handleType = "add"; // 添加模式
-      this.dialogTitle = "新增加分条件";
-      this.dialogLabel = "加分条件";
-      this.showDialog = true;
-      this.currentItem = { title: "", score: null, level: 2 };
-      this.currentNode = node;
+    // 关闭对话框
+    closeDialog() {
+      // 先重置
+      this.$refs.form.resetFields()
+      // 后关闭
+      this.dialogVisible = false
     },
-
-    // 编辑综测大类
-    handleEditRoot(node) {
-      this.handleType = "edit"; // 编辑模式
-      this.dialogTitle = "编辑综测大类别";
-      this.dialogLabel = "综测大类别名称";
-      this.showDialog = true;
-      this.currentItem = { ...node };
-      this.currentNode = node; // 设置当前综测大类节点
+    // 编辑按钮
+    handleEdit(index) {
+      this.modalType = 1
+      this.openForm()
+      // 深拷贝
+      this.form = JSON.parse(JSON.stringify(index))
     },
-
-    // 编辑当前加分条件
-    handleEditLeaf(node) {
-      this.handleType = "edit"; // 编辑模式
-      this.dialogTitle = "编辑加分条件";
-      this.dialogLabel = "加分条件";
-      this.showDialog = true;
-      this.currentItem = { ...node };
-      this.currentNode = node; // 设置当前综测大类节点
-    },
-
-    // 删除当前节点
-    handleDelete(node, data) {
-      this.$confirm('确定要删除吗?', '警告', {
+    // 删除按钮
+    handleDelete(index) {
+      this.$confirm('确定删除？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let apiPromise;
-        if (data.level === 1) {
-          // 删除综测大类别
-          console.log("删除综测大类别成功")
-          // 调用后端接口
-          apiPromise = deleteRuleType(data.id);
-        } else {
-          // 删除加分条件
-          console.log("删除加分条件成功")
-          // 调用后端接口
-          apiPromise = deleteRule(data.id);
-        }
-        console.log(apiPromise)
-
-        apiPromise.then(() => {
-          // 成功处理逻辑：从父节点的子列表中移除该节点
-          const parent = node.parent;
-          const children = parent ? parent.data.children : this.treeData; // Fallback to root if no parent
-          const index = children.findIndex(child => child.id === data.id);
-          if (index > -1) {
-            children.splice(index, 1);
-          }
+        // 删除操作:根据后端接口,参数是对象,id是唯一标识符
+        deleteCompAssBegin({ id: index.id }).then(() => {
           this.$message({
             type: 'success',
             message: '删除成功!'
-          });
-        }).catch(error => {
-          // 处理可能的错误响应
-          this.$message({
-            type: 'error',
-            message: '删除失败: ' + error.message
-          });
+          })
+          this.getList()
         });
       }).catch(() => {
+        // 点击取消:不删除了
         this.$message({
           type: 'info',
           message: '已取消删除'
         });
       });
     },
-
-    // 增加 / 修改当前节点
-    saveItem() {
-      let apiPromise;
-      // 添加节点模式
-      if (this.handleType === "add") {
-        if (this.currentNode==null) {
-          // 新增综测大类别
-          console.log("新增综测大类别成功")
-          // 调用后端接口
-          apiPromise = addNewRuleType(this.currentItem.title);
-        } else {
-          // 新增加分条件
-          console.log("新增加分条件成功")
-          // 调用后端接口
-          apiPromise = addNewRule(this.currentItem.title, this.currentItem.score);
-        }
-      } 
-      
-      // 编辑节点模式
-      else if (this.handleType === "edit") {
-        console.log(this.currentNode.level)
-        if (this.currentNode.level === 1) {
-          // 修改综测大类别
-          console.log("修改综测大类别成功")
-          // 调用后端接口
-          apiPromise = editRuleType(this.currentNode.id, this.currentItem.title);
-        } else {
-          // 修改加分条件
-          console.log("修改加分条件成功")
-          // 调用后端接口
-          apiPromise = editRule(this.currentNode.id, this.currentItem.title, this.currentItem.score);
-        }
-      }
-
-      if (apiPromise) {
-        apiPromise.then(response => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
-          });
-          this.showDialog = false;
-          this.treeData = response.tree; // 假设服务器返回更新后的整个树
-          this.handleSearch();
-        }).catch(error => {
-          this.$message({
-            type: 'error',
-            message: '保存失败: ' + error.message
-          });
-        });
-      }
+    // 新建按钮
+    handlecreate() {
+      this.modalType = 0
+      this.openForm()
     },
-
-
-    // 叶子节点的样式
-    renderContent(h, { node, data }) {
-      return (
-        <span class="custom-tree-node">
-          <span >
-            {`${node.label}`}
-            {data.score ? <span className="score">{` ${data.score}分`}</span> : ""}
-          </span>
-
-          {data.level === 1 ? (
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.handleEditRoot(data)}
-            >
-              编辑
-            </el-button>
-          ) : (
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.handleEditLeaf(data)}
-            >
-              编辑
-            </el-button>
-          )}
-
-
-          {data.level === 1 ? (
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.handleAdd(data)}
-            >
-              添加
-            </el-button>
-          ) : null}
-
-          <el-button
-            size="mini"
-            type="text"
-            on-click={() => this.handleDelete(node, data)}
-          >
-            删除
-          </el-button>
-
-        </span>
-      );
+    // 打开表单
+    openForm() {
+      this.dialogVisible = true
     },
-    cancel() {
-      this.currentNode = null; // 取消选中当前节点
-      this.showDialog = false; // 对话框消失 
-      this.currentItem = {}; // 当前内容置空
+    // 改变页码
+    currentChange(val) {
+      this.pageData.page = val
+      this.getList()
     },
+    // 搜索
+    search() {
+      this.getList()
+    },
+    // 跳转到综测审核页面
+    gotoReview(row) {
+      this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}` });
+    }
+
   },
   mounted() {
-
-    // 请求全部综测细则
-    getAllRuleDetail()
-      .then(response => {
-        if (response.data.code === 200) {
-          console.log("成功请求到数据")
-          console.log(response.data["data"].treeData)
-          this.treeData = response.data["data"].treeData
-          this.handleSearch() 
-        }
-        else {
-          console.log("网络错误")
-        }
-      })
-      .catch(error => {
-        console.error('请求错误:', error);
-      });
-  },
-};
+    // 挂载时获取当前页面的综测信息
+    this.getList()
+    getAllCompAssBegin();
+  }
+}
 </script>
 
-<style>
-.custom-tree-node {
+<style lang="less" scoped>
+.compAssTable {
+  height: 100%;
+
+  .compAssTable-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .common-table {
+    height: 90%;
+    position: relative;
+
+    .pager {
+      position: absolute;
+      right: 20px;
+      bottom: 0;
+    }
+  }
+}
+.compAssTable .el-form {
   display: flex;
+  flex-wrap: nowrap;
+  /* 确保所有表单项目在一行显示 */
   align-items: center;
+  /* 纵向居中对齐 */
   justify-content: space-between;
-  font-size: 14px;
-  margin-right: 8px;
+  /* 分散对齐，可以根据需要调整为space-around等 */
 }
 </style>
