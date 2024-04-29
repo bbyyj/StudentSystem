@@ -43,17 +43,10 @@
           </el-select>
         </el-form-item>
 
-
-
         <el-form-item>
-
           <el-input v-model="searchForm.name" placeholder="请输入加分条件"></el-input>
         </el-form-item>
-
-
-
         <el-form-item>
-
           <el-button type="primary" @click="search">查询</el-button>
         </el-form-item>
 
@@ -80,11 +73,12 @@
         </el-table-column>
 
       </el-table>
-      <!-- 分页栏目 -->
-      <div class="pager">
-        <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
-        </el-pagination>
-      </div>
+
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="1" :page-sizes="[1, 2, 5, 10]" :page-size="1"
+        layout="total, sizes, prev, pager, next, jumper" :total="total" class="pagination">
+      </el-pagination>
+
     </div>
   </div>
 </template>
