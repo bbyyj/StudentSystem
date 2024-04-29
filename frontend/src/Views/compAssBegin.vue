@@ -65,7 +65,6 @@
                     <template slot-scope="scope">
                         <el-button type="primary" @click="gotoReview(scope.row)">查看</el-button>
                         <el-button @click="handleEdit(scope.row)">编辑</el-button>
-                        <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
 
@@ -180,29 +179,7 @@ export default {
             // 深拷贝
             this.form = JSON.parse(JSON.stringify(index))
         },
-        // 删除按钮
-        handleDelete(index) {
-            this.$confirm('此操作将永久删除当下全部综测记录, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                // 删除操作:根据后端接口,参数是对象,id是唯一标识符
-                deleteCompAssBegin({ id: index.id }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    })
-                    this.getList()
-                });
-            }).catch(() => {
-                // 点击取消:不删除了
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });
-            });
-        },
+        
         // 新建按钮
         handlecreate() {
             this.modalType = 0
