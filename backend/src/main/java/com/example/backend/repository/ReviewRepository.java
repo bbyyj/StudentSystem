@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-
+    @Query("SELECT r FROM Review r")
+    List<Review> findAll();
 
 }
