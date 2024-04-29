@@ -74,9 +74,9 @@
 
       </el-table>
 
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :current-page="1" :page-sizes="[1, 2, 5, 10]" :page-size="1"
-        layout="total, sizes, prev, pager, next, jumper" :total="total" class="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+        :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :total="total" class="pagination">
       </el-pagination>
 
     </div>
@@ -143,12 +143,9 @@ export default {
       ],
       // 打开表单:新建0,编辑1
       modalType: 0,
-      // 分页的对象
-      pageData: {
-        page: 1,
-        limit: 20
-      },
-      // 分页页数
+      // 分页相关属性
+      currentPage: 1,
+      pageSize: 5,
       total: 0,
       // 搜索框表单
       searchForm: {
@@ -237,10 +234,14 @@ export default {
     openForm() {
       this.dialogVisible = true
     },
-    // 改变页码
-    currentChange(val) {
-      this.pageData.page = val
-      this.getList()
+    handleSizeChange(pageSize) {
+      // this.pageSize = pageSize;
+      // this.loadStudents(this.pageSize, this.currentPage);
+    },
+    // 处理当前页变化
+    handleCurrentChange(currentPage) {
+      // this.currentPage = currentPage;
+      // this.loadStudents(this.pageSize, this.currentPage);
     },
     // 搜索
     search() {
@@ -255,7 +256,7 @@ export default {
   mounted() {
     // 挂载时获取当前页面的综测信息
     this.getList()
-    getAllCompAssBegin();
+    // getAllCompAssBegin();
   }
 }
 </script>

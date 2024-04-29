@@ -2,27 +2,18 @@
     <div class="record-detail" style="height: calc(100vh - 160px) !important">
         <!-- 申请单详情 -->
         <el-card class="box-card" shadow="never">
-            <div slot="header" class="clearfix">
+            <!-- <div slot="header" class="clearfix">
                 <span>综测详情</span>
-            </div>
-            <el-form
-                    label-position="top"
-                    class="student-info-form"
-                    :model="record"
-                    :disabled="true"
-                    inline
-            >
+            </div> -->
+            <el-form label-position="top" class="student-info-form" :model="record" :disabled="true" inline>
                 <el-form-item label="学号">
                     <el-input v-model="record.studentID"></el-input>
                 </el-form-item>
                 <el-form-item label="姓名">
                     <el-input v-model="record.name"></el-input>
                 </el-form-item>
-                <el-form-item label="综测分数">
+                <el-form-item label="综测总分">
                     <el-input v-model="record.score"></el-input>
-                </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="record.remark"></el-input>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -30,25 +21,20 @@
         <!-- 综测信息列表 -->
         <el-card class="box-card" shadow="never">
             <div slot="header" class="clearfix">
-                <span>以下是学生的综测申请项目</span>
+                <span>以下是学生的综测申请项目，请参照综测表进行不合规分值的修改</span>
             </div>
-            <el-form
-                    inline
-                    class="search-form"
-                    @submit.native.prevent="fetchListData"
-            >
+
+            <el-form inline class="search-form" @submit.native.prevent="fetchListData">
                 <el-form-item label="类别">
-                    <el-input v-model="searchTerms.a" placeholder="请输入类别"></el-input>
+                    <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
+                        <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
+                            :label="item1.label"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="加分条件">
                     <el-input v-model="searchTerms.b" placeholder="请输入加分条件"></el-input>
                 </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="searchTerms.c" placeholder="请输入备注"></el-input>
-                </el-form-item>
-                <el-form-item label="分值">
-                    <el-input v-model="searchTerms.d" placeholder="请输入分值"></el-input>
-                </el-form-item>
+
                 <el-form-item>
                     <el-button type="primary" @click="fetchListData">搜索</el-button>
                 </el-form-item>
@@ -60,77 +46,32 @@
                 <el-table-column prop="b" label="加分条件"></el-table-column>
                 <el-table-column prop="c" label="备注"></el-table-column>
                 <el-table-column prop="d" label="分值"></el-table-column>
-
-                <el-table-column prop="fileUrl" label="附件">
-                    <template #default="scope">
-                        <div v-if="scope.row.fileUrl">
-                            <!-- 检查URL是否指向图片 -->
-                            <img v-if="isImage(scope.row.fileUrl)" :src="scope.row.fileUrl" alt="附件" style="width: 100px; height: auto; cursor: pointer;" @click="showImgDialog(scope.row.fileUrl)" />
-                            <!-- 对于PDF，显示一个可点击的链接 -->
-                            <a v-else :href="scope.row.fileUrl" target="_blank">查看文件</a>
-                        </div>
-                    </template>
-                </el-table-column>
-
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button
-                                size="mini"
-                                type="success"
-                                @click="approveItem(scope.row)"
-                        >通过</el-button
-                        >
-                        <el-button
-                                size="mini"
-                                type="danger"
-                                @click="showRejectDialog(scope.row)"
-                        >不通过</el-button
-                        >
+                        <el-button size="mini" type="success" @click="modifyItem(scope.row)">修改分值</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <el-pagination
-                    layout="total, prev, pager, next"
-                    :total="totalItems"
-                    :current-page.sync="currentPage"
-                    :page-size="pageSize"
-                    @current-change="fetchListData"
-            ></el-pagination>
+            <!-- 分页-->
+
         </el-card>
 
-        <el-dialog title="拒绝理由" :visible.sync="showDialogReject" width="30%">
-            <el-form>
-                <el-form-item label="请输入拒绝的理由">
-                    <el-input
-                            type="textarea"
-                            v-model="rejectReason"
-                            rows="5"
-                            placeholder="请输入理由"
-                    ></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-        <el-button @click="showDialogReject = false">取消</el-button>
-        <el-button type="primary" @click="submitRejectReason">确定</el-button>
-
-      </span>
-        </el-dialog>
 
         <!-- 审批操作按钮 -->
         <el-row type="flex" class="row-bg" justify="end">
             <el-col :span="3">
-                <el-button type="success" @click="approveApplication">通过</el-button>
+                <el-button type="success" @click="approveApplication">审核完毕</el-button>
             </el-col>
             <el-col :span="3">
-                <el-button type="danger" @click="rejectApplication">不通过</el-button>
+                <el-button type="primary" @click="rejectApplication">返回</el-button>
             </el-col>
         </el-row>
 
-        <!-- 图片预览对话框 -->
-        <el-dialog :visible.sync="imgDialogVisible" :before-close="handleClose">
-            <img :src="currentImgUrl" alt="预览图片" style="width: 100%;" />
-        </el-dialog>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+            :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+            :total="total" class="pagination">
+        </el-pagination>
 
     </div>
 </template>
@@ -139,9 +80,6 @@
 export default {
     data() {
         return {
-            imgDialogVisible: false, // 控制图片预览对话框的显示
-            currentImgUrl: '', // 当前预览的图片URL
-
             searchTerms: {
                 a: "",
                 b: "",
@@ -163,33 +101,49 @@ export default {
                     { a: "社会工作类", b: "班委委员", c: "软件工程学院2021级3班文体委员", d: "0.5分" },
                 ],
             },
-            totalItems: 4, // 模拟的总条目数
-            pageSize: 10, // 默认每页显示的条目数
-            currentPage: 1, // 当前页码
+            selectedRuleType:"",
+            RootCategory: [
+                {
+                    id: 1,
+                    label: "社会工作类",
+                    value: "社会工作类"
+                },
+                {
+                    id: 2,
+                    label: "政治思想道德类",
+                    value: "政治思想道德类"
+                },
+                {
+                    id: 3,
+                    label: "文体、实践类",
+                    value: "文体、实践类"
+                },
+                {
+                    id: 4,
+                    label: "学习、竞赛及科研成果",
+                    value: "学习、竞赛及科研成果"
+                }
+            ],
+
+            // 分页相关属性
+            currentPage: 1,
+            pageSize: 5,
+            total: 0,
+
             showDialogReject: false, // 控制拒绝理由对话框的显示
             rejectReason: "", // 存储用户输入的拒绝理由
             currentRejectItem: null, // 当前打算拒绝的项目
         };
     },
     methods: {
-        // 查看图片附件
-        showImgDialog(url) {
-            this.currentImgUrl = url;
-            this.imgDialogVisible = true;
-        },
-
-        handleClose(done) {
-            done();
-        },
-
-        // 判断附件格式
-        isImage(fileUrl) {
-            return /\.(jpeg|jpg|png)$/i.test(fileUrl);
-        },
-        cancelReject() {
-            this.showDialogReject = false; // 控制拒绝理由对话框的显示
-            this.rejectReason = ""; // 存储用户输入的拒绝理由
-            this.currentRejectItem = null; // 当前打算拒绝的项目
+        // 修改新的分值
+        modifyItem(item) {
+            // 弹出对话框或通过其他UI方式接受新分值
+            let newScore = prompt("请输入新的分值：", item.d); // 使用prompt作为简单示例
+            if (newScore !== null && newScore.trim() !== '' && !isNaN(newScore)) {
+                item.d = parseFloat(newScore).toFixed(1) + "分"; // 更新项目分数
+                this.updateTotalScore(); // 更新总分
+            }
         },
         showRejectDialog(item) {
             this.currentRejectItem = item;
@@ -202,6 +156,16 @@ export default {
             // 假设这里返回了搜索结果和总数
             // this.record.list = ...
             // this.totalItems = ...
+        },
+        // 处理每页显示数量变化
+        handleSizeChange(pageSize) {
+            // this.pageSize = pageSize;
+            // this.loadStudents(this.pageSize, this.currentPage);
+        },
+        // 处理当前页变化
+        handleCurrentChange(currentPage) {
+            // this.currentPage = currentPage;
+            // this.loadStudents(this.pageSize, this.currentPage);
         },
         editItem(item) {
             // 修改列表项，可能需要弹窗或导航到编辑表单页面

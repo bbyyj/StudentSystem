@@ -37,9 +37,9 @@
 
         </el-table>
 
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
-            :page-sizes="[1, 2, 5, 10]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total"
-            class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+            :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+            :total="total" class="pagination">
         </el-pagination>
 
     </div>
@@ -62,14 +62,24 @@ export default {
                 { id: 3, a: "21342323", b: "李四", c: "1", d: "5.0", status: "unverified" },
                 { id: 4, a: "21342323", b: "王五", c: "1", d: "5.0", status: "verified" },
             ],
-            totalItems: 4,
-            pageSize: 10,
+            // 分页相关属性
             currentPage: 1,
+            pageSize: 5,
+            total: 0,
             currentItem: {},
             isEditMode: false,
         };
     },
     methods: {
+        handleSizeChange(pageSize) {
+            // this.pageSize = pageSize;
+            // this.loadStudents(this.pageSize, this.currentPage);
+        },
+        // 处理当前页变化
+        handleCurrentChange(currentPage) {
+            // this.currentPage = currentPage;
+            // this.loadStudents(this.pageSize, this.currentPage);
+        },
         // 根据学生信息进行搜索
         fetchData() {
             // 后端接口 根据 searchTerms 进行搜索

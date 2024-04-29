@@ -76,9 +76,9 @@
                 <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
                 </el-pagination>
             </div> -->
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
-                :page-sizes="[1, 2, 5, 10]" :page-size="1" layout="total, sizes, prev, pager, next, jumper"
-                :total="total" class="pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                :current-page="currentPage" :page-sizes="[1, 2, 5, 10]" :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper" :total="total" class="pagination">
             </el-pagination>
 
         </div>
@@ -123,13 +123,12 @@ export default {
             ],
             // 打开表单:新建0,编辑1
             modalType: 0,
-            // 分页的对象
-            pageData: {
-                page: 1,
-                limit: 20
-            },
-            // 分页页数
+            // 分页相关属性
+            currentPage: 1,
+            pageSize: 5,
             total: 0,
+
+
             // 搜索框表单
             searchForm: {
                 compAssName: ''
@@ -137,6 +136,15 @@ export default {
         }
     },
     methods: {
+        handleSizeChange(pageSize) {
+            // this.pageSize = pageSize;
+            // this.loadStudents(this.pageSize, this.currentPage);
+        },
+        // 处理当前页变化
+        handleCurrentChange(currentPage) {
+            // this.currentPage = currentPage;
+            // this.loadStudents(this.pageSize, this.currentPage);
+        },
         // 获取列表数据
         getList() {
             // 由接口文档知传入一个对象:要返回的是当前页面数据和搜索到的数据的交集
@@ -195,11 +203,11 @@ export default {
         openForm() {
             this.dialogVisible = true
         },
-        // 改变页码
-        currentChange(val) {
-            this.pageData.page = val
-            this.getList()
-        },
+        // // 改变页码
+        // currentChange(val) {
+        //     this.pageData.page = val
+        //     this.getList()
+        // },
         // 搜索
         search() {
             this.getList()
@@ -207,7 +215,8 @@ export default {
         // 跳转到综测审核页面
         gotoReview(row){
             this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}`});
-        }
+        },
+        
 
     },
     mounted() {
