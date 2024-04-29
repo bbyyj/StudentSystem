@@ -7,7 +7,7 @@
             <!-- 对话框:点击新增或编辑才会弹出表单 -->
             <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
             <el-dialog :title="modalType == 0 ? '新建' : '编辑'" :visible.sync="dialogVisible" width="50%"
-                       :before-close="closeDialog">
+                :before-close="closeDialog">
                 <!-- 表单Form -->
                 <!-- ref=form:为了通过this.$refs调用组件的方法 -->
                 <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px">
@@ -19,14 +19,16 @@
 
                     <el-form-item label="开始时间">
                         <el-form-item prop="compAssBeginTime">
-                            <el-date-picker type="date" placeholder="请选择综测开始时间" v-model="form.compAssBeginTime" value-format="yyyy-MM-DD">
+                            <el-date-picker type="date" placeholder="请选择综测开始时间" v-model="form.compAssBeginTime"
+                                value-format="yyyy-MM-DD">
                             </el-date-picker>
                         </el-form-item>
                     </el-form-item>
 
                     <el-form-item label="结束时间">
                         <el-form-item prop="compAssEndTime">
-                            <el-date-picker type="date" placeholder="请选择综测结束时间" v-model="form.compAssEndTime" value-format="yyyy-MM-DD">
+                            <el-date-picker type="date" placeholder="请选择综测结束时间" v-model="form.compAssEndTime"
+                                value-format="yyyy-MM-DD">
                             </el-date-picker>
                         </el-form-item>
                     </el-form-item>
@@ -74,6 +76,10 @@
                 <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
                 </el-pagination>
             </div> -->
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
+                :page-sizes="[1, 2, 5, 10]" :page-size="1" layout="total, sizes, prev, pager, next, jumper"
+                :total="total" class="pagination">
+            </el-pagination>
 
         </div>
     </div>
