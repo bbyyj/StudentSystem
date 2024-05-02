@@ -5,9 +5,11 @@ import com.example.backend.dao.request.CompetitionListRequest;
 import com.example.backend.dao.response.CompetitionListResponse;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -30,6 +32,7 @@ public class ExamineController {
         boolean type = Objects.equals(select, "成果级别") && !Objects.equals(search, "");
         boolean level = Objects.equals(select, "成果等级") && !Objects.equals(search, "");
 
+
         if(Objects.equals(classId, "") && Objects.equals(year, "")){
             if(none){
                 return examineService.getAllCompetitionList();
@@ -42,8 +45,9 @@ public class ExamineController {
             } else if (level) {
                 return examineService.getAllCompetitionByLevel(search);
             }
-        }else{
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
             if(none){
+                // 查询某个班的所有比赛
                 return examineService.getClassCompetitionList(classId, year, isUndergraduate);
             } else if (stu_name) {
                 return examineService.getClassCompetitionByStudentName(classId, year, isUndergraduate, search);
@@ -54,6 +58,8 @@ public class ExamineController {
             } else if (level) {
                 return examineService.getClassCompetitionByLevel(classId, year, isUndergraduate, search);
             }
+        }else{
+            return null;
         }
 
         return null;
@@ -65,7 +71,8 @@ public class ExamineController {
     }
 
     @PutMapping("/competition/del")
-    public ResponseEntity<String> del(@RequestBody int id){
+    public ResponseEntity<String> del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
         return examineService.del(id);
     }
 }
