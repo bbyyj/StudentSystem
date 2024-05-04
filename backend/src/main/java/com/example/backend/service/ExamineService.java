@@ -1,7 +1,9 @@
 package com.example.backend.service;
 
 import com.example.backend.dao.request.CompCheckRequest;
+import com.example.backend.dao.request.PaperCheckRequest;
 import com.example.backend.dao.response.CompetitionListResponse;
+import com.example.backend.dao.response.PaperListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +32,34 @@ public interface ExamineService {
     CompetitionListResponse getClassCompetitionByLevel(String classId, String year, Boolean isUndergraduate, String level); // 成果等级
 
     @Transactional
-    ResponseEntity<String> check(CompCheckRequest request);
+    ResponseEntity<String> comp_check(CompCheckRequest request);
 
     @Transactional
-    ResponseEntity<String> del(int id);
+    ResponseEntity<String> comp_del(int id);
 
+    PaperListResponse getAllPaperList();
+
+    PaperListResponse getAllPaperByStudentName(String search);
+
+    PaperListResponse getAllPaperByPaperName(String search);
+
+    PaperListResponse getAllPaperByType(String search);
+
+    PaperListResponse getAllPaperByCCF(String search);
+
+    PaperListResponse getClassPaperList(String classId, String year, Boolean isUndergraduate);
+
+    PaperListResponse getClassPaperByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    PaperListResponse getClassPaperByPaperName(String classId, String year, Boolean isUndergraduate, String search);
+
+    PaperListResponse getClassPaperByType(String classId, String year, Boolean isUndergraduate, String search);
+
+    PaperListResponse getClassPaperByCCF(String classId, String year, Boolean isUndergraduate, String search);
+
+    @Transactional
+    ResponseEntity<String> paper_check(PaperCheckRequest request);
+
+    @Transactional
+    ResponseEntity<String> paper_del(int id);
 }
