@@ -15,6 +15,8 @@ public interface UploadService {
 
     void uploadExchangeActivity(String url, String exchangeActivityJson);
 
+    void uploadOthers(String url, String exchangeActivityJson);
+
 //    void uploadItem(String url, String itemJson, Class<?> itemType, JpaRepository repository);
 
 }

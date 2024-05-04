@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "patent")
+@Table(name = "patent") // 修改表名为 "patents"
 public class Patent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,19 +76,23 @@ public class Patent {
     @Column(name = "check_msg")
     private String check_msg; // 审核意见
 
+    // 添加新字段
     @Column(name = "rule_type")
-    private String rule_type;   // 综测大类
+    private String rule_type; // 综测大类
 
     @Column(name = "rule_detail")
-    private String rule_detail; // 综测细则
+    private String rule_detail; // 细则
 
     @Column(name = "rule_score")
-    private Float rule_score;   // 分数
+    private float rule_score; // 细则分数
 
     @Column(name = "check_score")
-    private Float check_score;      // 审核分数
+    private float check_score; // 审核分数
 
     @Column(name = "rule_accept")
-    private Integer rule_accept;    // 是否接受
+    private Integer rule_accept; // 是否加入综测，默认为0, not null
+
+
+
 }
 
