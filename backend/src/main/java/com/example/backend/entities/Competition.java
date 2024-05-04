@@ -17,7 +17,7 @@ import java.util.Date;
 public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id;     // 编号
 
     @Column(name = "url")
     private String url; // 材料链接
@@ -60,5 +60,23 @@ public class Competition {
 
     @Column(name = "teammate")
     private String teammate; // 其他参与人员
+
+    @Column(name = "rule_type")
+    private String rule_type;   // 综测大类
+
+    @Column(name = "rule_detail")
+    private String rule_detail; // 综测细则
+
+    @Column(name = "rule_score")
+    private Float rule_score;   // 分数
+
+    @Column(name = "check_score")
+    private Float check_score;      // 审核分数
+
+    @Column(name = "rule_accept")
+    private Integer rule_accept;    // 是否接受
+
+    @Column(name = "captain")
+    private String captain;     // 负责人
 }
 

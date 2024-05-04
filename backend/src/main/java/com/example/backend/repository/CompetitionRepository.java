@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,4 +83,24 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
             "where id = :id", nativeQuery = true)
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
+    @Modifying
+    @Query(value = "select c.*, s.name " +
+            "from competition c " +
+            "join student s on c.sid = s.sid " +
+            "where s.sid = :sid and c.check_status = 1 and c.rule_accept = 1 " +
+            "and c.time >= :begin and c.time <= :end", nativeQuery = true)
+    List<Map<String, Object>> getStuCompFromTime(@Param("sid") String sid,
+                                                 @Param("begin") Date begin,
+                                                 @Param("end") Date end);
+
+    @Modifying
+    @Query(value = "update competition set check_score = :check_score " +
+            "where id = :id", nativeQuery = true)
+    void updateCheckScoreById(@Param("id") int id, @Param("check_score") float check_score);
+
+
+    @Modifying
+    @Query(value = "update competition set rule_accept = :rule_accept " +
+            "where id = :id", nativeQuery = true)
+    void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
 }
