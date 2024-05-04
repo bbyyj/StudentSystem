@@ -29,8 +29,8 @@ class BackendApplicationTests {
 			}
 		}
 
-		u.updateCheckScoreFromTable("比赛", 1, 0.8);
-		u.updateRuleAcceptFromTable("比赛", 2, 1);
+		u.updateCheckScoreByTableName("比赛", 1, 0.8);
+		u.updateRuleAcceptByTableName("比赛", 2, 1);
 	}
 
 }
