@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Proxy;
 
 import java.util.Date;
 
@@ -13,43 +14,31 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "software")
-public class Software {
+@Proxy(lazy = false)
+@Table(name = "others")
+public class Others {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
-    private String name; // 软件著作权名称
-
-    @Column(name = "inv_type")
-    private String inv_type; // 第几发明人
-
-    @Column(name = "inventors")
-    private String inventors; // 全部完成人
-
-    @Column(name = "app_status")
-    private String app_status; // 申请状态
-
-    @Column(name = "status_date")
-    private Date status_date; // 该状态时间
-
-    @Column(name = "remark")
-    private String remark; // 备注
+    @Column(name = "sid")
+    private String sid; // 学生学号
 
     @Column(name = "url")
     private String url; // 材料链接
 
     @Column(name = "check_status")
-    private String check_status; // 审核状态
+    private String check_status; // 审核状态 未审核/审核通过/审核不通过
 
     @Column(name = "check_msg")
     private String check_msg; // 审核意见
 
-    @Column(name = "sid")
-    private String sid; // 学生学号
+    @Column(name = "attend_time")
+    private Date attend_time; // 参与时间
 
-    // 添加新字段
+    @Column(name = "discribe")
+    private String discribe; // 描述
+
     @Column(name = "rule_type")
     private String rule_type; // 综测大类
 
@@ -64,5 +53,4 @@ public class Software {
 
     @Column(name = "rule_accept")
     private Integer rule_accept; // 是否加入综测，默认为0, not null
-
 }

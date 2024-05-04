@@ -19,6 +19,8 @@ public class UploadServiceImpl implements UploadService {
     private final VolunteerRepository volunteerRepository;
     private final ExchangeActivityRepository exchangeActivityRepository;
     private final MonographRepository monographRepository;
+    private final OthersRepository othersRepository;
+
 
     public void uploadSoftware(String url, String softwareJson){
 
@@ -28,6 +30,7 @@ public class UploadServiceImpl implements UploadService {
         software.setUrl(url);
         software.setCheck_msg("无");
         software.setCheck_status("未审核");
+//        software.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         softwareRepository.save(software);
 
@@ -41,6 +44,7 @@ public class UploadServiceImpl implements UploadService {
         competition.setUrl(url);
         competition.setCheck_msg("无");
         competition.setCheck_status("未审核");
+//        competition.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         competitionRepository.save(competition);
 
@@ -54,6 +58,7 @@ public class UploadServiceImpl implements UploadService {
         paper.setUrl(url);
         paper.setCheck_msg("无");
         paper.setCheck_status("未审核");
+//        paper.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         paperRepository.save(paper);
 
@@ -67,6 +72,7 @@ public class UploadServiceImpl implements UploadService {
         patent.setUrl(url);
         patent.setCheck_msg("无");
         patent.setCheck_status("未审核");
+//        patent.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         patentRepository.save(patent);
 
@@ -80,6 +86,7 @@ public class UploadServiceImpl implements UploadService {
         volunteer.setUrl(url);
         volunteer.setCheck_msg("无");
         volunteer.setCheck_status("未审核");
+//        volunteer.setRuleScore(getRuleScore(rule_type,rule_detail)*volunteer.getTime());
 
         volunteerRepository.save(volunteer);
 
@@ -93,6 +100,7 @@ public class UploadServiceImpl implements UploadService {
         monograph.setUrl(url);
         monograph.setCheck_msg("无");
         monograph.setCheck_status("未审核");
+//        monograph.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         monographRepository.save(monograph);
 
@@ -106,9 +114,23 @@ public class UploadServiceImpl implements UploadService {
         exchangeActivity.setUrl(url);
         exchangeActivity.setCheck_msg("无");
         exchangeActivity.setCheck_status("未审核");
+//        exchangeActivity.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         exchangeActivityRepository.save(exchangeActivity);
 
+    }
+
+    @Override
+    public void uploadOthers(String url, String othersJson) {
+        Others others = gson.fromJson(othersJson, Others.class);
+
+        others.setId(0);
+        others.setUrl(url);
+        others.setCheck_msg("无");
+        others.setCheck_status("未审核");
+//        others.setRuleScore(getRuleScore(rule_type,rule_detail));
+
+        othersRepository.save(others);
     }
 
 //    public void uploadItem(String url, String itemJson, Class<?> itemType, JpaRepository repository) {

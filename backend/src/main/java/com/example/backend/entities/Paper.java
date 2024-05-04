@@ -100,5 +100,22 @@ public class Paper {
     @Column(name = "check_msg")
     private String check_msg; // 审核意见
 
+    // 添加新字段
+    @Column(name = "rule_type")
+    private String rule_type; // 综测大类
+
+    @Column(name = "rule_detail")
+    private String rule_detail; // 细则
+
+    @Column(name = "rule_score")
+    private float rule_score; // 细则分数
+
+    @Column(name = "check_score")
+    private float check_score; // 审核分数
+
+    @Column(name = "rule_accept")
+    private Integer rule_accept; // 是否加入综测，默认为0, not null
+
+
 }
 

@@ -78,5 +78,7 @@ public class Competition {
 
     @Column(name = "captain")
     private String captain;     // 负责人
+
+
 }
 
