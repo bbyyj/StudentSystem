@@ -96,7 +96,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Modifying
     @Query(value = "update competition set check_score = :check_score " +
             "where id = :id", nativeQuery = true)
-    void updateCheckScoreById(@Param("id") int id, @Param("check_score") float check_score);
+    void updateCheckScoreById(@Param("id") int id, @Param("check_score") double check_score);
 
 
     @Modifying
