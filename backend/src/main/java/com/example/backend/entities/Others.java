@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Proxy;
 
 import java.util.Date;
 
@@ -14,7 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Proxy(lazy = false)
 @Table(name = "others")
 public class Others {
     @Id

@@ -20,6 +20,6 @@ public interface AuthenticationService {
 
     StudentInformationResponse getStudentInfomation(String netId);
 
-    ResponseEntity<String> uploadExcelFile(MultipartFile file);
+    ResponseEntity<String> signupStudentExcel(MultipartFile file);
 
 }

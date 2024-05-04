@@ -28,8 +28,8 @@ public class UploadServiceImpl implements UploadService {
 
         software.setId(0);
         software.setUrl(url);
-        software.setCheck_msg("无");
-        software.setCheck_status("未审核");
+        software.setCheck_msg("未审核");
+        software.setCheck_status("无");
 //        software.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         softwareRepository.save(software);
@@ -42,8 +42,8 @@ public class UploadServiceImpl implements UploadService {
 
         competition.setId(0);
         competition.setUrl(url);
-        competition.setCheck_msg("无");
-        competition.setCheck_status("未审核");
+        competition.setCheck_msg("未审核");
+        competition.setCheck_status("无");
 //        competition.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         competitionRepository.save(competition);
@@ -56,8 +56,8 @@ public class UploadServiceImpl implements UploadService {
 
         paper.setId(0);
         paper.setUrl(url);
-        paper.setCheck_msg("无");
-        paper.setCheck_status("未审核");
+        paper.setCheck_msg("未审核");
+        paper.setCheck_status("无");
 //        paper.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         paperRepository.save(paper);
@@ -70,8 +70,8 @@ public class UploadServiceImpl implements UploadService {
 
         patent.setId(0);
         patent.setUrl(url);
-        patent.setCheck_msg("无");
-        patent.setCheck_status("未审核");
+        patent.setCheck_msg("未审核");
+        patent.setCheck_status("无");
 //        patent.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         patentRepository.save(patent);
@@ -84,8 +84,8 @@ public class UploadServiceImpl implements UploadService {
 
         volunteer.setId(0);
         volunteer.setUrl(url);
-        volunteer.setCheck_msg("无");
-        volunteer.setCheck_status("未审核");
+        volunteer.setCheck_msg("未审核");
+        volunteer.setCheck_status("无");
 //        volunteer.setRuleScore(getRuleScore(rule_type,rule_detail)*volunteer.getTime());
 
         volunteerRepository.save(volunteer);
@@ -98,8 +98,8 @@ public class UploadServiceImpl implements UploadService {
 
         monograph.setId(0);
         monograph.setUrl(url);
-        monograph.setCheck_msg("无");
-        monograph.setCheck_status("未审核");
+        monograph.setCheck_msg("未审核");
+        monograph.setCheck_status("无");
 //        monograph.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         monographRepository.save(monograph);
@@ -112,8 +112,8 @@ public class UploadServiceImpl implements UploadService {
 
         exchangeActivity.setId(0);
         exchangeActivity.setUrl(url);
-        exchangeActivity.setCheck_msg("无");
-        exchangeActivity.setCheck_status("未审核");
+        exchangeActivity.setCheck_msg("未审核");
+        exchangeActivity.setCheck_status("无");
 //        exchangeActivity.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         exchangeActivityRepository.save(exchangeActivity);
@@ -126,8 +126,8 @@ public class UploadServiceImpl implements UploadService {
 
         others.setId(0);
         others.setUrl(url);
-        others.setCheck_msg("无");
-        others.setCheck_status("未审核");
+        others.setCheck_msg("未审核");
+        others.setCheck_status("无");
 //        others.setRuleScore(getRuleScore(rule_type,rule_detail));
 
         othersRepository.save(others);
@@ -146,7 +146,7 @@ public class UploadServiceImpl implements UploadService {
 //
 //            Field checkMsgField = itemType.getDeclaredField("check_msg");
 //            checkMsgField.setAccessible(true);
-//            checkMsgField.set(item, "未审核");
+//            checkMsgField.set(item, "无");
 //
 //            Field checkStatusField = itemType.getDeclaredField("check_status");
 //            checkStatusField.setAccessible(true);

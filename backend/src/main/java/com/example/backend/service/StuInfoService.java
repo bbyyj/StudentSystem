@@ -4,6 +4,7 @@ import com.example.backend.dao.request.MyInfoModifyRequest;
 import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.entities.Student;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,12 +14,11 @@ import java.util.List;
 
 public interface StuInfoService {
 
+    Page<Student> findByPage(int page, int size);
+
     List<Student> getAllStudent();
 
-    List<Student> getClassStudent(Boolean isUndergraduate, Year admissionYear, Integer classId);
-
-    @Transactional
-    ResponseEntity<String> importStudentDormitory(MultipartFile file);
+    Page<Student> getClassStudent(Boolean isUndergraduate, Year admissionYear, Integer classId, int page, int size);
 
     @Transactional
     ResponseEntity<String> modifyMyInfo(MyInfoModifyRequest request);
@@ -32,5 +32,7 @@ public interface StuInfoService {
     @Transactional
     ResponseEntity<String> deleteStuInfo(String netId);
 
-    List<Student>  searchStuInfo(String netId);
+    Page<Student>  searchStuInfo(String netId, int page, int size);
+
+    ResponseEntity<String> modifyStuInfoExcel(MultipartFile file);
 }

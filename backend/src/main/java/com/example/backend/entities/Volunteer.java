@@ -38,7 +38,7 @@ public class Volunteer {
     private Date end; // 参与志愿活动结束时间
 
     @Column(name = "time")
-    private int time; // 志愿服务时长（X小时）
+    private float time; // 志愿服务时长（X小时，有0.5小时）
 
     @Column(name = "url")
     private String url; // 材料链接

@@ -15,10 +15,7 @@ import com.example.backend.repository.StudentRepository;
 import com.example.backend.service.AuthenticationService;
 import com.example.backend.service.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -123,7 +120,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<String> uploadExcelFile(MultipartFile file) {
+    public ResponseEntity<String> signupStudentExcel(MultipartFile file) {
 
         if (!file.getContentType().equals("application/vnd.ms-excel") &&
                 !file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
@@ -139,19 +136,57 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+//    private List<Student> parseExcel(InputStream inputStream) throws IOException {
+//        List<Student> students = new ArrayList<>();
+//        try (Workbook workbook = WorkbookFactory.create(inputStream)) {
+//            Sheet sheet = workbook.getSheetAt(0);
+//            for (Row row : sheet) {
+//                String netId = row.getCell(0).getStringCellValue();
+//                String undergraduateType = row.getCell(1).getStringCellValue();
+//                boolean isUndergraduate = "本科生".equals(undergraduateType) ? true : false;
+//                int admissionYear = (int) row.getCell(2).getNumericCellValue();
+//                int classId = (int) row.getCell(3).getNumericCellValue();
+//
+//                Student student = new Student();
+//                student.setNetId(netId);
+//                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//                String encryptedPassword = passwordEncoder.encode("123456");
+//                student.setPassword(encryptedPassword);
+//                StudentRole studentRole = StudentRole.valueOf("NOT_MONITOR");
+//                student.setStudentRole(studentRole);
+//                student.setUndergraduate(isUndergraduate);
+//                student.setAdmissionYear(Year.of(admissionYear));
+//                student.setClassId(classId);
+//
+//                students.add(student);
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//        return students;
+//    }
+
     private List<Student> parseExcel(InputStream inputStream) throws IOException {
         List<Student> students = new ArrayList<>();
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
             Sheet sheet = workbook.getSheetAt(0);
+            Row headerRow = sheet.getRow(0);
+            DataFormatter dataFormatter = new DataFormatter();
+            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
             for (Row row : sheet) {
-                String netId = row.getCell(0).getStringCellValue();
-                String undergraduateType = row.getCell(1).getStringCellValue();
-                boolean isUndergraduate = "本科生".equals(undergraduateType) ? true : false;
-                int admissionYear = (int) row.getCell(2).getNumericCellValue();
-                int classId = (int) row.getCell(3).getNumericCellValue();
+                if (row.getRowNum() == 0) {
+                    continue;
+                }
+                String netId = dataFormatter.formatCellValue(row.getCell(getColumnIndex(headerRow, "netId")), formulaEvaluator);
+                String sid = dataFormatter.formatCellValue(row.getCell(getColumnIndex(headerRow, "学号")), formulaEvaluator);
+                String undergraduateType = dataFormatter.formatCellValue(row.getCell(getColumnIndex(headerRow, "培养阶段")), formulaEvaluator);
+                boolean isUndergraduate = "本科生".equals(undergraduateType);
+                int admissionYear = (int) row.getCell(getColumnIndex(headerRow, "入学年份")).getNumericCellValue();
+                int classId = (int) row.getCell(getColumnIndex(headerRow, "班级")).getNumericCellValue();
 
                 Student student = new Student();
                 student.setNetId(netId);
+                student.setSid(sid);
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 String encryptedPassword = passwordEncoder.encode("123456");
                 student.setPassword(encryptedPassword);
@@ -169,85 +204,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return students;
     }
 
-//    private List<Student> parseExcel(InputStream inputStream) throws IOException {
-//        List<Student> students = new ArrayList<>();
-//        try (Workbook workbook = WorkbookFactory.create(inputStream)) {
-//            Sheet sheet = workbook.getSheetAt(0);
-//            System.out.println("place -1");
-//            Row headerRow = sheet.getRow(0);
-//            System.out.println("place -2");
-//
-//            Map<String, Integer> columnIndexMap = new HashMap<>();
-//            for (int i = 0; i < headerRow.getLastCellNum(); i++) {
-//                System.out.println("place -3");
-//
-//                Cell cell = headerRow.getCell(i);
-//                System.out.println("place -4");
-//
-//                String columnHeader = cell.getStringCellValue();
-//                System.out.println("place -5");
-//
-//                columnIndexMap.put(columnHeader, i);
-//            }
-//
-//            for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-//                Row row = sheet.getRow(rowIndex);
-//                System.out.println("place 1");
-//                String netId = row.getCell(columnIndexMap.get("netId")).getStringCellValue();
-//                System.out.println("place 2");
-//
-//                String undergraduateType = row.getCell(columnIndexMap.get("培养层次")).getStringCellValue();
-//                System.out.println("place 3");
-//
-//                boolean isUndergraduate = "本科生".equals(undergraduateType);
-//                System.out.println("place 4");
-//
-//                Cell admissionYearCell = row.getCell(columnIndexMap.get("入学年份"));
-//                System.out.println("place 5");
-//
-//                String admissionYearStr;
-//                if (admissionYearCell.getCellType() == CellType.NUMERIC) {
-//                    admissionYearStr = String.valueOf((int) admissionYearCell.getNumericCellValue());
-//                } else {
-//                    admissionYearStr = admissionYearCell.getStringCellValue();
-//                }
-//                System.out.println("place 6");
-//
-//                Year admissionYear = Year.parse(admissionYearStr);
-//                System.out.println("place 7");
-//
-//                Cell classIdCell = row.getCell(columnIndexMap.get("班级"));
-//                System.out.println("place 8");
-//
-//                int classId;
-//                System.out.println("place 9");
-//
-//                if (classIdCell.getCellType() == CellType.NUMERIC) {
-//                    classId = (int) classIdCell.getNumericCellValue();
-//                } else {
-//                    classId = Integer.parseInt(classIdCell.getStringCellValue());
-//                }
-//                System.out.println("place 10");
-//
-//
-//                Student student = new Student();
-//                student.setNetId(netId);
-//                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//                String encryptedPassword = passwordEncoder.encode("123456");
-//                student.setPassword(encryptedPassword);
-//                StudentRole studentRole = StudentRole.NOT_MONITOR;
-//                student.setStudentRole(studentRole);
-//                student.setUndergraduate(isUndergraduate);
-//                student.setAdmissionYear(admissionYear);
-//                student.setClassId(classId);
-//
-//                students.add(student);
-//            }
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
-//        return students;
-//    }
+    private int getColumnIndex(Row headerRow, String columnName) {
+        for (Cell cell: headerRow) {
+            if (columnName.equals(cell.getStringCellValue())) {
+                return cell.getColumnIndex();
+            }
+        }
+        throw new IllegalArgumentException("Column not found: " + columnName);
+    }
 
 
     private void saveStudentsToDatabase(List<Student> students) {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-//注册登录
+// 注册登录
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -43,8 +43,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signupStudentExcel")//从excel批量导入学生注册
-    public ResponseEntity<String> uploadExcelFile(@RequestParam("file") MultipartFile file) {
-        return authenticationService.uploadExcelFile(file);
+    public ResponseEntity<String> signupStudentExcel(@RequestParam("file") MultipartFile file) {
+        return authenticationService.signupStudentExcel(file);
     }
 
     @PostMapping("/signinStudent")//学生登录

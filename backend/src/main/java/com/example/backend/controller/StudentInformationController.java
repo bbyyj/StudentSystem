@@ -7,6 +7,7 @@ import com.example.backend.dao.response.StudentListResponse;
 import com.example.backend.entities.Student;
 import com.example.backend.service.StuInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,24 +15,26 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Year;
 import java.util.List;
 
-//学生个人信息
+// 学生个人信息
 @RestController
 @RequiredArgsConstructor
 public class StudentInformationController {
 
     private final StuInfoService stuInfoService;
 
+//    @GetMapping("/test/findByPage")
+//    public Page<Student> getStudentsByPage(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size) {
+//        return stuInfoService.findByPage(page, size);
+//    }
+
     @GetMapping("/topAdmin/getAllStudent")//返回所有学生的全部信息
-    public StudentListResponse getAllStudent() {
-        List<Student> students = stuInfoService.getAllStudent();
-        return new StudentListResponse(students, students.size());
+    public Page<Student> getAllStudent(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return stuInfoService.findByPage(page, size);
     }
-
-    @PutMapping("/topAdmin/importStudentDormitory")//批量导入宿舍表excel
-    public ResponseEntity<String> importStudentDormitory(@RequestParam("file") MultipartFile file) {
-        return stuInfoService.importStudentDormitory(file);
-    }
-
 
     @PutMapping("/student/modifyMyInfo")//学生修改自己的信息
     public ResponseEntity<String> modifyMyInfo(@RequestBody MyInfoModifyRequest request) {
@@ -48,20 +51,29 @@ public class StudentInformationController {
         return stuInfoService.modifyStuInfo(request);
     }
 
+    @PutMapping("/headTeacher/modifyStuInfoExcel")//老师批量导入学生信息excel
+    public ResponseEntity<String> modifyStuInfoExcel(@RequestParam("file") MultipartFile file) {
+        return stuInfoService.modifyStuInfoExcel(file);
+    }
+
     @DeleteMapping("/headTeacher/deleteStuInfo")//老师删除学生的信息
     public ResponseEntity<String> deleteStuInfo(@RequestParam String netId) {
         return stuInfoService.deleteStuInfo(netId);
     }
 
     @GetMapping("/headTeacher/searchStuInfo")//老师查询学生的信息
-    public StudentListResponse searchStuInfo(@RequestParam String keyword) {
-        List<Student> students = stuInfoService.searchStuInfo(keyword);
-        return new StudentListResponse(students, students.size());
+    public Page<Student> searchStuInfo(@RequestParam String keyword,
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "8") int size) {
+        return stuInfoService.searchStuInfo(keyword, page, size);
     }
 
-    @GetMapping("/headTeacher/getClassStudent")//返回所有学生的全部信息
-    public StudentListResponse getAllStudent(@RequestParam Boolean isUndergraduate, @RequestParam Year admissionYear, @RequestParam Integer classId) {
-        List<Student> students = stuInfoService.getClassStudent(isUndergraduate, admissionYear, classId);
-        return new StudentListResponse(students, students.size());
+    @GetMapping("/headTeacher/getClassStudent")//返回班级学生的全部信息
+    public Page<Student> getClassStudent(@RequestParam Boolean isUndergraduate,
+                                             @RequestParam Year admissionYear,
+                                             @RequestParam Integer classId,
+                                             @RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "8") int size) {
+        return stuInfoService.getClassStudent(isUndergraduate, admissionYear, classId, page, size);
     }
 }
