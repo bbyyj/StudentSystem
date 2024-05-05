@@ -23,6 +23,8 @@ public interface RuleDetailRepository extends JpaRepository<RuleDetail, Integer>
     @Query("delete from RuleDetail where rid = ?1")
     void deleteByRid(Integer rid);
 
+    @Query("select rd.score from RuleDetail rd where rd.tid=?1 and rd.title =?2")
+    float findScoreByTidAndTitle(Integer tid,String title);
 
 
 }

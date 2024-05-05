@@ -25,5 +25,7 @@ public interface RuleTypeRepository extends JpaRepository<RuleType, Integer> {
     void updateTypeByName(String newtype, String oldtype);
     @Query("select tid from RuleType ")
     List<Integer> findAllIds();
+    @Query("select tid from RuleType where type = ?1")
+    int findIdByType(String type);
 
 }
