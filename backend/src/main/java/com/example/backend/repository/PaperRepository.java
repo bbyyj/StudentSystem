@@ -83,23 +83,23 @@ public interface PaperRepository extends JpaRepository<Paper, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select c.*, s.name " +
-            "from  c " +
-            "join student s on c.sid = s.sid " +
-            "where s.sid = :sid and c.check_status = 1 and c.rule_accept = 1 " +
-            "and c.time >= :begin and c.time <= :end", nativeQuery = true)
+    @Query(value = "select p.*, s.name " +
+            "from paper p " +
+            "join student s on p.sid = s.sid " +
+            "where s.sid = :sid and p.check_status = 1 and p.rule_accept = 1 " +
+            "and p.acc_date >= :begin and p.acc_date <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuPaperFromTime(@Param("sid") String sid,
                                                  @Param("begin") Date begin,
                                                  @Param("end") Date end);
 
     @Modifying
-    @Query(value = "update  set check_score = :check_score " +
+    @Query(value = "update paper set check_score = :check_score " +
             "where id = :id", nativeQuery = true)
     void updateCheckScoreById(@Param("id") int id, @Param("check_score") double check_score);
 
 
     @Modifying
-    @Query(value = "update  set rule_accept = :rule_accept " +
+    @Query(value = "update paper set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
 }

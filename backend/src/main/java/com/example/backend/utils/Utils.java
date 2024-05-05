@@ -2,6 +2,7 @@ package com.example.backend.utils;
 
 import com.example.backend.repository.CompetitionRepository;
 import com.example.backend.repository.PaperRepository;
+import com.example.backend.repository.PatentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,12 +13,15 @@ import java.util.*;
 public class Utils {
     private final CompetitionRepository comp;
     private final PaperRepository paper;
+    private final PatentRepository patent;
 
     @Autowired
     public Utils(CompetitionRepository comp,
-                 PaperRepository paper) {
+                 PaperRepository paper,
+                 PatentRepository patent) {
         this.comp = comp;
         this.paper = paper;
+        this.patent = patent;
     }
 
     public List<Map<String, Object>> getInfoFromTable(String name, String sid, Date begin, Date end){
@@ -88,6 +92,38 @@ public class Utils {
             return lc;
         }
 
+        if(Objects.equals(name, "专利")){
+            List<Map<String, Object>> l = patent.getStuPaperFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("name")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getPatentChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
         return null;
 
     }
@@ -98,6 +134,8 @@ public class Utils {
             comp.updateCheckScoreById(id, score);
         } else if (Objects.equals(name, "论文")) {
             paper.updateCheckScoreById(id, score);
+        } else if (Objects.equals(name, "专利")) {
+            patent.updateCheckScoreById(id, score);
         }
     }
 
@@ -107,6 +145,8 @@ public class Utils {
             comp.updateRuleAcceptById(id, flag);
         } else if (Objects.equals(name, "论文")) {
             paper.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "专利")) {
+            patent.updateRuleAcceptById(id, flag);
         }
     }
 
