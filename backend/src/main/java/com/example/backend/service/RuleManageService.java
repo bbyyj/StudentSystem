@@ -36,5 +36,8 @@ public interface RuleManageService {
     ResponseEntity<String>  updateRuleDetailById(RuleDetailAddRequest request);
     @Transactional
     ResponseEntity<String>  deleteRuleDetailById(Integer id);
+    @Transactional
+    float getRuleScore(String rule_type,String rule_detail);
+
 
 }

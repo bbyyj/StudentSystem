@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.backend.dao.request.AdminSignUpRequest;
 import com.example.backend.dao.request.RuleDetailAddRequest;
 import com.example.backend.dao.request.RuleTypeAddRequest;
@@ -59,6 +60,15 @@ public class RuleManageController {
     @DeleteMapping("/detailManage/deleteRuleDetailById")
     public ResponseEntity<String>  deleteRuleDetailById(@RequestParam int rid){
         return ruleManageService.deleteRuleDetailById(rid);
+    }
+    //测试 getRuleScore函数的接口
+    @GetMapping("/getRuleScore")
+    public JSONObject  getRuleScore(@RequestParam String rule_type,@RequestParam String rule_detail){
+        float score = ruleManageService.getRuleScore(rule_type,rule_detail);
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("score",score);
+        return jsonResponse;
+
     }
 
 

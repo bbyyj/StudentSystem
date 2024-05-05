@@ -79,6 +79,13 @@ public class RuleManageServiceImpl implements RuleManageService {
         }
     }
 
+    @Override
+    public float getRuleScore(String rule_type, String rule_detail) {
+        int  ruleTypeId = ruleTypeRepository.findIdByType(rule_type);
+        float score = ruleDetailRepository.findScoreByTidAndTitle(ruleTypeId,rule_detail);
+        return score;
+    }
+
     public ResponseEntity<String> deleteRuleTypeByName(String name){
 
         try {
