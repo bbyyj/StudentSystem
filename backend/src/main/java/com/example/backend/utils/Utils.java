@@ -1,8 +1,6 @@
 package com.example.backend.utils;
 
-import com.example.backend.repository.CompetitionRepository;
-import com.example.backend.repository.PaperRepository;
-import com.example.backend.repository.PatentRepository;
+import com.example.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +12,27 @@ public class Utils {
     private final CompetitionRepository comp;
     private final PaperRepository paper;
     private final PatentRepository patent;
+    private final SoftwareRepository software;
+    private final MonographRepository monograph;
+    private final ExchangeActivityRepository activity;
+
+    private final VolunteerRepository volunteer;
 
     @Autowired
     public Utils(CompetitionRepository comp,
                  PaperRepository paper,
-                 PatentRepository patent) {
+                 PatentRepository patent,
+                 SoftwareRepository software,
+                 MonographRepository monograph,
+                 ExchangeActivityRepository activity,
+                 VolunteerRepository volunteer) {
         this.comp = comp;
         this.paper = paper;
         this.patent = patent;
+        this.software = software;
+        this.monograph = monograph;
+        this.activity = activity;
+        this.volunteer = volunteer;
     }
 
     public List<Map<String, Object>> getInfoFromTable(String name, String sid, Date begin, Date end){
@@ -93,7 +104,7 @@ public class Utils {
         }
 
         if(Objects.equals(name, "专利")){
-            List<Map<String, Object>> l = patent.getStuPaperFromTime(sid, begin, end);
+            List<Map<String, Object>> l = patent.getStuPatentFromTime(sid, begin, end);
             for(Map<String, Object> m:l){
                 Map<String, Object> new_map = new HashMap<>();
                 StringBuilder str = new StringBuilder();
@@ -124,6 +135,140 @@ public class Utils {
             }
             return lc;
         }
+
+        if(Objects.equals(name, "软著")){
+            List<Map<String, Object>> l = software.getStuSoftwareFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("name")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getSoftwareChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
+
+        if(Objects.equals(name, "专著")){
+            List<Map<String, Object>> l = monograph.getStuMonoFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("title")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getMonographChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
+
+        if(Objects.equals(name, "校外交流")){
+            List<Map<String, Object>> l = activity.getStuActivityFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("name")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getActivityChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
+
+        if(Objects.equals(name, "志愿服务")){
+            List<Map<String, Object>> l = volunteer.getStuVolunteerFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("name")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getVolunteerChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
+
+
         return null;
 
     }
@@ -136,6 +281,14 @@ public class Utils {
             paper.updateCheckScoreById(id, score);
         } else if (Objects.equals(name, "专利")) {
             patent.updateCheckScoreById(id, score);
+        }else if (Objects.equals(name, "软著")) {
+            software.updateCheckScoreById(id, score);
+        }else if (Objects.equals(name, "专著")) {
+            monograph.updateCheckScoreById(id, score);
+        }else if (Objects.equals(name, "校外交流")) {
+            activity.updateCheckScoreById(id, score);
+        }else if (Objects.equals(name, "志愿服务")) {
+            volunteer.updateCheckScoreById(id, score);
         }
     }
 
@@ -147,6 +300,14 @@ public class Utils {
             paper.updateRuleAcceptById(id, flag);
         }else if (Objects.equals(name, "专利")) {
             patent.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "软著")) {
+            software.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "专著")) {
+            monograph.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "校外交流")) {
+            activity.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "志愿服务")) {
+            volunteer.updateRuleAcceptById(id, flag);
         }
     }
 
@@ -285,7 +446,7 @@ public class Utils {
             case "inv_type" -> "第几发明人";
             case "inventors" -> "全部完成人";
             case "app_status" -> "申请状态";
-            case "status_date" -> "该状态时间";
+            case "status_date" -> "状态时间";
             case "remark" -> "备注";
             case "url" -> "材料链接";
             case "check_status" -> "审核状态";
@@ -342,6 +503,37 @@ public class Utils {
             case "rule_score" -> "分数";
             case "check_score" -> "审核分数";
             case "rule_accept" -> "是否接受";
+            default -> "";
+        };
+    }
+
+    public String getActivityChineseName(String fieldName) {
+        return switch (fieldName) {
+            case "id" -> "编号";
+            case "name" -> "项目名称";
+            case "type" -> "事由类型";
+            case "funding" -> "经费来源";
+            case "dest_country" -> "前往国家";
+            case "dest_city" -> "前往城市";
+            case "dest_institution" -> "前往院校";
+            case "duration" -> "项目期限";
+            case "begin" -> "出发时间";
+            case "end" -> "返校时间";
+            case "status" -> "目前状态";
+            case "is_apply" -> "是否申报";
+            case "is_pre_edu" -> "是否参加行前教育";
+            case "is_signed" -> "是否已签订";
+            case "is_talk" -> "是否谈话";
+            case "remark" -> "备注";
+            case "sid" -> "学生学号";
+            case "url" -> "材料链接";
+            case "check_status" -> "审核状态";
+            case "check_msg" -> "审核意见";
+            case "rule_type" -> "综测大类";
+            case "rule_detail" -> "细则";
+            case "rule_score" -> "细则分数";
+            case "check_score" -> "审核分数";
+            case "rule_accept" -> "是否加入综测";
             default -> "";
         };
     }

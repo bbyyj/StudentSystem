@@ -32,7 +32,7 @@ public class Software {
     private String app_status; // 申请状态
 
     @Column(name = "status_date")
-    private Date status_date; // 该状态时间
+    private Date status_date; // 状态时间
 
     @Column(name = "remark")
     private String remark; // 备注

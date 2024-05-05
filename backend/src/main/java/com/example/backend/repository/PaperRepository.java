@@ -61,19 +61,19 @@ public interface PaperRepository extends JpaRepository<Paper, Integer> {
 
     @Modifying
     @Query(value = "select p.*, s.name " +
-            "from paper p join student s on c.sid = s.sid " +
+            "from paper p join student s on p.sid = s.sid " +
             "where p.title = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPaperByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
     @Modifying
     @Query(value = "select p.*, s.name " +
-            "from paper c join student s on c.sid = s.sid " +
+            "from paper c join student s on p.sid = s.sid " +
             "where p.paper_type = :result_type and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPaperByType(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("result_type") String result_type);
 
     @Modifying
     @Query(value = "select p.*, s.name " +
-            "from paper p join student s on c.sid = s.sid " +
+            "from paper p join student s on p.sid = s.sid " +
             "where p.ccf_level = :level and s.class_id = :classId and s.admission_year = :year and is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPaperByLevel(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("level") String level);
 

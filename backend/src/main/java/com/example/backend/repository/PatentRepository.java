@@ -53,7 +53,7 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
 
     @Modifying
     @Query(value = "select p.*, s.name " +
-            "from patent p join student s on c.sid = s.sid " +
+            "from patent p join student s on p.sid = s.sid " +
             "where p.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPatentByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
@@ -68,7 +68,7 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
             "join student s on p.sid = s.sid " +
             "where s.sid = :sid and p.check_status = 1 and p.rule_accept = 1 " +
             "and p.pub_date >= :begin and p.pub_date <= :end", nativeQuery = true)
-    List<Map<String, Object>> getStuPaperFromTime(@Param("sid") String sid,
+    List<Map<String, Object>> getStuPatentFromTime(@Param("sid") String sid,
                                                   @Param("begin") Date begin,
                                                   @Param("end") Date end);
 

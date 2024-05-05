@@ -1,84 +1,143 @@
 package com.example.backend.service;
 
-import com.example.backend.dao.request.CompCheckRequest;
-import com.example.backend.dao.request.PaperCheckRequest;
-import com.example.backend.dao.response.CompetitionListResponse;
-import com.example.backend.dao.response.PaperListResponse;
-import com.example.backend.dao.response.PatentListResponse;
+import com.example.backend.dao.request.CheckRequest;
+import com.example.backend.dao.response.ListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public interface ExamineService {
-    CompetitionListResponse getAllCompetitionList();
+    ListResponse getAllCompetitionList();
 
-    CompetitionListResponse getAllCompetitionByStudentName(String name);
+    ListResponse getAllCompetitionByStudentName(String name);
 
-    CompetitionListResponse getAllCompetitionByCompName(String name);
+    ListResponse getAllCompetitionByCompName(String name);
 
-    CompetitionListResponse getAllCompetitionByType(String type); // 成果类别 (学科竞赛/艺术比赛/体育比赛/其他)
+    ListResponse getAllCompetitionByType(String type); // 成果类别 (学科竞赛/艺术比赛/体育比赛/其他)
 
-    CompetitionListResponse getAllCompetitionByLevel(String level); // 成果等级
+    ListResponse getAllCompetitionByLevel(String level); // 成果等级
 
     // 针对某个班
-    CompetitionListResponse getClassCompetitionList(String classId, String year, Boolean isUndergraduate);
+    ListResponse getClassCompetitionList(String classId, String year, Boolean isUndergraduate);
 
-    CompetitionListResponse getClassCompetitionByStudentName(String classId, String year, Boolean isUndergraduate, String name);
+    ListResponse getClassCompetitionByStudentName(String classId, String year, Boolean isUndergraduate, String name);
 
-    CompetitionListResponse getClassCompetitionByCompName(String classId, String year, Boolean isUndergraduate, String name);
+    ListResponse getClassCompetitionByCompName(String classId, String year, Boolean isUndergraduate, String name);
 
-    CompetitionListResponse getClassCompetitionByType(String classId, String year, Boolean isUndergraduate, String type); // 成果类别 (学科竞赛/艺术比赛/体育比赛/其他)
+    ListResponse getClassCompetitionByType(String classId, String year, Boolean isUndergraduate, String type); // 成果类别 (学科竞赛/艺术比赛/体育比赛/其他)
 
-    CompetitionListResponse getClassCompetitionByLevel(String classId, String year, Boolean isUndergraduate, String level); // 成果等级
+    ListResponse getClassCompetitionByLevel(String classId, String year, Boolean isUndergraduate, String level); // 成果等级
 
     @Transactional
-    ResponseEntity<String> comp_check(CompCheckRequest request);
+    ResponseEntity<String> comp_check(CheckRequest request);
 
     @Transactional
     ResponseEntity<String> comp_del(int id);
 
-    PaperListResponse getAllPaperList();
+    ListResponse getAllPaperList();
 
-    PaperListResponse getAllPaperByStudentName(String search);
+    ListResponse getAllPaperByStudentName(String search);
 
-    PaperListResponse getAllPaperByPaperName(String search);
+    ListResponse getAllPaperByPaperName(String search);
 
-    PaperListResponse getAllPaperByType(String search);
+    ListResponse getAllPaperByType(String search);
 
-    PaperListResponse getAllPaperByCCF(String search);
+    ListResponse getAllPaperByCCF(String search);
 
-    PaperListResponse getClassPaperList(String classId, String year, Boolean isUndergraduate);
+    ListResponse getClassPaperList(String classId, String year, Boolean isUndergraduate);
 
-    PaperListResponse getClassPaperByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPaperByStudentName(String classId, String year, Boolean isUndergraduate, String search);
 
-    PaperListResponse getClassPaperByPaperName(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPaperByPaperName(String classId, String year, Boolean isUndergraduate, String search);
 
-    PaperListResponse getClassPaperByType(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPaperByType(String classId, String year, Boolean isUndergraduate, String search);
 
-    PaperListResponse getClassPaperByCCF(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPaperByCCF(String classId, String year, Boolean isUndergraduate, String search);
 
     @Transactional
-    ResponseEntity<String> paper_check(PaperCheckRequest request);
+    ResponseEntity<String> paper_check(CheckRequest request);
 
     @Transactional
     ResponseEntity<String> paper_del(int id);
 
-    PatentListResponse getAllPatentList();
+    ListResponse getAllPatentList();
 
-    PatentListResponse getAllPatentByStudentName(String search);
+    ListResponse getAllPatentByStudentName(String search);
 
-    PatentListResponse getAllPatentByPatentName(String search);
+    ListResponse getAllPatentByPatentName(String search);
 
-    PatentListResponse getClassPatentList(String classId, String year, Boolean isUndergraduate);
+    ListResponse getClassPatentList(String classId, String year, Boolean isUndergraduate);
 
-    PatentListResponse getClassPatentByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPatentByStudentName(String classId, String year, Boolean isUndergraduate, String search);
 
-    PatentListResponse getClassPatentByPaperName(String classId, String year, Boolean isUndergraduate, String search);
+    ListResponse getClassPatentByPatentName(String classId, String year, Boolean isUndergraduate, String search);
 
     @Transactional
-    ResponseEntity<String> patent_check(PaperCheckRequest request);
+    ResponseEntity<String> patent_check(CheckRequest request);
 
     @Transactional
     ResponseEntity<String> patent_del(int id);
+
+    ListResponse getAllSoftwareList();
+
+    ListResponse getAllSoftwareByStudentName(String search);
+
+    ListResponse getAllSoftwareBySoftwareName(String search);
+
+    ListResponse getClassSoftwareList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassSoftwareByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ListResponse getClassSoftwareBySoftwareName(String classId, String year, Boolean isUndergraduate, String search);
+
+    @Transactional
+    ResponseEntity<String> software_check(CheckRequest request);
+
+    @Transactional
+    ResponseEntity<String> software_del(int id);
+
+    ListResponse getAllMonographList();
+
+    ListResponse getAllMonographByStudentName(String search);
+
+    ListResponse getAllMonographByMonographName(String search);
+
+    ListResponse getClassMonographList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassMonographByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ListResponse getClassMonographByMonographName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> monograph_check(CheckRequest request);
+
+    ResponseEntity<String> monograph_del(int id);
+
+    ListResponse getAllExchangeList();
+
+    ListResponse getAllExchangeByStudentName(String search);
+
+    ListResponse getAllExchangeByActivityName(String search);
+
+    ListResponse getClassExchangeList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassExchangeByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ListResponse getClassExchangeByActivityName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> activity_check(CheckRequest request);
+
+    ResponseEntity<String> activity_del(int id);
+
+    ListResponse getAllVolunteerList();
+
+    ListResponse getAllVolunteerByStudentName(String search);
+
+    ListResponse getClassVolunteerList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassVolunteerByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> volunteer_time_check(CheckRequest request);
+
+    ResponseEntity<String> volunteer_time_del(int id);
 }
