@@ -3,6 +3,7 @@ package com.example.backend.utils;
 import com.example.backend.repository.CompetitionRepository;
 import com.example.backend.repository.PaperRepository;
 import com.example.backend.repository.PatentRepository;
+import com.example.backend.repository.SoftwareRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +15,17 @@ public class Utils {
     private final CompetitionRepository comp;
     private final PaperRepository paper;
     private final PatentRepository patent;
+    private final SoftwareRepository software;
 
     @Autowired
     public Utils(CompetitionRepository comp,
                  PaperRepository paper,
-                 PatentRepository patent) {
+                 PatentRepository patent,
+                 SoftwareRepository software) {
         this.comp = comp;
         this.paper = paper;
         this.patent = patent;
+        this.software = software;
     }
 
     public List<Map<String, Object>> getInfoFromTable(String name, String sid, Date begin, Date end){
@@ -124,6 +128,39 @@ public class Utils {
             }
             return lc;
         }
+
+        if(Objects.equals(name, "软著")){
+            List<Map<String, Object>> l = software.getStuPaperFromTime(sid, begin, end);
+            for(Map<String, Object> m:l){
+                Map<String, Object> new_map = new HashMap<>();
+                StringBuilder str = new StringBuilder();
+
+                for (Map.Entry<String, Object> entry : m.entrySet()){
+                    String k = entry.getKey();
+                    Object v = entry.getValue();
+
+                    if(k.equals("rule_type") || k.equals("rule_detail")
+                            || k.equals("rule_score") || k.equals("name")){
+
+                        new_map.put(k, v);
+                        continue;
+                    }
+
+                    String cname = getSoftwareChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
+
+                    str.append(cname).append(":").append(value).append(", ");
+                }
+
+                String s = str.toString();
+                s = s.substring(0, s.length()-1);
+
+                // 其余字段的key为others, value为合成的string
+                new_map.put("others", s);
+                lc.add(new_map);
+            }
+            return lc;
+        }
         return null;
 
     }
@@ -136,6 +173,8 @@ public class Utils {
             paper.updateCheckScoreById(id, score);
         } else if (Objects.equals(name, "专利")) {
             patent.updateCheckScoreById(id, score);
+        }else if (Objects.equals(name, "软著")) {
+            software.updateCheckScoreById(id, score);
         }
     }
 
@@ -147,6 +186,8 @@ public class Utils {
             paper.updateRuleAcceptById(id, flag);
         }else if (Objects.equals(name, "专利")) {
             patent.updateRuleAcceptById(id, flag);
+        }else if (Objects.equals(name, "软著")) {
+            software.updateRuleAcceptById(id, flag);
         }
     }
 
@@ -285,7 +326,7 @@ public class Utils {
             case "inv_type" -> "第几发明人";
             case "inventors" -> "全部完成人";
             case "app_status" -> "申请状态";
-            case "status_date" -> "该状态时间";
+            case "status_date" -> "状态时间";
             case "remark" -> "备注";
             case "url" -> "材料链接";
             case "check_status" -> "审核状态";

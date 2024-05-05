@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompetitionListRequest {
+public class ListRequest {
     private int pageNum;
     private int pageSize;
     private String select;

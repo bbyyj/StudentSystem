@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompCheckRequest {
+public class CheckRequest {
     private int id;
     private String status;
     private String msg;

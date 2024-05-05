@@ -1,15 +1,10 @@
 package com.example.backend.controller;
 
-import com.example.backend.dao.request.CompCheckRequest;
-import com.example.backend.dao.request.CompetitionListRequest;
-import com.example.backend.dao.request.PaperCheckRequest;
-import com.example.backend.dao.response.CompetitionListResponse;
-import com.example.backend.dao.response.PaperListResponse;
-import com.example.backend.dao.response.PatentListResponse;
+import com.example.backend.dao.request.CheckRequest;
+import com.example.backend.dao.request.ListRequest;
+import com.example.backend.dao.response.ListResponse;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.compress.harmony.pack200.CanonicalCodecFamilies;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +21,7 @@ public class ExamineController {
     api for Competition
      */
     @PostMapping("/loadingdata/competition")
-    public CompetitionListResponse getCompetitionList(@RequestBody CompetitionListRequest request){
+    public ListResponse getCompetitionList(@RequestBody ListRequest request){
         String search = request.getSearch();
         String select = request.getSelect();
         String classId = request.getClassId();
@@ -73,7 +68,7 @@ public class ExamineController {
     }
 
     @PostMapping("/competition/check")
-    public ResponseEntity<String> comp_check(@RequestBody CompCheckRequest request){
+    public ResponseEntity<String> comp_check(@RequestBody CheckRequest request){
         return examineService.comp_check(request);
     }
 
@@ -88,7 +83,7 @@ public class ExamineController {
      api for Paper
      */
     @PostMapping("/loadingdata/paper")
-    public PaperListResponse getPaperList(@RequestBody CompetitionListRequest request){
+    public ListResponse getPaperList(@RequestBody ListRequest request){
         String search = request.getSearch();
         String select = request.getSelect();
         String classId = request.getClassId();
@@ -134,7 +129,7 @@ public class ExamineController {
     }
 
     @PostMapping("/paper/check")
-    public ResponseEntity<String> paper_check(@RequestBody PaperCheckRequest request){
+    public ResponseEntity<String> paper_check(@RequestBody CheckRequest request){
         return examineService.paper_check(request);
     }
 
@@ -149,7 +144,7 @@ public class ExamineController {
      api for Patent
      */
     @PostMapping("/loadingdata/patent")
-    public PatentListResponse getPatentList(@RequestBody CompetitionListRequest request){
+    public ListResponse getPatentList(@RequestBody ListRequest request){
         String search = request.getSearch();
         String select = request.getSelect();
         String classId = request.getClassId();
@@ -175,7 +170,7 @@ public class ExamineController {
             } else if (stu_name) {
                 return examineService.getClassPatentByStudentName(classId, year, isUndergraduate, search);
             } else if (patent_name) {
-                return examineService.getClassPatentByPaperName(classId, year, isUndergraduate, search);
+                return examineService.getClassPatentByPatentName(classId, year, isUndergraduate, search);
             }
         }else{
             return null;
@@ -185,7 +180,7 @@ public class ExamineController {
     }
 
     @PostMapping("/patent/check")
-    public ResponseEntity<String> patent_check(@RequestBody PaperCheckRequest request){
+    public ResponseEntity<String> patent_check(@RequestBody CheckRequest request){
         return examineService.patent_check(request);
     }
 
@@ -193,5 +188,55 @@ public class ExamineController {
     public ResponseEntity<String> patent_del(@RequestBody Map<String, Object> request){
         int id = (int)request.get("id");
         return examineService.patent_del(id);
+    }
+
+    /*
+    api for Software
+    */
+    @PostMapping("/loadingdata/software")
+    public ListResponse getSoftwareList(@RequestBody ListRequest request){
+        String search = request.getSearch();
+        String select = request.getSelect();
+        String classId = request.getClassId();
+        String year = request.getYear();
+        Boolean isUndergraduate = request.getIsUndergraduate();
+
+        boolean none = Objects.equals(search, "") && Objects.equals(select, "");
+        boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
+        boolean software_name = Objects.equals(select, "软著名称") && !Objects.equals(search, "");
+
+
+        if(Objects.equals(classId, "") && Objects.equals(year, "")){
+            if(none){
+                return examineService.getAllSoftwareList();
+            } else if (stu_name) {
+                return examineService.getAllSoftwareByStudentName(search);
+            } else if (software_name) {
+                return examineService.getAllSoftwareBySoftwareName(search);
+            }
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
+            if(none){
+                return examineService.getClassSoftwareList(classId, year, isUndergraduate);
+            } else if (stu_name) {
+                return examineService.getClassSoftwareByStudentName(classId, year, isUndergraduate, search);
+            } else if (software_name) {
+                return examineService.getClassSoftwareBySoftwareName(classId, year, isUndergraduate, search);
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
+
+    @PostMapping("/software/check")
+    public ResponseEntity<String> software_check(@RequestBody CheckRequest request){
+        return examineService.software_check(request);
+    }
+
+    @PutMapping("/software/del")
+    public ResponseEntity<String> software_del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
+        return examineService.software_del(id);
     }
 }

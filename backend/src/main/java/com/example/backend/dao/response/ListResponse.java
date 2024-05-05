@@ -12,7 +12,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PatentListResponse {
-    private List<Map<String, Object>> PaperList;
+public class ListResponse {
+    private List<Map<String, Object>> tableData;
     private int count;
 }
