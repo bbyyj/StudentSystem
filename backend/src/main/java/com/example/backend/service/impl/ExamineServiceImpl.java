@@ -2,10 +2,7 @@ package com.example.backend.service.impl;
 
 import com.example.backend.dao.request.CheckRequest;
 import com.example.backend.dao.response.ListResponse;
-import com.example.backend.repository.CompetitionRepository;
-import com.example.backend.repository.PaperRepository;
-import com.example.backend.repository.PatentRepository;
-import com.example.backend.repository.SoftwareRepository;
+import com.example.backend.repository.*;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +19,9 @@ public class ExamineServiceImpl implements ExamineService {
     private final PaperRepository paper;
     private final PatentRepository patent;
     private final SoftwareRepository software;
+    private final MonographRepository monograph;
+    private final ExchangeActivityRepository activity;
+    private final VolunteerRepository volunteer;
 
 
     /*
@@ -328,5 +328,183 @@ public class ExamineServiceImpl implements ExamineService {
         }
     }
 
+    /*
+     operation for Monograph
+     */
 
+    @Override
+    public ListResponse getAllMonographList() {
+        List<Map<String, Object>> lc = monograph.getAll();
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getAllMonographByStudentName(String name) {
+        List<Map<String, Object>> lc = monograph.getMonographByStudent(name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getAllMonographByMonographName(String name) {
+        List<Map<String, Object>> lc = monograph.getMonographByName(name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassMonographList(String classId, String year, Boolean isUndergraduate) {
+        List<Map<String, Object>> lc = monograph.getClassAll(classId, year, isUndergraduate);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassMonographByStudentName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = monograph.getClassMonographByStudent(classId, year, isUndergraduate, name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassMonographByMonographName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = monograph.getClassMonographByName(classId, year, isUndergraduate, name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ResponseEntity<String> monograph_check(CheckRequest request) {
+        try {
+            monograph.updateCheckingStatus(
+                    request.getId(),
+                    request.getStatus(),
+                    request.getMsg()
+            );
+            return ResponseEntity.ok("check successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while checking.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> monograph_del(int id) {
+        try {
+            monograph.deleteById(id);
+            return ResponseEntity.ok("delete successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting competition.");
+        }
+    }
+
+    /*
+     operation for Exchange_Activity
+     */
+
+    @Override
+    public ListResponse getAllExchangeList() {
+        List<Map<String, Object>> lc = activity.getAll();
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getAllExchangeByStudentName(String name) {
+        List<Map<String, Object>> lc = activity.getExchangeByStudent(name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getAllExchangeByActivityName(String name) {
+        List<Map<String, Object>> lc = activity.getExchangeByName(name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassExchangeList(String classId, String year, Boolean isUndergraduate) {
+        List<Map<String, Object>> lc = activity.getClassAll(classId, year, isUndergraduate);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassExchangeByStudentName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = activity.getClassExchangeByStudent(classId, year, isUndergraduate, name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassExchangeByActivityName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = activity.getClassExchangeByName(classId, year, isUndergraduate, name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ResponseEntity<String> activity_check(CheckRequest request) {
+        try {
+            activity.updateCheckingStatus(
+                    request.getId(),
+                    request.getStatus(),
+                    request.getMsg()
+            );
+            return ResponseEntity.ok("check successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while checking.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> activity_del(int id) {
+        try {
+            activity.deleteById(id);
+            return ResponseEntity.ok("delete successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting competition.");
+        }
+    }
+
+    /*
+     operation for Volunteer
+     */
+
+    @Override
+    public ListResponse getAllVolunteerList() {
+        List<Map<String, Object>> lc = volunteer.getAll();
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getAllVolunteerByStudentName(String name) {
+        List<Map<String, Object>> lc = volunteer.getVolunteerByStudent(name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassVolunteerList(String classId, String year, Boolean isUndergraduate) {
+        List<Map<String, Object>> lc = volunteer.getClassAll(classId, year, isUndergraduate);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ListResponse getClassVolunteerByStudentName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = volunteer.getClassVolunteerByStudent(classId, year, isUndergraduate, name);
+        return new ListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ResponseEntity<String> volunteer_time_check(CheckRequest request) {
+        try {
+            volunteer.updateCheckingStatus(
+                    request.getId(),
+                    request.getStatus(),
+                    request.getMsg()
+            );
+            return ResponseEntity.ok("check successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while checking.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> volunteer_time_del(int id) {
+        try {
+            volunteer.deleteById(id);
+            return ResponseEntity.ok("delete successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting competition.");
+        }
+    }
 }

@@ -68,7 +68,7 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
             "join student s on sf.sid = s.sid " +
             "where s.sid = :sid and sf.check_status = 1 and sf.rule_accept = 1 " +
             "and sf.status_date >= :begin and sf.status_date <= :end", nativeQuery = true)
-    List<Map<String, Object>> getStuPaperFromTime(@Param("sid") String sid,
+    List<Map<String, Object>> getStuSoftwareFromTime(@Param("sid") String sid,
                                                   @Param("begin") Date begin,
                                                   @Param("end") Date end);
 
