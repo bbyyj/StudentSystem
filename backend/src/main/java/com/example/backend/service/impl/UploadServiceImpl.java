@@ -3,6 +3,7 @@ package com.example.backend.service.impl;
 import com.example.backend.entities.*;
 import com.example.backend.repository.*;
 import com.example.backend.service.UploadService;
+import com.example.backend.service.RuleManageService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UploadServiceImpl implements UploadService {
+
 
     private final Gson gson = new Gson();
     private final SoftwareRepository softwareRepository;
@@ -20,6 +22,7 @@ public class UploadServiceImpl implements UploadService {
     private final ExchangeActivityRepository exchangeActivityRepository;
     private final MonographRepository monographRepository;
     private final OthersRepository othersRepository;
+    private final RuleManageService ruleManageService;
 
 
     public void uploadSoftware(String url, String softwareJson){
@@ -30,7 +33,7 @@ public class UploadServiceImpl implements UploadService {
         software.setUrl(url);
         software.setCheck_msg("未审核");
         software.setCheck_status("无");
-//        software.setRuleScore(getRuleScore(rule_type,rule_detail));
+        software.setRule_score(ruleManageService.getRuleScore(software.getRule_type(),software.getRule_detail()));
 
         softwareRepository.save(software);
 
@@ -44,7 +47,7 @@ public class UploadServiceImpl implements UploadService {
         competition.setUrl(url);
         competition.setCheck_msg("未审核");
         competition.setCheck_status("无");
-//        competition.setRuleScore(getRuleScore(rule_type,rule_detail));
+        competition.setRule_score(ruleManageService.getRuleScore(competition.getRule_type(),competition.getRule_detail()));
 
         competitionRepository.save(competition);
 
@@ -58,7 +61,7 @@ public class UploadServiceImpl implements UploadService {
         paper.setUrl(url);
         paper.setCheck_msg("未审核");
         paper.setCheck_status("无");
-//        paper.setRuleScore(getRuleScore(rule_type,rule_detail));
+        paper.setRule_score(ruleManageService.getRuleScore(paper.getRule_type(),paper.getRule_detail()));
 
         paperRepository.save(paper);
 
@@ -72,7 +75,7 @@ public class UploadServiceImpl implements UploadService {
         patent.setUrl(url);
         patent.setCheck_msg("未审核");
         patent.setCheck_status("无");
-//        patent.setRuleScore(getRuleScore(rule_type,rule_detail));
+        patent.setRule_score(ruleManageService.getRuleScore(patent.getRule_type(),patent.getRule_detail()));
 
         patentRepository.save(patent);
 
@@ -86,7 +89,7 @@ public class UploadServiceImpl implements UploadService {
         volunteer.setUrl(url);
         volunteer.setCheck_msg("未审核");
         volunteer.setCheck_status("无");
-//        volunteer.setRuleScore(getRuleScore(rule_type,rule_detail)*volunteer.getTime());
+        volunteer.setRule_score(ruleManageService.getRuleScore(volunteer.getRule_type(),volunteer.getRule_detail()));
 
         volunteerRepository.save(volunteer);
 
@@ -100,7 +103,7 @@ public class UploadServiceImpl implements UploadService {
         monograph.setUrl(url);
         monograph.setCheck_msg("未审核");
         monograph.setCheck_status("无");
-//        monograph.setRuleScore(getRuleScore(rule_type,rule_detail));
+        monograph.setRule_score(ruleManageService.getRuleScore(monograph.getRule_type(),monograph.getRule_detail()));
 
         monographRepository.save(monograph);
 
@@ -114,7 +117,7 @@ public class UploadServiceImpl implements UploadService {
         exchangeActivity.setUrl(url);
         exchangeActivity.setCheck_msg("未审核");
         exchangeActivity.setCheck_status("无");
-//        exchangeActivity.setRuleScore(getRuleScore(rule_type,rule_detail));
+        exchangeActivity.setRule_score(ruleManageService.getRuleScore(exchangeActivity.getRule_type(),exchangeActivity.getRule_detail()));
 
         exchangeActivityRepository.save(exchangeActivity);
 
@@ -128,37 +131,9 @@ public class UploadServiceImpl implements UploadService {
         others.setUrl(url);
         others.setCheck_msg("未审核");
         others.setCheck_status("无");
-//        others.setRuleScore(getRuleScore(rule_type,rule_detail));
+        others.setRule_score(ruleManageService.getRuleScore(others.getRule_type(),others.getRule_detail()));
 
         othersRepository.save(others);
     }
-
-//    public void uploadItem(String url, String itemJson, Class<?> itemType, JpaRepository repository) {
-//        Object item = gson.fromJson(itemJson, itemType);
-//        try {
-//            Field idField = itemType.getDeclaredField("id");
-//            idField.setAccessible(true);
-//            idField.set(item, 0);
-//
-//            Field urlField = itemType.getDeclaredField("url");
-//            urlField.setAccessible(true);
-//            urlField.set(item, url);
-//
-//            Field checkMsgField = itemType.getDeclaredField("check_msg");
-//            checkMsgField.setAccessible(true);
-//            checkMsgField.set(item, "无");
-//
-//            Field checkStatusField = itemType.getDeclaredField("check_status");
-//            checkStatusField.setAccessible(true);
-//            checkStatusField.set(item, "无");
-//
-//            // 保存到数据库
-//            repository.save((Object)item);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            // 在这里处理异常
-//        }
-//    }
-
 
 }
