@@ -5,6 +5,7 @@ import com.example.backend.dao.request.CompetitionListRequest;
 import com.example.backend.dao.request.PaperCheckRequest;
 import com.example.backend.dao.response.CompetitionListResponse;
 import com.example.backend.dao.response.PaperListResponse;
+import com.example.backend.dao.response.PatentListResponse;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.harmony.pack200.CanonicalCodecFamilies;
@@ -21,6 +22,9 @@ import java.util.Objects;
 public class ExamineController {
     private final ExamineService examineService;
 
+    /*
+    api for Competition
+     */
     @PostMapping("/loadingdata/competition")
     public CompetitionListResponse getCompetitionList(@RequestBody CompetitionListRequest request){
         String search = request.getSearch();
@@ -80,6 +84,9 @@ public class ExamineController {
     }
 
 
+     /*
+     api for Paper
+     */
     @PostMapping("/loadingdata/paper")
     public PaperListResponse getPaperList(@RequestBody CompetitionListRequest request){
         String search = request.getSearch();
@@ -109,7 +116,6 @@ public class ExamineController {
             }
         }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
             if(none){
-                // 查询某个班的所有比赛
                 return examineService.getClassPaperList(classId, year, isUndergraduate);
             } else if (stu_name) {
                 return examineService.getClassPaperByStudentName(classId, year, isUndergraduate, search);
@@ -136,5 +142,56 @@ public class ExamineController {
     public ResponseEntity<String> paper_del(@RequestBody Map<String, Object> request){
         int id = (int)request.get("id");
         return examineService.paper_del(id);
+    }
+
+
+    /*
+     api for Patent
+     */
+    @PostMapping("/loadingdata/patent")
+    public PatentListResponse getPatentList(@RequestBody CompetitionListRequest request){
+        String search = request.getSearch();
+        String select = request.getSelect();
+        String classId = request.getClassId();
+        String year = request.getYear();
+        Boolean isUndergraduate = request.getIsUndergraduate();
+
+        boolean none = Objects.equals(search, "") && Objects.equals(select, "");
+        boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
+        boolean patent_name = Objects.equals(select, "专利名称") && !Objects.equals(search, "");
+
+
+        if(Objects.equals(classId, "") && Objects.equals(year, "")){
+            if(none){
+                return examineService.getAllPatentList();
+            } else if (stu_name) {
+                return examineService.getAllPatentByStudentName(search);
+            } else if (patent_name) {
+                return examineService.getAllPatentByPatentName(search);
+            }
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
+            if(none){
+                return examineService.getClassPatentList(classId, year, isUndergraduate);
+            } else if (stu_name) {
+                return examineService.getClassPatentByStudentName(classId, year, isUndergraduate, search);
+            } else if (patent_name) {
+                return examineService.getClassPatentByPaperName(classId, year, isUndergraduate, search);
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
+
+    @PostMapping("/patent/check")
+    public ResponseEntity<String> patent_check(@RequestBody PaperCheckRequest request){
+        return examineService.patent_check(request);
+    }
+
+    @PutMapping("/patent/del")
+    public ResponseEntity<String> patent_del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
+        return examineService.patent_del(id);
     }
 }

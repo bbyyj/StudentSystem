@@ -4,6 +4,7 @@ import com.example.backend.dao.request.CompCheckRequest;
 import com.example.backend.dao.request.PaperCheckRequest;
 import com.example.backend.dao.response.CompetitionListResponse;
 import com.example.backend.dao.response.PaperListResponse;
+import com.example.backend.dao.response.PatentListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,4 +63,22 @@ public interface ExamineService {
 
     @Transactional
     ResponseEntity<String> paper_del(int id);
+
+    PatentListResponse getAllPatentList();
+
+    PatentListResponse getAllPatentByStudentName(String search);
+
+    PatentListResponse getAllPatentByPatentName(String search);
+
+    PatentListResponse getClassPatentList(String classId, String year, Boolean isUndergraduate);
+
+    PatentListResponse getClassPatentByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    PatentListResponse getClassPatentByPaperName(String classId, String year, Boolean isUndergraduate, String search);
+
+    @Transactional
+    ResponseEntity<String> patent_check(PaperCheckRequest request);
+
+    @Transactional
+    ResponseEntity<String> patent_del(int id);
 }

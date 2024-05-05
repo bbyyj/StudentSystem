@@ -4,8 +4,10 @@ import com.example.backend.dao.request.CompCheckRequest;
 import com.example.backend.dao.request.PaperCheckRequest;
 import com.example.backend.dao.response.CompetitionListResponse;
 import com.example.backend.dao.response.PaperListResponse;
+import com.example.backend.dao.response.PatentListResponse;
 import com.example.backend.repository.CompetitionRepository;
 import com.example.backend.repository.PaperRepository;
+import com.example.backend.repository.PatentRepository;
 import com.example.backend.service.ExamineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,12 @@ import java.util.Map;
 public class ExamineServiceImpl implements ExamineService {
     private final CompetitionRepository comp;
     private final PaperRepository paper;
+    private final PatentRepository patent;
 
+
+    /*
+     * operation about Competition
+     */
     @Override
     public CompetitionListResponse getAllCompetitionList() {
         List<Map<String, Object>> lc = comp.getAll();
@@ -194,4 +201,70 @@ public class ExamineServiceImpl implements ExamineService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting competition.");
         }
     }
+
+
+    /*
+     * operation for Patent
+     */
+    @Override
+    public PatentListResponse getAllPatentList() {
+        List<Map<String, Object>> lc = patent.getAll();
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public PatentListResponse getAllPatentByStudentName(String name) {
+        List<Map<String, Object>> lc = patent.getPatentByStudent(name);
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public PatentListResponse getAllPatentByPatentName(String name) {
+        List<Map<String, Object>> lc = patent.getPatentByName(name);
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public PatentListResponse getClassPatentList(String classId, String year, Boolean isUndergraduate) {
+        List<Map<String, Object>> lc = patent.getClassAll(classId, year, isUndergraduate);
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public PatentListResponse getClassPatentByStudentName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = patent.getClassPatentByStudent(classId, year, isUndergraduate, name);
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public PatentListResponse getClassPatentByPaperName(String classId, String year, Boolean isUndergraduate, String name) {
+        List<Map<String, Object>> lc = patent.getClassPatentByName(classId, year, isUndergraduate, name);
+        return new PatentListResponse(lc, lc.size());
+    }
+
+    @Override
+    public ResponseEntity<String> patent_check(PaperCheckRequest request) {
+        try {
+            patent.updateCheckingStatus(
+                    request.getId(),
+                    request.getStatus(),
+                    request.getMsg()
+            );
+            return ResponseEntity.ok("check successfully");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while checking.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> patent_del(int id) {
+        try {
+            patent.deleteById(id);
+            return ResponseEntity.ok("delete successfully");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting competition.");
+        }
+    }
+
+
 }

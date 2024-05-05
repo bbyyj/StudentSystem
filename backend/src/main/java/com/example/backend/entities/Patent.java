@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "patent") // 修改表名为 "patents"
+@Table(name = "patent")
 public class Patent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
