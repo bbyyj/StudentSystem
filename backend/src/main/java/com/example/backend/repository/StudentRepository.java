@@ -65,6 +65,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     List<Student> findAll();
 
     Page<Student> findByIsUndergraduateAndAdmissionYearAndClassId(Boolean isUndergraduate, Year admissionYear, Integer classId, Pageable pageable);
+    List<Student> findByIsUndergraduateAndAdmissionYearAndClassId(Boolean isUndergraduate, Year admissionYear, Integer classId);
 
     @Modifying
     @Transactional
