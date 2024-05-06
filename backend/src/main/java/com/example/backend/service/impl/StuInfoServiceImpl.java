@@ -131,8 +131,6 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String dormitory = dataFormatter.formatCellValue(row.getCell(dormitoryIndex), formulaEvaluator);
-                        System.out.println(sid);
-                        System.out.println(dormitory);
                         StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, dormitory, "","","","","","","");
                         updates.add(update);
                     }
@@ -159,6 +157,8 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String type = dataFormatter.formatCellValue(row.getCell(typeIndex), formulaEvaluator);
+                        System.out.println(sid);
+                        System.out.println(type);
                         StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "",type,"","","","","");
                         updates.add(update);
                     }
