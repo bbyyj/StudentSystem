@@ -35,257 +35,251 @@ public class Utils {
         this.volunteer = volunteer;
     }
 
-    public List<Map<String, Object>> getInfoFromTable(String name, String sid, Date begin, Date end){
+    public List<Map<String, Object>> getInfoFromTable(String sid, Date begin, Date end){
         List<Map<String, Object>> lc = new ArrayList<>();
-        if(Objects.equals(name, "比赛")){
-            List<Map<String, Object>> l = comp.getStuCompFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+        List<Map<String, Object>> l = comp.getStuCompFromTime(sid, begin, end);
+        for(Map<String, Object> m:l){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","比赛获奖");
+            StringBuilder str = new StringBuilder();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("competition_name")){
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score")||k.equals("id") ){
 
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getCompChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
+                }
+                if(k.equals("competition_name")){
+                    new_map.put("name",v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getCompChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
 
-        if(Objects.equals(name, "论文")){
-            List<Map<String, Object>> l = paper.getStuPaperFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+        List<Map<String, Object>> l1 = paper.getStuPaperFromTime(sid, begin, end);
+        for(Map<String, Object> m:l1){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","论文发表");
+            StringBuilder str = new StringBuilder();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("title")){
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score")||k.equals("id") ){
 
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getPaperChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
+                }
+                if(k.equals("title")){
+                    new_map.put("name",v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getPaperChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
+        List<Map<String, Object>> l2 = patent.getStuPatentFromTime(sid, begin, end);
+        for(Map<String, Object> m:l2){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","专利发明");
+            StringBuilder str = new StringBuilder();
 
-        if(Objects.equals(name, "专利")){
-            List<Map<String, Object>> l = patent.getStuPatentFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("name")){
-
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getPatentChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getPatentChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
 
-        if(Objects.equals(name, "软著")){
-            List<Map<String, Object>> l = software.getStuSoftwareFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+        List<Map<String, Object>> l3 = software.getStuSoftwareFromTime(sid, begin, end);
+        for(Map<String, Object> m:l3){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","软件著作权发明");
+            StringBuilder str = new StringBuilder();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("name")){
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
 
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getSoftwareChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getSoftwareChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
+        List<Map<String, Object>> l4 = monograph.getStuMonoFromTime(sid, begin, end);
+        for(Map<String, Object> m:l4){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","专著出版");
+            StringBuilder str = new StringBuilder();
 
-        if(Objects.equals(name, "专著")){
-            List<Map<String, Object>> l = monograph.getStuMonoFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score") ||k.equals("id") ){
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("title")){
-
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getMonographChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
+                }
+                if (k.equals("title")){
+                    new_map.put("name",v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getMonographChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
 
-        if(Objects.equals(name, "校外交流")){
-            List<Map<String, Object>> l = activity.getStuActivityFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+        List<Map<String, Object>> l5 = activity.getStuActivityFromTime(sid, begin, end);
+        for(Map<String, Object> m:l5){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","赴外校交流");
+            StringBuilder str = new StringBuilder();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("name")){
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
 
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getActivityChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getActivityChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
 
-        if(Objects.equals(name, "志愿服务")){
-            List<Map<String, Object>> l = volunteer.getStuVolunteerFromTime(sid, begin, end);
-            for(Map<String, Object> m:l){
-                Map<String, Object> new_map = new HashMap<>();
-                StringBuilder str = new StringBuilder();
+        List<Map<String, Object>> l6 = volunteer.getStuVolunteerFromTime(sid, begin, end);
+        for(Map<String, Object> m:l6){
+            Map<String, Object> new_map = new HashMap<>();
+            new_map.put("source","志愿服务");
+            StringBuilder str = new StringBuilder();
 
-                for (Map.Entry<String, Object> entry : m.entrySet()){
-                    String k = entry.getKey();
-                    Object v = entry.getValue();
+            for (Map.Entry<String, Object> entry : m.entrySet()){
+                String k = entry.getKey();
+                Object v = entry.getValue();
 
-                    if(k.equals("rule_type") || k.equals("rule_detail")
-                            || k.equals("rule_score") || k.equals("name")){
+                if(k.equals("rule_type") || k.equals("rule_detail")
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
 
-                        new_map.put(k, v);
-                        continue;
-                    }
-
-                    String cname = getVolunteerChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
-                    String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
-
-                    str.append(cname).append(":").append(value).append(", ");
+                    new_map.put(k, v);
+                    continue;
                 }
 
-                String s = str.toString();
-                s = s.substring(0, s.length()-1);
+                String cname = getVolunteerChineseName(k); // 根据字段名获取字段的中文名，需要根据实际情况实现
+                String value = v != null ? v.toString() : ""; // 将字段值转为字符串，如果字段值为null，则赋为空字符串
 
-                // 其余字段的key为others, value为合成的string
-                new_map.put("others", s);
-                lc.add(new_map);
+                str.append(cname).append(":").append(value).append(", ");
             }
-            return lc;
+
+            String s = str.toString();
+            s = s.substring(0, s.length()-1);
+
+            // 其余字段的key为others, value为合成的string
+            new_map.put("others", s);
+            lc.add(new_map);
         }
-
-
-        return null;
+        return lc;
 
     }
 
     @Transactional
     public void updateCheckScoreByTableName(String name, int id, double score){
-        if(Objects.equals(name, "比赛")){
+        if(Objects.equals(name, "比赛获奖")){
             comp.updateCheckScoreById(id, score);
-        } else if (Objects.equals(name, "论文")) {
+        } else if (Objects.equals(name, "论文发表")) {
             paper.updateCheckScoreById(id, score);
-        } else if (Objects.equals(name, "专利")) {
+        } else if (Objects.equals(name, "专利发明")) {
             patent.updateCheckScoreById(id, score);
-        }else if (Objects.equals(name, "软著")) {
+        }else if (Objects.equals(name, "软件著作权发明")) {
             software.updateCheckScoreById(id, score);
-        }else if (Objects.equals(name, "专著")) {
+        }else if (Objects.equals(name, "专著出版")) {
             monograph.updateCheckScoreById(id, score);
-        }else if (Objects.equals(name, "校外交流")) {
+        }else if (Objects.equals(name, "赴外校交流")) {
             activity.updateCheckScoreById(id, score);
         }else if (Objects.equals(name, "志愿服务")) {
             volunteer.updateCheckScoreById(id, score);
@@ -294,17 +288,17 @@ public class Utils {
 
     @Transactional
     public void updateRuleAcceptByTableName(String name, int id, int flag){
-        if(Objects.equals(name, "比赛")){
+        if(Objects.equals(name, "比赛获奖")){
             comp.updateRuleAcceptById(id, flag);
-        } else if (Objects.equals(name, "论文")) {
+        } else if (Objects.equals(name, "论文发表")) {
             paper.updateRuleAcceptById(id, flag);
-        }else if (Objects.equals(name, "专利")) {
+        }else if (Objects.equals(name, "专利发明")) {
             patent.updateRuleAcceptById(id, flag);
-        }else if (Objects.equals(name, "软著")) {
+        }else if (Objects.equals(name, "软件著作权发明")) {
             software.updateRuleAcceptById(id, flag);
-        }else if (Objects.equals(name, "专著")) {
+        }else if (Objects.equals(name, "专著出版")) {
             monograph.updateRuleAcceptById(id, flag);
-        }else if (Objects.equals(name, "校外交流")) {
+        }else if (Objects.equals(name, "赴外校交流")) {
             activity.updateRuleAcceptById(id, flag);
         }else if (Objects.equals(name, "志愿服务")) {
             volunteer.updateRuleAcceptById(id, flag);
@@ -315,7 +309,7 @@ public class Utils {
     private String getCompChineseName(String fieldName) {
         // 根据字段名返回相应的字段的中文名
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "url" -> "材料链接";
             case "check_status" -> "审核状态";
             case "check_msg" -> "审核意见";
@@ -343,7 +337,7 @@ public class Utils {
 
     private String getStuChineseName(String name){
         return switch (name){
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "netId" -> "netID";
             case "password" -> "密码";
             case "studentRole" -> "学生身份";
@@ -371,7 +365,7 @@ public class Utils {
 
     private String getPaperChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "title" -> "论文标题";
             case "author_type" -> "作者类型";
             case "authors" -> "全部作者姓名";
@@ -410,7 +404,7 @@ public class Utils {
 
     public String getPatentChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "name" -> "专利名称";
             case "apply_number" -> "专利申请号";
             case "certificate_number" -> "专利证书编号";
@@ -441,7 +435,7 @@ public class Utils {
 
     public String getSoftwareChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "name" -> "软件著作权名称";
             case "inv_type" -> "第几发明人";
             case "inventors" -> "全部完成人";
@@ -463,7 +457,7 @@ public class Utils {
 
     public String getMonographChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "title" -> "专著名称";
             case "author_type" -> "第几作者";
             case "authors" -> "该著作全部作者";
@@ -487,7 +481,7 @@ public class Utils {
 
     public String getVolunteerChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "sid" -> "学生学号";
             case "organization" -> "志愿组织团体（全称）";
             case "name" -> "志愿活动名称（全称）";
@@ -509,7 +503,7 @@ public class Utils {
 
     public String getActivityChineseName(String fieldName) {
         return switch (fieldName) {
-            case "id" -> "编号";
+//            case "id" -> "编号";
             case "name" -> "项目名称";
             case "type" -> "事由类型";
             case "funding" -> "经费来源";
