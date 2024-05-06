@@ -48,7 +48,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score")||k.equals("id") ){
+                        || k.equals("rule_score")||k.equals("id")||k.equals("check_score")||k.equals("rule_accept") ){
 
                     new_map.put(k, v);
                     continue;
@@ -83,7 +83,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score")||k.equals("id") ){
+                        || k.equals("rule_score")||k.equals("id")||k.equals("check_score") ||k.equals("rule_accept")){
 
                     new_map.put(k, v);
                     continue;
@@ -117,7 +117,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id")||k.equals("check_score")||k.equals("rule_accept") ){
 
                     new_map.put(k, v);
                     continue;
@@ -148,7 +148,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ||k.equals("check_score")||k.equals("rule_accept")){
 
                     new_map.put(k, v);
                     continue;
@@ -178,7 +178,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score") ||k.equals("id") ){
+                        || k.equals("rule_score") ||k.equals("id") ||k.equals("check_score")||k.equals("rule_accept")){
 
                     new_map.put(k, v);
                     continue;
@@ -213,7 +213,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id")||k.equals("check_score")||k.equals("rule_accept") ){
 
                     new_map.put(k, v);
                     continue;
@@ -244,7 +244,7 @@ public class Utils {
                 Object v = entry.getValue();
 
                 if(k.equals("rule_type") || k.equals("rule_detail")
-                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ){
+                        || k.equals("rule_score") || k.equals("name")||k.equals("id") ||k.equals("check_score")||k.equals("rule_accept")){
 
                     new_map.put(k, v);
                     continue;
@@ -309,7 +309,7 @@ public class Utils {
     private String getCompChineseName(String fieldName) {
         // 根据字段名返回相应的字段的中文名
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "url" -> "材料链接";
             case "check_status" -> "审核状态";
             case "check_msg" -> "审核意见";
@@ -337,7 +337,7 @@ public class Utils {
 
     private String getStuChineseName(String name){
         return switch (name){
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "netId" -> "netID";
             case "password" -> "密码";
             case "studentRole" -> "学生身份";
@@ -365,7 +365,7 @@ public class Utils {
 
     private String getPaperChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "title" -> "论文标题";
             case "author_type" -> "作者类型";
             case "authors" -> "全部作者姓名";
@@ -404,7 +404,7 @@ public class Utils {
 
     public String getPatentChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "name" -> "专利名称";
             case "apply_number" -> "专利申请号";
             case "certificate_number" -> "专利证书编号";
@@ -435,7 +435,7 @@ public class Utils {
 
     public String getSoftwareChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "name" -> "软件著作权名称";
             case "inv_type" -> "第几发明人";
             case "inventors" -> "全部完成人";
@@ -457,7 +457,7 @@ public class Utils {
 
     public String getMonographChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "title" -> "专著名称";
             case "author_type" -> "第几作者";
             case "authors" -> "该著作全部作者";
@@ -481,7 +481,7 @@ public class Utils {
 
     public String getVolunteerChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "sid" -> "学生学号";
             case "organization" -> "志愿组织团体（全称）";
             case "name" -> "志愿活动名称（全称）";
@@ -503,7 +503,7 @@ public class Utils {
 
     public String getActivityChineseName(String fieldName) {
         return switch (fieldName) {
-//            case "id" -> "编号";
+            case "id" -> "编号";
             case "name" -> "项目名称";
             case "type" -> "事由类型";
             case "funding" -> "经费来源";

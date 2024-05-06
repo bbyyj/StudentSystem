@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("SELECT r FROM Review r")
     List<Review> findAll();
+    @Query("SELECT r FROM Review r WHERE r.id = ?1")
+    Review findById(int id);
 
 }

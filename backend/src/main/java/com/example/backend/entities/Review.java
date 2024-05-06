@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
@@ -23,7 +24,7 @@ public class Review {
     @Column(name = "name")
     private String name;
     @Column(name = "start_time")
-    private Timestamp start_time;
+    private Date start_time;
     @Column(name = "end_time")
-    private Timestamp end_time;
+    private Date end_time;
 }

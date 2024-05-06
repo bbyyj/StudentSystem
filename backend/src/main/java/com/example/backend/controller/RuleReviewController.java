@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Year;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +36,10 @@ public class RuleReviewController {
         request.setAdmission_year(admission_year);
         request.setClassId(classId);
         return ruleReviewService.getStudentReviewList(request);
+    }
+    @GetMapping("/getStudentMatiarial")
+    public List<Map<String, Object>> getStudentMatiarial(@RequestParam int id, @RequestParam String sid){
+        return ruleReviewService.getStudentMatiarial(id,sid);
     }
 
 

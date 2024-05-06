@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RuleReviewService {
     @Transactional
@@ -17,6 +18,8 @@ public interface RuleReviewService {
     List<Review> getReviews();
     @Transactional
     List<StudentReviewList> getStudentReviewList(StudentReviewListRequest request);
+    @Transactional
+    List<Map<String, Object>>  getStudentMatiarial (int review_id, String student_id);
 
 
 
