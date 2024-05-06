@@ -239,4 +239,152 @@ public class ExamineController {
         int id = (int)request.get("id");
         return examineService.software_del(id);
     }
+
+
+    /*
+    api for Monograph
+    */
+    @PostMapping("/loadingdata/monograph")
+    public ListResponse getMonographList(@RequestBody ListRequest request){
+        String search = request.getSearch();
+        String select = request.getSelect();
+        String classId = request.getClassId();
+        String year = request.getYear();
+        Boolean isUndergraduate = request.getIsUndergraduate();
+
+        boolean none = Objects.equals(search, "") && Objects.equals(select, "");
+        boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
+        boolean monograph_name = Objects.equals(select, "专著名称") && !Objects.equals(search, "");
+
+
+        if(Objects.equals(classId, "") && Objects.equals(year, "")){
+            if(none){
+                return examineService.getAllMonographList();
+            } else if (stu_name) {
+                return examineService.getAllMonographByStudentName(search);
+            } else if (monograph_name) {
+                return examineService.getAllMonographByMonographName(search);
+            }
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
+            if(none){
+                return examineService.getClassMonographList(classId, year, isUndergraduate);
+            } else if (stu_name) {
+                return examineService.getClassMonographByStudentName(classId, year, isUndergraduate, search);
+            } else if (monograph_name) {
+                return examineService.getClassMonographByMonographName(classId, year, isUndergraduate, search);
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
+
+    @PostMapping("/monograph/check")
+    public ResponseEntity<String> monograph_check(@RequestBody CheckRequest request){
+        return examineService.monograph_check(request);
+    }
+
+    @PutMapping("/monograph/del")
+    public ResponseEntity<String> monograph_del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
+        return examineService.monograph_del(id);
+    }
+
+
+    /*
+    api for ExchangeActivity
+    */
+    @PostMapping("/loadingdata/exchange")
+    public ListResponse getExchangeList(@RequestBody ListRequest request){
+        String search = request.getSearch();
+        String select = request.getSelect();
+        String classId = request.getClassId();
+        String year = request.getYear();
+        Boolean isUndergraduate = request.getIsUndergraduate();
+
+        boolean none = Objects.equals(search, "") && Objects.equals(select, "");
+        boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
+        boolean activity = Objects.equals(select, "项目名称") && !Objects.equals(search, "");
+
+
+        if(Objects.equals(classId, "") && Objects.equals(year, "")){
+            if(none){
+                return examineService.getAllExchangeList();
+            } else if (stu_name) {
+                return examineService.getAllExchangeByStudentName(search);
+            } else if (activity) {
+                return examineService.getAllExchangeByActivityName(search);
+            }
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
+            if(none){
+                return examineService.getClassExchangeList(classId, year, isUndergraduate);
+            } else if (stu_name) {
+                return examineService.getClassExchangeByStudentName(classId, year, isUndergraduate, search);
+            } else if (activity) {
+                return examineService.getClassExchangeByActivityName(classId, year, isUndergraduate, search);
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
+
+    @PostMapping("/exchange/check")
+    public ResponseEntity<String> exchange_check(@RequestBody CheckRequest request){
+        return examineService.activity_check(request);
+    }
+
+    @PutMapping("/exchange/del")
+    public ResponseEntity<String> exchange_del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
+        return examineService.activity_del(id);
+    }
+
+
+    /*
+    api for Volunteer
+    */
+    @PostMapping("/loadingdata/volunteer")
+    public ListResponse getVolunteerList(@RequestBody ListRequest request){
+        String search = request.getSearch();
+        String select = request.getSelect();
+        String classId = request.getClassId();
+        String year = request.getYear();
+        Boolean isUndergraduate = request.getIsUndergraduate();
+
+        boolean none = Objects.equals(search, "") && Objects.equals(select, "");
+        boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
+
+
+        if(Objects.equals(classId, "") && Objects.equals(year, "")){
+            if(none){
+                return examineService.getAllVolunteerList();
+            } else if (stu_name) {
+                return examineService.getAllVolunteerByStudentName(search);
+            }
+        }else if(!Objects.equals(classId, "") && !Objects.equals(year, "")){
+            if(none){
+                return examineService.getClassVolunteerList(classId, year, isUndergraduate);
+            } else if (stu_name) {
+                return examineService.getClassVolunteerByStudentName(classId, year, isUndergraduate, search);
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
+
+    @PostMapping("/volunteer/check")
+    public ResponseEntity<String> volunteer_time_check(@RequestBody CheckRequest request){
+        return examineService.volunteer_time_check(request);
+    }
+
+    @PutMapping("/volunteer/del")
+    public ResponseEntity<String> volunteer_time_del(@RequestBody Map<String, Object> request){
+        int id = (int)request.get("id");
+        return examineService.volunteer_time_del(id);
+    }
 }

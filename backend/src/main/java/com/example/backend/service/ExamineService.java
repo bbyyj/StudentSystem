@@ -96,4 +96,48 @@ public interface ExamineService {
 
     @Transactional
     ResponseEntity<String> software_del(int id);
+
+    ListResponse getAllMonographList();
+
+    ListResponse getAllMonographByStudentName(String search);
+
+    ListResponse getAllMonographByMonographName(String search);
+
+    ListResponse getClassMonographList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassMonographByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ListResponse getClassMonographByMonographName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> monograph_check(CheckRequest request);
+
+    ResponseEntity<String> monograph_del(int id);
+
+    ListResponse getAllExchangeList();
+
+    ListResponse getAllExchangeByStudentName(String search);
+
+    ListResponse getAllExchangeByActivityName(String search);
+
+    ListResponse getClassExchangeList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassExchangeByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ListResponse getClassExchangeByActivityName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> activity_check(CheckRequest request);
+
+    ResponseEntity<String> activity_del(int id);
+
+    ListResponse getAllVolunteerList();
+
+    ListResponse getAllVolunteerByStudentName(String search);
+
+    ListResponse getClassVolunteerList(String classId, String year, Boolean isUndergraduate);
+
+    ListResponse getClassVolunteerByStudentName(String classId, String year, Boolean isUndergraduate, String search);
+
+    ResponseEntity<String> volunteer_time_check(CheckRequest request);
+
+    ResponseEntity<String> volunteer_time_del(int id);
 }
