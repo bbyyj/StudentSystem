@@ -20,7 +20,7 @@ class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
-		List<Map<String, Object>> l = u.getInfoFromTable("比赛", "21310001", Date.valueOf("2018-09-01"), Date.valueOf("2024-01-01"));
+		List<Map<String, Object>> l = u.getInfoFromTable("21310001", Date.valueOf("2018-09-01"), Date.valueOf("2024-01-01"));
 		for (Map<String, Object> map : l) {
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				String key = entry.getKey();
