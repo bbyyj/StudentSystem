@@ -83,4 +83,18 @@ public class MaterialUploadController {
         return url;
     }
 
+    @PostMapping("/IdeologyMorality")
+    public String uploadIdeologyMorality(@RequestParam("file") MultipartFile file, @RequestParam String ideologyMoralityJson) {
+        String url = tencentCOSUtil.upLoadFile(file);
+        uploadService.uploadIdeologyMorality(url,ideologyMoralityJson);
+        return url;
+    }
+
+    @PostMapping("/SocialWork")
+    public String uploadSocialWork(@RequestParam("file") MultipartFile file, @RequestParam String socialWorkJson) {
+        String url = tencentCOSUtil.upLoadFile(file);
+        uploadService.uploadSocialWork(url,socialWorkJson);
+        return url;
+    }
+
 }

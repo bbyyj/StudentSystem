@@ -22,6 +22,8 @@ public class UploadServiceImpl implements UploadService {
     private final ExchangeActivityRepository exchangeActivityRepository;
     private final MonographRepository monographRepository;
     private final OthersRepository othersRepository;
+    private final IdeologyMoralityRepository ideologyMoralityRepository;
+    private final SocialWorkRepository socialWorkRepository;
     private final RuleManageService ruleManageService;
 
 
@@ -31,9 +33,9 @@ public class UploadServiceImpl implements UploadService {
 
         software.setId(0);
         software.setUrl(url);
-        software.setCheck_msg("未审核");
-        software.setCheck_status("无");
-        software.setRule_score(ruleManageService.getRuleScore(software.getRule_type(),software.getRule_detail()));
+        software.setCheck_msg("无");
+        software.setCheck_status("未审核");
+//        software.setRule_score(ruleManageService.getRuleScore(software.getRule_type(),software.getRule_detail()));
 
         softwareRepository.save(software);
 
@@ -45,9 +47,9 @@ public class UploadServiceImpl implements UploadService {
 
         competition.setId(0);
         competition.setUrl(url);
-        competition.setCheck_msg("未审核");
-        competition.setCheck_status("无");
-        competition.setRule_score(ruleManageService.getRuleScore(competition.getRule_type(),competition.getRule_detail()));
+        competition.setCheck_msg("无");
+        competition.setCheck_status("未审核");
+//        competition.setRule_score(ruleManageService.getRuleScore(competition.getRule_type(),competition.getRule_detail()));
 
         competitionRepository.save(competition);
 
@@ -59,9 +61,9 @@ public class UploadServiceImpl implements UploadService {
 
         paper.setId(0);
         paper.setUrl(url);
-        paper.setCheck_msg("未审核");
-        paper.setCheck_status("无");
-        paper.setRule_score(ruleManageService.getRuleScore(paper.getRule_type(),paper.getRule_detail()));
+        paper.setCheck_msg("无");
+        paper.setCheck_status("未审核");
+//        paper.setRule_score(ruleManageService.getRuleScore(paper.getRule_type(),paper.getRule_detail()));
 
         paperRepository.save(paper);
 
@@ -73,9 +75,9 @@ public class UploadServiceImpl implements UploadService {
 
         patent.setId(0);
         patent.setUrl(url);
-        patent.setCheck_msg("未审核");
-        patent.setCheck_status("无");
-        patent.setRule_score(ruleManageService.getRuleScore(patent.getRule_type(),patent.getRule_detail()));
+        patent.setCheck_msg("无");
+        patent.setCheck_status("未审核");
+//        patent.setRule_score(ruleManageService.getRuleScore(patent.getRule_type(),patent.getRule_detail()));
 
         patentRepository.save(patent);
 
@@ -87,9 +89,9 @@ public class UploadServiceImpl implements UploadService {
 
         volunteer.setId(0);
         volunteer.setUrl(url);
-        volunteer.setCheck_msg("未审核");
-        volunteer.setCheck_status("无");
-        volunteer.setRule_score(ruleManageService.getRuleScore(volunteer.getRule_type(),volunteer.getRule_detail()));
+        volunteer.setCheck_msg("无");
+        volunteer.setCheck_status("未审核");
+//        volunteer.setRule_score(ruleManageService.getRuleScore(volunteer.getRule_type(),volunteer.getRule_detail()));
 
         volunteerRepository.save(volunteer);
 
@@ -101,9 +103,9 @@ public class UploadServiceImpl implements UploadService {
 
         monograph.setId(0);
         monograph.setUrl(url);
-        monograph.setCheck_msg("未审核");
-        monograph.setCheck_status("无");
-        monograph.setRule_score(ruleManageService.getRuleScore(monograph.getRule_type(),monograph.getRule_detail()));
+        monograph.setCheck_msg("无");
+        monograph.setCheck_status("未审核");
+//        monograph.setRule_score(ruleManageService.getRuleScore(monograph.getRule_type(),monograph.getRule_detail()));
 
         monographRepository.save(monograph);
 
@@ -115,9 +117,9 @@ public class UploadServiceImpl implements UploadService {
 
         exchangeActivity.setId(0);
         exchangeActivity.setUrl(url);
-        exchangeActivity.setCheck_msg("未审核");
-        exchangeActivity.setCheck_status("无");
-        exchangeActivity.setRule_score(ruleManageService.getRuleScore(exchangeActivity.getRule_type(),exchangeActivity.getRule_detail()));
+        exchangeActivity.setCheck_msg("无");
+        exchangeActivity.setCheck_status("未审核");
+//        exchangeActivity.setRule_score(ruleManageService.getRuleScore(exchangeActivity.getRule_type(),exchangeActivity.getRule_detail()));
 
         exchangeActivityRepository.save(exchangeActivity);
 
@@ -129,11 +131,37 @@ public class UploadServiceImpl implements UploadService {
 
         others.setId(0);
         others.setUrl(url);
-        others.setCheck_msg("未审核");
-        others.setCheck_status("无");
-        others.setRule_score(ruleManageService.getRuleScore(others.getRule_type(),others.getRule_detail()));
+        others.setCheck_msg("无");
+        others.setCheck_status("未审核");
+//        others.setRule_score(ruleManageService.getRuleScore(others.getRule_type(),others.getRule_detail()));
 
         othersRepository.save(others);
+    }
+
+    @Override
+    public void uploadIdeologyMorality(String url, String ideologyMoralityJson) {
+        IdeologyMorality ideologyMorality = gson.fromJson(ideologyMoralityJson, IdeologyMorality.class);
+
+        ideologyMorality.setId(0);
+        ideologyMorality.setUrl(url);
+        ideologyMorality.setCheck_msg("无");
+        ideologyMorality.setCheck_status("未审核");
+//        ideologyMorality.setRule_score(ruleManageService.getRuleScore(ideologyMorality.getRule_type(),ideologyMorality.getRule_detail()));
+
+        ideologyMoralityRepository.save(ideologyMorality);
+    }
+
+    @Override
+    public void uploadSocialWork(String url, String socialWorkJson) {
+        SocialWork socialWork = gson.fromJson(socialWorkJson, SocialWork.class);
+
+        socialWork.setId(0);
+        socialWork.setUrl(url);
+        socialWork.setCheck_msg("无");
+        socialWork.setCheck_status("未审核");
+//        socialWork.setRule_score(ruleManageService.getRuleScore(socialWork.getRule_type(),socialWork.getRule_detail()));
+
+        socialWorkRepository.save(socialWork);
     }
 
 }

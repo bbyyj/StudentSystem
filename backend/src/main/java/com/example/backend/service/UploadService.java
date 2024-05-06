@@ -17,6 +17,10 @@ public interface UploadService {
 
     void uploadOthers(String url, String exchangeActivityJson);
 
+    void uploadIdeologyMorality(String url, String ideologyMoralityJson);
+
+    void uploadSocialWork(String url, String socialWorkJson);
+
 //    void uploadItem(String url, String itemJson, Class<?> itemType, JpaRepository repository);
 
 }
