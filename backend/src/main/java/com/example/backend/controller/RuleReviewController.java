@@ -7,6 +7,7 @@ import com.example.backend.entities.Review;
 import com.example.backend.entities.StudentReviewList;
 import com.example.backend.service.RuleReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Year;
@@ -42,6 +43,10 @@ public class RuleReviewController {
         System.out.println(id);
         System.out.println(sid);
         return ruleReviewService.getStudentMatiarial(id,sid);
+    }
+    @PostMapping("/submitReview")
+    public ResponseEntity<String>  submitReview(@RequestBody List<Map<String, Object>> data){
+        return ruleReviewService.submitReview(data);
     }
 
 

@@ -16,5 +16,8 @@ import java.util.Optional;
 public interface StudentReviewListRepository extends JpaRepository<StudentReviewList, Integer> {
     @Query("SELECT r FROM StudentReviewList r where r.review_id=?1 and r.isUndergraduate=?2 and r.admission_year=?3 and r.classId=?4 ")
     List<StudentReviewList> findByReviewId(int review_id, boolean isUndergraduate, Year admission_year, Integer classId);
+    @Modifying
+    @Query("UPDATE StudentReviewList r SET r.state=1 ,r.score=?1 where r.review_id=?2 and r.student_id=?3")
+    void updateScoreAndState(double score, int review_id, String student_id);
 
 }

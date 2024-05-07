@@ -20,6 +20,9 @@ public interface RuleReviewService {
     List<StudentReviewList> getStudentReviewList(StudentReviewListRequest request);
     @Transactional
     List<Map<String, Object>>  getStudentMatiarial (int review_id, String student_id);
+    @Transactional
+    ResponseEntity<String> submitReview(List<Map<String, Object>> data);
+
 
 
 
