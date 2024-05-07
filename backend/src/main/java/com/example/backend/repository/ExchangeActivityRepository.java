@@ -63,10 +63,9 @@ public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivi
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.* " +
             "from exchange_activity a " +
-            "join student s on a.sid = s.sid " +
-            "where s.sid = :sid and a.check_status = 1 and a.rule_accept = 1 " +
+            "where a.sid = :sid and a.check_status ='已审核'" +
             "and a.begin >= :begin and a.begin <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuActivityFromTime(@Param("sid") String sid,
                                                  @Param("begin") Date begin,

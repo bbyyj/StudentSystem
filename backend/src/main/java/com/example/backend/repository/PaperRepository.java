@@ -83,10 +83,9 @@ public interface PaperRepository extends JpaRepository<Paper, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.* " +
             "from paper p " +
-            "join student s on p.sid = s.sid " +
-            "where s.sid = :sid and p.check_status = 1 and p.rule_accept = 1 " +
+            "where p.sid = :sid and p.check_status = '已审核' " +
             "and p.acc_date >= :begin and p.acc_date <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuPaperFromTime(@Param("sid") String sid,
                                                  @Param("begin") Date begin,

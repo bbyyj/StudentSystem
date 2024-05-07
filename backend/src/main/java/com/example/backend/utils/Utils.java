@@ -38,6 +38,9 @@ public class Utils {
     public List<Map<String, Object>> getInfoFromTable(String sid, Date begin, Date end){
         List<Map<String, Object>> lc = new ArrayList<>();
         List<Map<String, Object>> l = comp.getStuCompFromTime(sid, begin, end);
+        System.out.println(sid);
+        System.out.println(begin);
+        System.out.println(l);
         for(Map<String, Object> m:l){
             Map<String, Object> new_map = new HashMap<>();
             new_map.put("source","比赛获奖");

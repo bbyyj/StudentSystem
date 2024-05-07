@@ -30,7 +30,7 @@ public class RuleReviewServiceImpl implements RuleReviewService {
     private final ReviewRepository  reviewRepository;
     private final StudentReviewListRepository  studentReviewListRepository;
     private final StudentRepository  studentRepository;
-    private static Utils u;
+    private final Utils u;
     public JSONObject addReview(ReviewAddRequest request) {
         Review review = new Review();
         review.setName(request.getName());
@@ -73,6 +73,8 @@ public class RuleReviewServiceImpl implements RuleReviewService {
     @Override
     public List<Map<String, Object>> getStudentMatiarial(int review_id, String student_id) {
         Review review = reviewRepository.findById(review_id);
+        System.out.println(review.getStart_time());
+        System.out.println(review.getEnd_time());
         return u.getInfoFromTable(student_id,review.getStart_time(),review.getEnd_time());
     }
 }

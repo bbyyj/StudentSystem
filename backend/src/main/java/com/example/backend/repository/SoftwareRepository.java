@@ -63,10 +63,9 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select sf.*, s.name " +
+    @Query(value = "select sf.* " +
             "from software sf " +
-            "join student s on sf.sid = s.sid " +
-            "where s.sid = :sid and sf.check_status = 1 and sf.rule_accept = 1 " +
+            "where sf.sid = :sid and sf.check_status = '已审核'" +
             "and sf.status_date >= :begin and sf.status_date <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuSoftwareFromTime(@Param("sid") String sid,
                                                   @Param("begin") Date begin,

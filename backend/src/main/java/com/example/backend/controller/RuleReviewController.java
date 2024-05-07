@@ -39,6 +39,8 @@ public class RuleReviewController {
     }
     @GetMapping("/getStudentMatiarial")
     public List<Map<String, Object>> getStudentMatiarial(@RequestParam int id, @RequestParam String sid){
+        System.out.println(id);
+        System.out.println(sid);
         return ruleReviewService.getStudentMatiarial(id,sid);
     }
 

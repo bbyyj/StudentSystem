@@ -63,10 +63,9 @@ public interface MonographRepository extends JpaRepository<Monograph, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.* " +
             "from monograph m " +
-            "join student s on m.sid = s.sid " +
-            "where s.sid = :sid and m.check_status = 1 and m.rule_accept = 1 " +
+            "where m.sid = :sid and m.check_status = '已审核' " +
             "and m.pub_date >= :begin and m.pub_date <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuMonoFromTime(@Param("sid") String sid,
                                                   @Param("begin") Date begin,

@@ -63,10 +63,9 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.* " +
             "from patent p " +
-            "join student s on p.sid = s.sid " +
-            "where s.sid = :sid and p.check_status = 1 and p.rule_accept = 1 " +
+            "where p.sid = :sid and p.check_status = '已审核' " +
             "and p.pub_date >= :begin and p.pub_date <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuPatentFromTime(@Param("sid") String sid,
                                                   @Param("begin") Date begin,

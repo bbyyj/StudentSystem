@@ -52,10 +52,9 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Integer> {
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select v.*, s.name " +
+    @Query(value = "select v.* " +
             "from volunteer v " +
-            "join student s on v.sid = s.sid " +
-            "where s.sid = :sid and v.check_status = 1 and v.rule_accept = 1 " +
+            "where v.sid = :sid and v.check_status = '已审核' " +
             "and v.begin >= :begin and v.end <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuVolunteerFromTime(@Param("sid") String sid,
                                                      @Param("begin") Date begin,

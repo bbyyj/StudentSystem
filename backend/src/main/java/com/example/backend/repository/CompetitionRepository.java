@@ -84,10 +84,9 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     void updateCheckingStatus(@Param("id") int id, @Param("status") String status, @Param("msg") String msg);
 
     @Modifying
-    @Query(value = "select c.*, s.name " +
+    @Query(value = "select c.* " +
             "from competition c " +
-            "join student s on c.sid = s.sid " +
-            "where s.sid = :sid and c.check_status = 1 and c.rule_accept = 1 " +
+            "where c.sid = :sid and c.check_status = '已审核' " +
             "and c.time >= :begin and c.time <= :end", nativeQuery = true)
     List<Map<String, Object>> getStuCompFromTime(@Param("sid") String sid,
                                                  @Param("begin") Date begin,
