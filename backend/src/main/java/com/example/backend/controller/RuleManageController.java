@@ -10,10 +10,12 @@ import com.example.backend.dao.response.RuleTypeListResponse;
 import com.example.backend.entities.RuleType;
 import com.example.backend.service.RuleManageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,9 +47,14 @@ public class RuleManageController {
     }
 
     @GetMapping("/detailManage/getAllRuleDetail")
-    public RuleDetailAllResponse  getAllRuleDetail(){
-        List<RuleDetailListResponse>  ruleDetailList = ruleManageService.getAllRuleDetail();
-        return new RuleDetailAllResponse(ruleDetailList);
+    public Page<Map<String,Object>> getAllRuleDetail(@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "8") int size){
+        return ruleManageService.getAllRuleDetail(page,size);
+    }
+    @GetMapping("/detailManage/getRuleDetailByCondition")
+    public Page<Map<String,Object>> getRuleDetailByCondition(@RequestParam String type,@RequestParam String detail,@RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "8") int size){
+        return ruleManageService.getRuleDetailByCondition(type,detail,page,size);
     }
     @PostMapping("/detailManage/addRuleDetail")
     public ResponseEntity<String> addRuleDetail(@RequestBody RuleDetailAddRequest request){

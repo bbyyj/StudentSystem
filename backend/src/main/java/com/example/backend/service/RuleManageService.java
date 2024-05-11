@@ -5,10 +5,12 @@ import com.example.backend.dao.request.RuleTypeAddRequest;
 import com.example.backend.dao.response.RuleDetailListResponse;
 import com.example.backend.dao.response.RuleTypeListResponse;
 import com.example.backend.entities.RuleType;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface RuleManageService {
@@ -29,7 +31,7 @@ public interface RuleManageService {
 
     //ruleDetail
     @Transactional
-    List<RuleDetailListResponse> getAllRuleDetail();
+    Page<Map<String,Object>> getAllRuleDetail(int page, int size);
     @Transactional
     ResponseEntity<String>  addRuleDetail(RuleDetailAddRequest request);
     @Transactional
@@ -38,6 +40,8 @@ public interface RuleManageService {
     ResponseEntity<String>  deleteRuleDetailById(Integer id);
     @Transactional
     float getRuleScore(String rule_type,String rule_detail);
+    @Transactional
+    Page<Map<String,Object>> getRuleDetailByCondition(String type,String detail,int page, int size);
 
 
 }

@@ -10,12 +10,16 @@ import com.example.backend.repository.RuleDetailRepository;
 import com.example.backend.repository.RuleTypeRepository;
 import com.example.backend.service.RuleManageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -128,24 +132,12 @@ public class RuleManageServiceImpl implements RuleManageService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating RuleType by name.");
         }
     }
-    public List<RuleDetailListResponse> getAllRuleDetail(){
-        List<Integer> ruleTypeIds = ruleTypeRepository.findAllIds();
-        System.out.println(ruleTypeIds);
-        List<RuleDetailListResponse> responseList = new ArrayList<>();
-
-        for (Integer ruleTypeId : ruleTypeIds) {
-            RuleDetailListResponse ruleDetailListResponse = new RuleDetailListResponse();
-            System.out.println(ruleDetailRepository.findAllByTid(ruleTypeId));
-            List<RuleDetail> ruleDetailList = ruleDetailRepository.findAllByTid(ruleTypeId);
-            String type = ruleTypeRepository.findById(ruleTypeId).get().getType();
-            ruleDetailListResponse.setTitle(type);
-            ruleDetailListResponse.setTid(ruleTypeId);
-            ruleDetailListResponse.setRuleDetailList(ruleDetailList);
-            responseList.add(ruleDetailListResponse);
-
-        }
-
-
-        return responseList;
+    public Page<Map<String,Object>> getAllRuleDetail(int page, int size){
+        Pageable pageable= PageRequest.of(page, size);
+        return ruleDetailRepository.getAll(pageable);
+    }
+    public Page<Map<String,Object>> getRuleDetailByCondition(String type,String detail,int page, int size){
+        Pageable pageable= PageRequest.of(page, size);
+        return ruleDetailRepository.getRuleDetailByCondition(type,detail,pageable);
     }
 }
