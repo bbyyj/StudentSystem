@@ -4,8 +4,6 @@
       <!-- 新增按钮 -->
       <el-button type="primary" @click="handlecreate">+ 新增综测加分条件</el-button>
 
-
-
       <!-- 对话框:点击新增或编辑才会弹出表单 -->
       <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
       <el-dialog :title="modalType == 0 ? '新增综测分数条件' : '编辑综测分数条件'" :visible.sync="dialogVisible" width="50%"
@@ -73,7 +71,6 @@
             <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
-
       </el-table>
 
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
@@ -95,9 +92,10 @@ export default {
       selectedRuleType: '',
       // 表单绑定的数据
       form: {
+        RuleTypeId: '',
         RuleType: '',
-        RuleDetail: '',
-        RuleScore: '',
+        RuleDetail: '', // 加分条件
+        RuleScore: '', // 加分分值 
       },
       // 表单验证规则
       rules: {
@@ -108,23 +106,23 @@ export default {
       RootCategory: [
         {
           id: 1,
-          label: "社会工作类",
-          value: "社会工作类"
+          label: "政治思想道德类",
+          value: "1"
         },
         {
           id: 2,
-          label: "政治思想道德类",
-          value: "政治思想道德类"
+          label: "社会工作类",
+          value: "2"
         },
         {
           id: 3,
           label: "文体、实践类",
-          value: "文体、实践类"
+          value: "3"
         },
         {
           id: 4,
           label: "学习、竞赛及科研成果",
-          value: "学习、竞赛及科研成果"
+          value: "4"
         }
       ],
       // 表单是否打开
@@ -138,7 +136,7 @@ export default {
       currentPage: 1, // 当前所在的页数
       pageSize: 5,  // 每个页请求的数量（1条/页、2条/页、5条/页、10条/页）
       total: 0, // 全部的条数
-      
+
       // 搜索框表单
       searchForm: {
         detail: ''
@@ -174,7 +172,7 @@ export default {
       });
     },
     // 根据条件检索获取
-    getListByCondition(page = this.currentPage, size = this.pageSize){
+    getListByCondition(page = this.currentPage, size = this.pageSize) {
       // 将页码增加1，并确保page和size是字符串
       let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
       let pageSize = parseInt(size); // 确保pageSize是字符串
@@ -182,9 +180,9 @@ export default {
       let detail = this.searchForm.detail;
       axios.get(`http://127.0.0.1:8080/rule/detailManage/getRuleDetailByCondition?type=${type}&detail=${detail}&page=${nextPage}&size=${pageSize}`).then((response) => {
         if (response.data.code === 200) {
-          this.tableData = response.data.data.content; // 设置表格数据
-          this.total = response.data.data.totalElements; // 设置总数据量
-          this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+          this.tableData = response.data.data.content; // 返回的表格数据
+          this.total = response.data.data.totalElements; // 数据的总条数
+          this.currentPage = response.data.data.pageable.pageNumber + 1; // 数据的总页数
         }
       }).catch((error) => {
         console.error("获取数据失败:", error);
@@ -199,32 +197,46 @@ export default {
         // 符合校验
         if (valid) {
           // 需要新增的数据
-          const Data = {
-            tid: "1",          // 根据需要从组件的data或props中获取
-            detail: "123123",  // 同上，示例直接使用硬编码值
-            score: "0.5"       // 同上
+          const addRuleDetailData = {
+            tid: this.form.RuleType,          // 根据需要从组件的data或props中获取
+            detail: this.form.RuleDetail,  // 同上，示例直接使用硬编码值
+            score: this.form.RuleScore       // 同上
           };
-
+          const updateRuleDetailByIdData = {
+            id: this.form.RuleTypeId,          // 根据需要从组件的data或props中获取
+            detail: this.form.RuleDetail,  // 同上，示例直接使用硬编码值
+            score: this.form.RuleScore       // 同上
+          };
           // 提交数据
           if (this.modalType === 0) {
             // 新增加分条件
-            axios.post(`http://127.0.0.1:8080/rule/detailManage/addRuleDetail`, Data).then(() => {
+            axios.post(`http://127.0.0.1:8080/rule/detailManage/addRuleDetail`, addRuleDetailData).then(() => {
               this.$message({
                 type: 'success',
                 message: '新增成功!'
               })
               // 重新进行请求新的内容
               this.getList()
+            }).catch((error) => {
+              this.$message({
+                type: 'error',
+                message: '新增失败!'
+              })
             })
           } else {
             // 编辑加分条件
-            axios.put(`http://127.0.0.1:8080/rule/detailManage/updateRuleDetailById`, Data).then(() => {
+            axios.put(`http://127.0.0.1:8080/rule/detailManage/updateRuleDetailById`, updateRuleDetailByIdData).then(() => {
               this.$message({
                 type: 'success',
                 message: '修改成功!'
               })
               // 重新进行请求新的内容
               this.getList()
+            }).catch((error) => {
+              this.$message({
+                type: 'error',
+                message: '修改失败!'
+              })
             })
           }
           // 清空,关闭
@@ -239,12 +251,15 @@ export default {
       // 后关闭
       this.dialogVisible = false
     },
+
     // 编辑按钮
-    handleEdit(index) {
+    handleEdit(item) {
       this.modalType = 1
+      this.form.RuleTypeId = item.rid;
+      this.form.RuleType = item.type;
+      this.form.RuleDetail = item.detail;
+      this.form.RuleScore = item.score;
       this.openForm()
-      // 深拷贝
-      this.form = JSON.parse(JSON.stringify(index))
     },
 
     // 删除按钮
@@ -256,7 +271,8 @@ export default {
       }).then(() => {
         // 删除操作:根据后端接口,参数是对象,id是唯一标识符
         axios.delete(`http://127.0.0.1:8080/rule/detailManage/deleteRuleDetailById?rid=${item.id}`).then((response) => {
-          if (response.data.code === 200) {
+          console.log(response)
+          if (response.data.data.code === 200) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -264,7 +280,12 @@ export default {
             // 重新进行数据请求
             this.getList()
           }
-        });
+        }).catch((error) => {
+          this.$message({
+            type: 'error',
+            message: '删除失败!'
+          })
+        })
       }).catch(() => {
         // 点击取消:不删除了
         this.$message({
@@ -283,7 +304,7 @@ export default {
       this.dialogVisible = true
     },
 
-   
+
     // 搜索
     search() {
       this.getListByCondition()
@@ -324,6 +345,7 @@ export default {
     }
   }
 }
+
 .compAssTable .el-form {
   display: flex;
   flex-wrap: nowrap;
