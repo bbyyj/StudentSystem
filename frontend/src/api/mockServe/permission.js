@@ -184,6 +184,13 @@ export default {
                                     icon: 'setting',
                                     url: 'InfoSubmission.vue'
                                 },
+                                {
+                                    path: '/InfoSubmission/Other',
+                                    name: 'OtherSubmission',
+                                    label: '其他',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
                             ]
                         },
                         {
@@ -198,7 +205,14 @@ export default {
                                     url: 'compAssCommit.vue'
                                 },
                             ]
-                        }
+                        },
+                        {
+                            path: '/InfoSubmissionRecord/record',
+                            name: 'InfoSubmissionRecord',
+                            label: '资料提交记录',
+                            icon: 'user',
+                            url: 'InfoSubmissionRecord.vue'
+                        },
                     ],
                     token: Mock.Random.guid(),
                     message: '获取成功'
