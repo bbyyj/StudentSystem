@@ -108,12 +108,13 @@ export default {
             // 表单是否打开
             dialogVisible: false,
             // 列表数据
-            tableData: [{
+            tableData: [
+                {
                 compAssID:1,
                 compAssName: '2024年综测',
                 compAssBeginTime: '2024-10-01',
                 compAssEndTime: '2024-10-20',
-            },
+                },
                 {
                     compAssID:2,
                     compAssName: '2023年综测',

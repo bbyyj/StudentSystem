@@ -36,6 +36,7 @@
 
       <!-- 搜索框 -->
       <el-form :inline="true">
+        <!--需要检索的综测类别-->
         <el-form-item>
           <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
             <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
@@ -43,8 +44,9 @@
           </el-select>
         </el-form-item>
 
+        <!--需要的加分条件-->
         <el-form-item>
-          <el-input v-model="searchForm.name" placeholder="请输入加分条件"></el-input>
+          <el-input v-model="searchForm.detail" placeholder="请输入加分条件"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">查询</el-button>
@@ -58,11 +60,11 @@
     <div class="common-table">
       <!-- 数据表格 -->
       <el-table :data="tableData" stripe style="width: 100%" height="90%">
-        <el-table-column prop="RuleType" label="综测类别">
+        <el-table-column prop="type" label="综测类别">
         </el-table-column>
-        <el-table-column prop="RuleDetail" label="加分条件">
+        <el-table-column prop="detail" label="加分条件">
         </el-table-column>
-        <el-table-column prop="RuleScore" label="分值">
+        <el-table-column prop="score" label="分值">
         </el-table-column>
         <!-- 操作列 -->
         <el-table-column label="操作">
@@ -84,7 +86,7 @@
 </template>
 
 <script>
-
+import axios from 'axios';
 
 export default {
   data() {
@@ -128,57 +130,99 @@ export default {
       // 表单是否打开
       dialogVisible: false,
       // 列表数据
-      tableData: [{
-        ID: 1,
-        RuleType: '政治思想道德类',
-        RuleDetail: '全国三好学生',
-        RuleScore: '1.5',
-      },
-      {
-        ID: 2,
-        RuleType: '社会工作类',
-        RuleDetail: '校学生会主席',
-        RuleScore: '3',
-      },
-      ],
+      tableData: [],
       // 打开表单:新建0,编辑1
       modalType: 0,
+
       // 分页相关属性
-      currentPage: 1,
-      pageSize: 5,
-      total: 0,
+      currentPage: 1, // 当前所在的页数
+      pageSize: 5,  // 每个页请求的数量（1条/页、2条/页、5条/页、10条/页）
+      total: 0, // 全部的条数
+      
       // 搜索框表单
       searchForm: {
-        compAssName: ''
+        detail: ''
       }
     }
   },
   methods: {
-    // 获取列表数据
-    getList() {
-      // 由接口文档知传入一个对象:要返回的是当前页面数据和搜索到的数据的交集
-      // getUser({ params: { ...this.pageData, ...this.searchForm } }).then((data) => {
-      //     // this.tableData = data.data.list
-      //     // this.total = data.data.count || 0
-      // })
+    // 分页相关的函数
+    // 变化多少条每页
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.getList(this.currentPage, pageSize);
     },
+    // 处理当前的页码
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+      this.getList(currentPage);
+    },
+
+    // 获取列表数据
+    getList(page = this.currentPage, size = this.pageSize) {
+      // 将页码增加1，并确保page和size是字符串
+      let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+      let pageSize = parseInt(size); // 确保pageSize是字符串
+      axios.get(`http://127.0.0.1:8080/rule/detailManage/getAllRuleDetail?page=${nextPage}&size=${pageSize}`).then((response) => {
+        if (response.data.code === 200) {
+          this.tableData = response.data.data.content; // 设置表格数据
+          this.total = response.data.data.totalElements; // 设置总数据量
+          this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+        }
+      }).catch((error) => {
+        console.error("获取数据失败:", error);
+      });
+    },
+    // 根据条件检索获取
+    getListByCondition(page = this.currentPage, size = this.pageSize){
+      // 将页码增加1，并确保page和size是字符串
+      let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+      let pageSize = parseInt(size); // 确保pageSize是字符串
+      let type = this.selectedRuleType;
+      let detail = this.searchForm.detail;
+      axios.get(`http://127.0.0.1:8080/rule/detailManage/getRuleDetailByCondition?type=${type}&detail=${detail}&page=${nextPage}&size=${pageSize}`).then((response) => {
+        if (response.data.code === 200) {
+          this.tableData = response.data.data.content; // 设置表格数据
+          this.total = response.data.data.totalElements; // 设置总数据量
+          this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+        }
+      }).catch((error) => {
+        console.error("获取数据失败:", error);
+      });
+    },
+
+
     // 表单提交
     submit() {
       // 要用箭头函数,若用function会报错,不知道为什么
       this.$refs.form.validate((valid) => {
         // 符合校验
         if (valid) {
+          // 需要新增的数据
+          const Data = {
+            tid: "1",          // 根据需要从组件的data或props中获取
+            detail: "123123",  // 同上，示例直接使用硬编码值
+            score: "0.5"       // 同上
+          };
+
           // 提交数据
           if (this.modalType === 0) {
-            // 新增
-            addCompAssBegin(this.form).then(() => {
-              console.log("新增综测")
+            // 新增加分条件
+            axios.post(`http://127.0.0.1:8080/rule/detailManage/addRuleDetail`, Data).then(() => {
+              this.$message({
+                type: 'success',
+                message: '新增成功!'
+              })
               // 重新进行请求新的内容
               this.getList()
             })
           } else {
-            // 编辑
-            editCompAssBegin(this.form).then(() => {
+            // 编辑加分条件
+            axios.put(`http://127.0.0.1:8080/rule/detailManage/updateRuleDetailById`, Data).then(() => {
+              this.$message({
+                type: 'success',
+                message: '修改成功!'
+              })
               // 重新进行请求新的内容
               this.getList()
             })
@@ -202,20 +246,24 @@ export default {
       // 深拷贝
       this.form = JSON.parse(JSON.stringify(index))
     },
+
     // 删除按钮
-    handleDelete(index) {
+    handleDelete(item) {
       this.$confirm('确定删除？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         // 删除操作:根据后端接口,参数是对象,id是唯一标识符
-        deleteCompAssBegin({ id: index.id }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.getList()
+        axios.delete(`http://127.0.0.1:8080/rule/detailManage/deleteRuleDetailById?rid=${item.id}`).then((response) => {
+          if (response.data.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            // 重新进行数据请求
+            this.getList()
+          }
         });
       }).catch(() => {
         // 点击取消:不删除了
@@ -234,18 +282,11 @@ export default {
     openForm() {
       this.dialogVisible = true
     },
-    handleSizeChange(pageSize) {
-      // this.pageSize = pageSize;
-      // this.loadStudents(this.pageSize, this.currentPage);
-    },
-    // 处理当前页变化
-    handleCurrentChange(currentPage) {
-      // this.currentPage = currentPage;
-      // this.loadStudents(this.pageSize, this.currentPage);
-    },
+
+   
     // 搜索
     search() {
-      this.getList()
+      this.getListByCondition()
     },
     // 跳转到综测审核页面
     gotoReview(row) {
@@ -256,6 +297,7 @@ export default {
   mounted() {
     // 挂载时获取当前页面的综测信息
     this.getList()
+
     // getAllCompAssBegin();
   }
 }
