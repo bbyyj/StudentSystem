@@ -29,7 +29,7 @@
             action="https://jsonplaceholder.typicode.com/posts/"  :multiple="false" :limit="1" :on-exceed="handleExceed" 
             :on-error="handleError" :file-list="fileList" :show-file-list="true" accept="xlsx" :before-upload="validateExcelFile">
             <el-button size="small" type="plain">点击上传</el-button>
-            
+             
             <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
           </el-upload>
           <el-button slot="reference" type="primary" round @click="importStudents">批量导入</el-button>
@@ -43,6 +43,9 @@
       <el-table-column v-for="item in studentForm" 
         :key="item.model" :prop="item.model" :label="item.label" :width="item.width" 
         :filters="item.filters" :filter-method="item.filters ? filterMethod : null" />
+      
+        <!-- <el-table-column v-for="item in studentForm" 
+        :key="item.model" :prop="item.model" :label="item.label" :width="item.width"  /> -->
 
       <el-table-column fixed="right" label="操作" width="180">
         <template #default="{ row }">
@@ -54,6 +57,7 @@
       </el-table-column>
     </el-table>
 
+    <!-- 分页，有bug -->
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"

@@ -1,7 +1,9 @@
 <template>
     <el-form ref="form" class="login_container" :model="login" status-icon :rules="rules" label-width="70px">
-        <!-- h3要放在里面:只能有一个根,且title也是表单的一部分 -->
-        <h3 class="login_title">用户登录</h3>
+        <el-tabs v-model="activeName" @tab-click="handleClick" style="margin-left: 90px; margin-right: 90px;">
+            <el-tab-pane label="学生" name="first"></el-tab-pane>
+            <el-tab-pane label="教师" name="second"></el-tab-pane>
+        </el-tabs>
         <!-- prop对应rules里的键 -->
         <el-form-item label="用户名" prop="username">
             <el-input v-model="login.username" autocomplete="off"></el-input>
