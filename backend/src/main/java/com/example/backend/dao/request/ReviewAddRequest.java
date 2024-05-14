@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewAddRequest {
+    private Integer id;
     private String name;
     private String start_time;
     private String end_time;

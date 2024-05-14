@@ -11,6 +11,9 @@ import com.example.backend.repository.StudentRepository;
 import com.example.backend.repository.StudentReviewListRepository;
 import com.example.backend.service.RuleReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -46,13 +49,32 @@ public class RuleReviewServiceImpl implements RuleReviewService {
     }
 
     @Override
-    public List<Review> getReviews() {
-        return reviewRepository.findAll();
+    public ResponseEntity<String> updateReview(ReviewAddRequest request) {
+        try {
+            reviewRepository.update(request.getId(),request.getName(),Date.valueOf(request.getStart_time()),Date.valueOf(request.getEnd_time()));
+            return ResponseEntity.ok("review update successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating review.");
+        }
     }
 
     @Override
-    public List<StudentReviewList> getStudentReviewList(StudentReviewListRequest request) {
-        List<StudentReviewList> studentReviewLists = studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId());
+    public Page<Review> getReviews(int page,int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return reviewRepository.getAll(pageable);
+    }
+
+    @Override
+    public Page<Review> getReviewsByCondition(String name, int page, int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        return reviewRepository.getByCondition(name,pageable);
+    }
+
+    @Override
+    public Page<StudentReviewList> getStudentReviewList(StudentReviewListRequest request,int page,int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        Page<StudentReviewList> studentReviewLists = studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId(),pageable);
         if(studentReviewLists.isEmpty()){
             List<Student>  students = studentRepository.findByIsUndergraduateAndAdmissionYearAndClassId(request.getIsUndergraduate(), request.getAdmission_year(), request.getClassId());
             for(Student student:students){
@@ -65,10 +87,17 @@ public class RuleReviewServiceImpl implements RuleReviewService {
                 studentReviewList.setClassId(student.getClassId());
                 studentReviewListRepository.saveAndFlush(studentReviewList);
             }
-            studentReviewLists = studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId());
+
+            studentReviewLists = studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId(),pageable);
 
         }
         return studentReviewLists;
+    }
+
+    @Override
+    public Page<StudentReviewList> getStudentReviewListByCondition(StudentReviewListRequest request, int page, int size, int state, String sid, String sname) {
+        Pageable pageable= PageRequest.of(page, size);
+        return studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId(),pageable);
     }
 
     @Override
