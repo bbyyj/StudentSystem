@@ -54,7 +54,7 @@ public class RuleReviewController {
     }
     @GetMapping("/getStudentReviewListByCondition")
     public Page<StudentReviewList> getStudentReviewListByCondition(@RequestParam int id, @RequestParam boolean isUndergraduate, @RequestParam Year admission_year,@RequestParam(defaultValue = "0") int classId,@RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "8") int size,@RequestParam(defaultValue = "-1") int state,@RequestParam String sid,@RequestParam String sname){
+                                                        @RequestParam(defaultValue = "8") int size,@RequestParam String state,@RequestParam String sid,@RequestParam String sname){
         StudentReviewListRequest request = new StudentReviewListRequest();
         request.setId(id);
         request.setIsUndergraduate(isUndergraduate);
@@ -63,10 +63,11 @@ public class RuleReviewController {
         return ruleReviewService.getStudentReviewListByCondition(request,page, size,state,sid,sname);
     }
     @GetMapping("/getStudentMatiarial")
-    public List<Map<String, Object>> getStudentMatiarial(@RequestParam int id, @RequestParam String sid){
+    public Page<Map<String, Object>> getStudentMatiarial(@RequestParam int id, @RequestParam String sid,@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "8") int size){
         System.out.println(id);
         System.out.println(sid);
-        return ruleReviewService.getStudentMatiarial(id,sid);
+        return ruleReviewService.getStudentMatiarial(id,sid,page,size);
     }
     @PostMapping("/submitReview")
     public ResponseEntity<String>  submitReview(@RequestBody List<Map<String, Object>> data){

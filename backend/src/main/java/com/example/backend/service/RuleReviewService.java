@@ -26,9 +26,9 @@ public interface RuleReviewService {
     Page<StudentReviewList> getStudentReviewList(StudentReviewListRequest request,int page, int size);
     @Transactional
     Page<StudentReviewList> getStudentReviewListByCondition(StudentReviewListRequest request,int page, int size,
-                                                            int state,String sid,String sname);
+                                                            String state,String sid,String sname);
     @Transactional
-    List<Map<String, Object>>  getStudentMatiarial (int review_id, String student_id);
+    Page<Map<String, Object>>  getStudentMatiarial (int review_id, String student_id,int page,int size);
     @Transactional
     ResponseEntity<String> submitReview(List<Map<String, Object>> data);
 

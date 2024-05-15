@@ -95,17 +95,17 @@ public class RuleReviewServiceImpl implements RuleReviewService {
     }
 
     @Override
-    public Page<StudentReviewList> getStudentReviewListByCondition(StudentReviewListRequest request, int page, int size, int state, String sid, String sname) {
+    public Page<StudentReviewList> getStudentReviewListByCondition(StudentReviewListRequest request, int page, int size, String state, String sid, String sname) {
         Pageable pageable= PageRequest.of(page, size);
-        return studentReviewListRepository.findByReviewId(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId(),pageable);
+        return studentReviewListRepository.findByReviewIdAndCondition(request.getId(),request.getIsUndergraduate(),request.getAdmission_year(),request.getClassId(),state,sid,sname,pageable);
     }
 
     @Override
-    public List<Map<String, Object>> getStudentMatiarial(int review_id, String student_id) {
+    public Page<Map<String, Object>> getStudentMatiarial(int review_id, String student_id,int page,int size) {
         Review review = reviewRepository.findById(review_id);
         System.out.println(review.getStart_time());
         System.out.println(review.getEnd_time());
-        return u.getInfoFromTable(student_id,review.getStart_time(),review.getEnd_time());
+        return u.getInfoFromTable(student_id,review.getStart_time(),review.getEnd_time(),page,size);
     }
 
     @Override

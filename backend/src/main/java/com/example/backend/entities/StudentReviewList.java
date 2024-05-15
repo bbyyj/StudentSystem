@@ -34,7 +34,7 @@ public class StudentReviewList {
     @Column(name = "class_id")
     private Integer classId;
     @Column(name = "state")
-    private int state;
+    private String state;
     @Column(name = "score")
     private float score;
 }

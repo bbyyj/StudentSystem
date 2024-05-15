@@ -2,6 +2,10 @@ package com.example.backend.utils;
 
 import com.example.backend.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +39,7 @@ public class Utils {
         this.volunteer = volunteer;
     }
 
-    public List<Map<String, Object>> getInfoFromTable(String sid, Date begin, Date end){
+    public Page<Map<String, Object>> getInfoFromTable(String sid, Date begin, Date end, int page , int size){
         List<Map<String, Object>> lc = new ArrayList<>();
         List<Map<String, Object>> l = comp.getStuCompFromTime(sid, begin, end);
         System.out.println(sid);
@@ -266,7 +270,9 @@ public class Utils {
             new_map.put("others", s);
             lc.add(new_map);
         }
-        return lc;
+        Pageable pageable= PageRequest.of(page, size);
+        Page<Map<String, Object>> plc = new PageImpl<>(lc, pageable, lc.size());
+        return plc;
 
     }
 
