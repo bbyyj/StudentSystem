@@ -56,43 +56,59 @@ export default {
                 status: ''  // 默认为空，即未选择状态
             },
             // mock 综测信息
-            comprehensiveData: [
-                { id: 1, a: "21311111", b: "乔羿童", c: "3", d: "5.0", status:"unverified" },
+            tableData: [
+                { id: 1, a: "21311111", b: "乔羿童", c: "3", d: "5.0", status: "unverified" },
                 { id: 2, a: "21312312", b: "张三", c: "4", d: "5.0", status: "verified" },
                 { id: 3, a: "21342323", b: "李四", c: "1", d: "5.0", status: "unverified" },
                 { id: 4, a: "21342323", b: "王五", c: "1", d: "5.0", status: "verified" },
             ],
+
             // 分页相关属性
             currentPage: 1,
             pageSize: 5,
             total: 0,
+
             currentItem: {},
             isEditMode: false,
         };
     },
     methods: {
+        // 变化多少条每页
         handleSizeChange(pageSize) {
-            // this.pageSize = pageSize;
-            // this.loadStudents(this.pageSize, this.currentPage);
+            this.pageSize = pageSize;
+            this.getList(this.currentPage, pageSize);
         },
-        // 处理当前页变化
+        // 处理当前的页码
         handleCurrentChange(currentPage) {
-            // this.currentPage = currentPage;
-            // this.loadStudents(this.pageSize, this.currentPage);
+            this.currentPage = currentPage;
+            this.getList(currentPage);
         },
-        // 根据学生信息进行搜索
-        fetchData() {
-            // 后端接口 根据 searchTerms 进行搜索
-            console.log("搜索条件", this.searchTerms);
-            // 假设这里返回了搜索结果和总数
-            // this.comprehensiveData = ...
-            // this.totalItems = ...
+        // 获取列表数据
+        getList(page = this.currentPage, size = this.pageSize) {
+            // 将页码增加1，并确保page和size是字符串
+            let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+            let pageSize = parseInt(size); // 确保pageSize是字符串
+            axios.get(`http://127.0.0.1:8080/ruleReview/getStudentReviewList?page=${nextPage}&size=${pageSize}`).then((response) => {
+                if (response.data.code === 200) {
+                    this.tableData = response.data.data.content; // 设置表格数据
+                    this.total = response.data.data.totalElements; // 设置总数据量
+                    this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+                }   
+            }).catch((error) => {
+                console.error("获取数据失败:", error);
+            });
         },
 
         // 跳转到当前学生的综测审核页面
         goReview(row) {
-            this.$router.push({ path: `/compAssDetail/${row.a}`});
+            this.$router.push({ path: `/compAssDetail/${row.a}` });
         },
+        mounted() {
+            // 挂载时获取当前页面的综测信息
+            this.getList()
+
+            // getAllCompAssBegin();
+        }
     },
 };
 </script>

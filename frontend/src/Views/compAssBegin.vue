@@ -13,22 +13,20 @@
                 <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px">
 
                     <!-- 每一项表单域:el-form-item -->
-                    <el-form-item label="综测名称" prop="compAssName">
+                    <el-form-item label="综测名称" prop="name">
                         <el-input placeholder="请输入综测名称" v-model="form.compAssName"></el-input>
                     </el-form-item>
-
                     <el-form-item label="开始时间">
-                        <el-form-item prop="compAssBeginTime">
-                            <el-date-picker type="date" placeholder="请选择综测开始时间" v-model="form.compAssBeginTime"
-                                value-format="yyyy-MM-DD">
+                        <el-form-item prop="start_time">
+                            <el-date-picker v-model="form.compAssBeginTime" type="date" placeholder="选择日期"
+                                format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                             </el-date-picker>
                         </el-form-item>
                     </el-form-item>
-
                     <el-form-item label="结束时间">
-                        <el-form-item prop="compAssEndTime">
-                            <el-date-picker type="date" placeholder="请选择综测结束时间" v-model="form.compAssEndTime"
-                                value-format="yyyy-MM-DD">
+                        <el-form-item prop="end_time">
+                            <el-date-picker v-model="form.compAssEndTime" type="date" placeholder="选择日期"
+                                format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
                             </el-date-picker>
                         </el-form-item>
                     </el-form-item>
@@ -43,7 +41,7 @@
             <!-- 搜索框 -->
             <el-form :inline="true">
                 <el-form-item>
-                    <el-input v-model="searchForm.name" placeholder="请输入名称"></el-input>
+                    <el-input v-model="searchForm.name" placeholder="请输入综测名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search">查询</el-button>
@@ -54,13 +52,12 @@
         <div class="common-table">
             <!-- 用户数据Table -->
             <el-table :data="tableData" stripe style="width: 100%" height="90%">
-                <el-table-column prop="compAssName" label="综测名称">
+                <el-table-column prop="name" label="综测名称">
                 </el-table-column>
-                <el-table-column prop="compAssBeginTime" label="综测开始时间">
+                <el-table-column prop="start_time" label="综测开始时间">
                 </el-table-column>
-                <el-table-column prop="compAssEndTime" label="综测结束时间">
+                <el-table-column prop="end_time" label="综测结束时间">
                 </el-table-column>
-
 
                 <!-- 自定义列 -->
                 <el-table-column label="操作">
@@ -72,10 +69,6 @@
 
             </el-table>
             <!-- 分页 -->
-            <!-- <div class="pager">
-                <el-pagination layout="prev, pager, next" :total="total" @current-change="currentChange">
-                </el-pagination>
-            </div> -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                 :current-page="currentPage" :page-sizes="[1, 2, 5, 10]" :page-size="pageSize"
                 layout="total, sizes, prev, pager, next, jumper" :total="total" class="pagination">
@@ -86,8 +79,8 @@
 </template>
 
 <script>
-import { createUser, deleteUser, updateUser } from '../api/index'
-import { getAllCompAssBegin, addCompAssBegin , deleteCompAssBegin , editCompAssBegin } from '../api/index'
+
+import axios from 'axios';
 
 
 export default {
@@ -95,6 +88,7 @@ export default {
         return {
             // 表单绑定的数据
             form: {
+                compAssId:'',
                 compAssName: '',
                 compAssBeginTime: '',
                 compAssEndTime: '',
@@ -110,13 +104,13 @@ export default {
             // 列表数据
             tableData: [
                 {
-                compAssID:1,
-                compAssName: '2024年综测',
-                compAssBeginTime: '2024-10-01',
-                compAssEndTime: '2024-10-20',
+                    compAssID: 1,
+                    compAssName: '2024年综测',
+                    compAssBeginTime: '2024-10-01',
+                    compAssEndTime: '2024-10-20',
                 },
                 {
-                    compAssID:2,
+                    compAssID: 2,
                     compAssName: '2023年综测',
                     compAssBeginTime: '2023-10-01',
                     compAssEndTime: '2023-10-20',
@@ -129,8 +123,7 @@ export default {
             pageSize: 5,
             total: 0,
 
-
-            // 搜索框表单
+            // 搜索框表单 用来根据特定条件进行检索
             searchForm: {
                 compAssName: ''
             }
@@ -138,41 +131,97 @@ export default {
     },
     methods: {
         handleSizeChange(pageSize) {
-            // this.pageSize = pageSize;
-            // this.loadStudents(this.pageSize, this.currentPage);
+            this.pageSize = pageSize;
+            this.getList(this.currentPage, pageSize);
         },
-        // 处理当前页变化
+        // 处理当前的页码
         handleCurrentChange(currentPage) {
-            // this.currentPage = currentPage;
-            // this.loadStudents(this.pageSize, this.currentPage);
+            this.currentPage = currentPage;
+            this.getList(currentPage);
         },
-        // 获取列表数据
-        getList() {
-            // 由接口文档知传入一个对象:要返回的是当前页面数据和搜索到的数据的交集
-            // getUser({ params: { ...this.pageData, ...this.searchForm } }).then((data) => {
-            //     // this.tableData = data.data.list
-            //     // this.total = data.data.count || 0
-            // })
+        // 获取列表数据 获取当前全部的综测发布内容
+        getList(page = this.currentPage, size = this.pageSize) {
+            // 将页码增加1，并确保page和size是字符串
+            let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+            let pageSize = parseInt(size); // 确保pageSize是字符串
+            axios.get(`http://127.0.0.1:8080/ruleReview/getAllReview?page=${nextPage}&size=${pageSize}`).then((response) => {
+                if (response.data.code === 200) {
+                    this.tableData = response.data.data.content; // 设置表格数据
+                    this.total = response.data.data.totalElements; // 设置总数据量
+                    this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+                }
+            }).catch((error) => {
+                console.error("获取数据失败:", error);
+            });
+        },
+        // 根据条件检索获取
+        getListByCondition(page = this.currentPage, size = this.pageSize) {
+            // 将页码增加1，并确保page和size是字符串
+            let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+            let pageSize = parseInt(size); // 确保pageSize是字符串
+            let name = this.searchForm.name
+            axios.get(`http://127.0.0.1:8080/ruleReview/getAllReviewByCondition?name=${name}&page=${nextPage}&size=${pageSize}`).then((response) => {
+                if (response.data.code === 200) {
+                    this.tableData = response.data.data.content; // 返回的表格数据
+                    this.total = response.data.data.totalElements; // 数据的总条数
+                    this.currentPage = response.data.data.pageable.pageNumber + 1; // 数据的总页数
+                }
+            }).catch((error) => {
+                console.error("获取数据失败:", error);
+            });
         },
         // 表单提交
         submit() {
-            // 要用箭头函数,若用function会报错,不知道为什么
+            // 要用箭头函数,若用function会报错
             this.$refs.form.validate((valid) => {
                 // 符合校验
                 if (valid) {
+                    const addReviewData = {
+                        name: this.form.compAssName,          // 根据需要从组件的data或props中获取
+                        start_time: this.form.compAssBeginTime,  // 同上，示例直接使用硬编码值
+                        end_time: this.form.compAssEndTime       // 同上
+                    };
+                    console.log(addReviewData)
+                    const updateReviewData = {
+                        id: this.form.compAssId,
+                        name: this.form.compAssName,          // 根据需要从组件的data或props中获取
+                        start_time: this.form.compAssBeginTime,  // 同上，示例直接使用硬编码值
+                        end_time: this.form.compAssEndTime       // 同上
+                    };
                     // 提交数据
                     if (this.modalType === 0) {
-                        // 新增
-                        addCompAssBegin(this.form).then(() => {
-                            console.log("新增综测")
-                            // 重新进行请求新的内容
-                            this.getList()
+                        // 新增综测
+                        axios.post(`http://127.0.0.1:8080/ruleReview/addReview`, addReviewData).then((response) => {
+                            if (response.data.code == 200) {
+                                this.$message({
+                                    type: 'success',
+                                    message: '新增成功!'
+                                })
+                                // 重新进行请求新的内容
+                                this.getList()
+                            }
+                        }).catch((error) => {
+                            this.$message({
+                                type: 'error',
+                                message: '新增失败!'
+                            })
                         })
                     } else {
-                        // 编辑
-                        editCompAssBegin(this.form).then(() => {
-                            // 重新进行请求新的内容
-                            this.getList()
+                        // 编辑综测
+                        axios.put(`http://127.0.0.1:8080/ruleReview/updateReview`, updateReviewData).then((response) => {
+                            if(response.data.code ==200){
+                                this.$message({
+                                    type: 'success',
+                                    message: '修改成功!'
+                                })
+                                // 重新进行请求新的内容
+                                this.getList()
+                            }
+                        }).catch((error) => {
+                            this.$message({
+                                type: 'error',
+                                message: '修改失败!'
+                            })
                         })
                     }
                     // 清空,关闭
@@ -188,42 +237,42 @@ export default {
             this.dialogVisible = false
         },
         // 编辑按钮
-        handleEdit(index) {
+        handleEdit(item) {
             this.modalType = 1
+            this.form.compAssId = item.id
+            this.form.compAssName = item.name
+            this.form.compAssBeginTime = item.start_time
+            this.form.compAssEndTime = item.end_time
             this.openForm()
-            // 深拷贝
-            this.form = JSON.parse(JSON.stringify(index))
         },
-        
+
         // 新建按钮
         handlecreate() {
-            this.modalType = 0
-            this.openForm()
+            this.modalType = 0;
+            this.form.compAssName = ''
+            this.form.compAssBeginTime =''
+            this.form.compAssEndTime = ''
+            this.openForm();
         },
         // 打开表单
         openForm() {
             this.dialogVisible = true
         },
-        // // 改变页码
-        // currentChange(val) {
-        //     this.pageData.page = val
-        //     this.getList()
-        // },
+
         // 搜索
         search() {
-            this.getList()
+            this.getListByCondition();
         },
         // 跳转到综测审核页面
-        gotoReview(row){
-            this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}`});
+        gotoReview(row) {
+            this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}` });
         },
-        
+
 
     },
     mounted() {
         // 挂载时获取当前页面的综测信息
         this.getList()
-        getAllCompAssBegin();
     }
 }
 </script>
@@ -244,7 +293,7 @@ export default {
 
         .pager {
             position: absolute;
-            right:20px;
+            right: 20px;
             bottom: 0;
         }
     }
