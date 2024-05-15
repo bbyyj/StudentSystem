@@ -179,7 +179,9 @@ export default {
       let type = this.selectedRuleType;
       let detail = this.searchForm.detail;
       axios.get(`http://127.0.0.1:8080/rule/detailManage/getRuleDetailByCondition?type=${type}&detail=${detail}&page=${nextPage}&size=${pageSize}`).then((response) => {
+        console.log(response)
         if (response.data.code === 200) {
+          console.log(response.data.data.content)
           this.tableData = response.data.data.content; // 返回的表格数据
           this.total = response.data.data.totalElements; // 数据的总条数
           this.currentPage = response.data.data.pageable.pageNumber + 1; // 数据的总页数
@@ -270,9 +272,10 @@ export default {
         type: 'warning'
       }).then(() => {
         // 删除操作:根据后端接口,参数是对象,id是唯一标识符
-        axios.delete(`http://127.0.0.1:8080/rule/detailManage/deleteRuleDetailById?rid=${item.id}`).then((response) => {
+        axios.delete(`http://127.0.0.1:8080/rule/detailManage/deleteRuleDetailById?rid=${item.rid}`).then((response) => {
+          console.log("delete")
           console.log(response)
-          if (response.data.data.code === 200) {
+          if (response.data.code === 200) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -297,6 +300,10 @@ export default {
     // 新建按钮
     handlecreate() {
       this.modalType = 0
+      this.form.RuleTypeId = "";
+      this.form.RuleType = "";
+      this.form.RuleDetail = "";
+      this.form.RuleScore = "";
       this.openForm()
     },
     // 打开表单
