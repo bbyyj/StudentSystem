@@ -37,7 +37,7 @@
         <!--需要检索的综测类别-->
         <el-form-item>
           <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
-            <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
+            <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.label"
               :label="item1.label"></el-option>
           </el-select>
         </el-form-item>
@@ -88,7 +88,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      // 当前选择的综测大类
+      // // 当前选择的综测大类
       selectedRuleType: '',
       // 表单绑定的数据
       form: {
