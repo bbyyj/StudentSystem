@@ -27,7 +27,7 @@ const routes = [
             },
             {
                 // 管理员跳到的每个不同年份的综测审核页面
-                path: '/compAssReview/:compAssId/:compAssName',
+                path: '/compAssReview/:id/:name',
                 name: 'compAssReview',
                 component: () => import('@/Views/compAssReview.vue'),
             }
@@ -46,7 +46,7 @@ const routes = [
     // },
     // {
     //     // 管理员跳到的每个不同年份的综测审核页面
-    //     path: '/compAssReview/:compAssId/:compAssName',
+    //     path: '/compAssReview/:id/:name',
     //     name: 'compAssReview',
     //     component: () => import('@/Views/compAssReview.vue'),
     // }

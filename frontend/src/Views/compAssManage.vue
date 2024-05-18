@@ -316,10 +316,10 @@ export default {
     search() {
       this.getListByCondition()
     },
-    // 跳转到综测审核页面
-    gotoReview(row) {
-      this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}` });
-    }
+    // // 跳转到综测审核页面
+    // gotoReview(row) {
+    //   this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}` });
+    // }
 
   },
   mounted() {
