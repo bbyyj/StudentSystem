@@ -146,7 +146,9 @@ export default {
 
         // 跳转到当前学生的综测审核页面
         goReview(row) {
-            this.$router.push({ path: `/compAssDetail/${this.id}/${row.sid}` });
+            // console.log(this.id)
+            // console.log(row.student_id)
+            this.$router.push({ path: `/compAssDetail/${this.id}/${row.student_id}` });
         },
     },
 };
