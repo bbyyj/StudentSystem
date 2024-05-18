@@ -56,10 +56,10 @@ export default {
             },
             // 综测审核的信息
             tableData: [
-                { id: 1, a: "21311111", b: "乔羿童", c: "3", d: "5.0", status: "unverified" },
-                { id: 2, a: "21312312", b: "张三", c: "4", d: "5.0", status: "verified" },
-                { id: 3, a: "21342323", b: "李四", c: "1", d: "5.0", status: "unverified" },
-                { id: 4, a: "21342323", b: "王五", c: "1", d: "5.0", status: "verified" },
+                // { id: 1, a: "21311111", b: "乔羿童", c: "3", d: "5.0", status: "unverified" },
+                // { id: 2, a: "21312312", b: "张三", c: "4", d: "5.0", status: "verified" },
+                // { id: 3, a: "21342323", b: "李四", c: "1", d: "5.0", status: "unverified" },
+                // { id: 4, a: "21342323", b: "王五", c: "1", d: "5.0", status: "verified" },
             ],
 
             // 分页相关属性
@@ -91,7 +91,7 @@ export default {
         getList(page = this.currentPage, size = this.pageSize) {
             // 综测的学年 通过路由进行获取
             let id = this.id;
-            
+
             // 班长携带的信息
             let isUndergraduate = 1;
             let admission_year = 2020;
@@ -146,7 +146,7 @@ export default {
 
         // 跳转到当前学生的综测审核页面
         goReview(row) {
-            this.$router.push({ path: `/compAssDetail/${row.a}` });
+            this.$router.push({ path: `/compAssDetail/${this.id}/${row.sid}` });
         },
     },
 };
