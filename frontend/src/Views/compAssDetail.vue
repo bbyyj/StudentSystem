@@ -24,7 +24,7 @@
                 <span>以下是学生的综测申请项目，请参照综测表进行不合规分值的修改</span>
             </div>
 
-            <el-form inline class="search-form" @submit.native.prevent="fetchListData">
+            <el-form inline class="search-form" @submit.native.prevent="getList">
                 <el-form-item label="类别">
                     <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
                         <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
@@ -35,12 +35,13 @@
                     <el-input v-model="searchTerms.b" placeholder="请输入加分条件"></el-input>
                 </el-form-item>
 
-                <el-form-item>
+                <!-- <el-form-item>
                     <el-button type="primary" @click="fetchListData">搜索</el-button>
-                </el-form-item>
+                </el-form-item> -->
+
             </el-form>
 
-            <el-table :data="record.list" style="width: 100%">
+            <el-table :data="record.tableData" style="width: 100%">
                 <el-table-column prop="time" label="时间"></el-table-column>
                 <el-table-column prop="a" label="类别"></el-table-column>
                 <el-table-column prop="b" label="加分条件"></el-table-column>
@@ -77,9 +78,14 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
+            id: parseInt(this.$route.params.id), // 当前学年的综测
+            sid: this.$route.params.sid, // 当前学生的综测
+
             searchTerms: {
                 a: "",
                 b: "",
@@ -94,34 +100,39 @@ export default {
                 name: "乔羿童",
                 score: "5.0",
                 remark:"无",
-                list: [
-                    { a: "社会工作类", b: "院团委副书记", c: "软件工程学院院团委副书记", d: "3.0分",fileUrl:"https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png"  },
-                    { a: "政治思想道德类", b: "全国三好学生", c: "无", d: "1.5分",fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E9%99%84%E4%BB%B61.%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%A62023%E5%B9%B4%E5%BA%A6%E6%B0%91%E4%B8%BB%E8%AF%84%E8%AE%AE%E5%85%9A%E5%91%98%E7%99%BB%E8%AE%B0%E8%A1%A8.pdf" },
-                    { a: "政治思想道德类", b: "校级马研班、青马班获评优秀学员", c: "无", d: "0.8分" },
-                    { a: "社会工作类", b: "班委委员", c: "软件工程学院2021级3班文体委员", d: "0.5分" },
-                ],
+                // list: [
+                //     { a: "社会工作类", b: "院团委副书记", c: "软件工程学院院团委副书记", d: "3.0分",fileUrl:"https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png"  },
+                //     { a: "政治思想道德类", b: "全国三好学生", c: "无", d: "1.5分",fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E9%99%84%E4%BB%B61.%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%A62023%E5%B9%B4%E5%BA%A6%E6%B0%91%E4%B8%BB%E8%AF%84%E8%AE%AE%E5%85%9A%E5%91%98%E7%99%BB%E8%AE%B0%E8%A1%A8.pdf" },
+                //     { a: "政治思想道德类", b: "校级马研班、青马班获评优秀学员", c: "无", d: "0.8分" },
+                //     { a: "社会工作类", b: "班委委员", c: "软件工程学院2021级3班文体委员", d: "0.5分" },
+                // ],
+                // 列表数据
+                tableData: [],
             },
+            
+
             selectedRuleType:"",
+
             RootCategory: [
                 {
                     id: 1,
-                    label: "社会工作类",
-                    value: "社会工作类"
+                    label: "政治思想道德类",
+                    value: "1"
                 },
                 {
                     id: 2,
-                    label: "政治思想道德类",
-                    value: "政治思想道德类"
+                    label: "社会工作类",
+                    value: "2"
                 },
                 {
                     id: 3,
                     label: "文体、实践类",
-                    value: "文体、实践类"
+                    value: "3"
                 },
                 {
                     id: 4,
                     label: "学习、竞赛及科研成果",
-                    value: "学习、竞赛及科研成果"
+                    value: "4"
                 }
             ],
 
@@ -135,7 +146,45 @@ export default {
             currentRejectItem: null, // 当前打算拒绝的项目
         };
     },
+    created(){
+        this.getList();
+    },
     methods: {
+        // 分页相关的函数
+        // 变化多少条每页
+        handleSizeChange(pageSize) {
+            this.pageSize = pageSize;
+            this.getList(this.currentPage, pageSize);
+        },
+        // 处理当前的页码
+        handleCurrentChange(currentPage) {
+            this.currentPage = currentPage;
+            this.getList(currentPage);
+        },
+        // 获取列表数据
+        getList(page = this.currentPage, size = this.pageSize) {
+            // 将页码增加1，并确保page和size是字符串
+            let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
+            let pageSize = parseInt(size); // 确保pageSize是字符串
+
+            let id =this.id; // 综测学年id
+            let sid = this.sid; // 学生的id
+            console.log(id);
+            console.log(sid);
+
+            axios.get(`http://127.0.0.1:8080/ruleReview/getStudentMatiarial?id=${id}&sid=${sid}&page=${nextPage}&size=${pageSize}`).then((response) => {
+                console.log(response)
+                if (response.data.code === 200) {
+                    this.record.tableData = response.data.data.content; // 设置表格数据
+                    this.total = response.data.data.totalElements; // 设置总数据量
+                    this.currentPage = response.data.data.pageable.pageNumber + 1; // 更新当前页码
+                }
+            }).catch((error) => {
+                console.error("获取数据失败:", error);
+            });
+        },
+
+
         // 修改新的分值
         modifyItem(item) {
             // 弹出对话框或通过其他UI方式接受新分值
@@ -150,23 +199,8 @@ export default {
             this.rejectReason = ""; // 清空上次的输入
             this.showDialogReject = true;
         },
-        fetchListData() {
-            // 后端接口 根据 searchTerms 进行搜索
-            console.log("搜索条件", this.searchTerms);
-            // 假设这里返回了搜索结果和总数
-            // this.record.list = ...
-            // this.totalItems = ...
-        },
-        // 处理每页显示数量变化
-        handleSizeChange(pageSize) {
-            // this.pageSize = pageSize;
-            // this.loadStudents(this.pageSize, this.currentPage);
-        },
-        // 处理当前页变化
-        handleCurrentChange(currentPage) {
-            // this.currentPage = currentPage;
-            // this.loadStudents(this.pageSize, this.currentPage);
-        },
+        
+       
         editItem(item) {
             // 修改列表项，可能需要弹窗或导航到编辑表单页面
             console.log("编辑项目", item);
@@ -190,9 +224,9 @@ export default {
         // 设置不通过的理由
         submitRejectReason() {},
     },
-    mounted() {
-        // 页面加载完成后获取数据
-        this.fetchListData();
-    },
+    // mounted() {
+    //     // 页面加载完成后获取数据
+    //     this.fetchListData();
+    // },
 };
 </script>

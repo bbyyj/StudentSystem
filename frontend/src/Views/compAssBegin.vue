@@ -265,7 +265,7 @@ export default {
         },
         // 跳转到综测审核页面
         gotoReview(row) {
-            this.$router.push({ path: `/compAssReview/${row.compAssID}/${row.compAssName}` });
+            this.$router.push({ path: `/compAssReview/${row.id}/${row.name}` });
         },
 
 

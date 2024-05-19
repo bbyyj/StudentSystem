@@ -12,45 +12,45 @@ import Cookie from 'js-cookie'
 Vue.use(VueRouter)
 
 const routes = [
-    // 主路由
-    {
-        path: '/',
-        name:'Main',
-        component: Main,
-        redirect: '/home', // 重定向
-        children: [
-            {
-                // 管理员跳到的每个学生综测详情页面
-                path: '/compAssDetail/:studentId',
-                name: 'compAssDetail',
-                component: () => import('@/Views/compAssDetail.vue'),
-            },
-            {
-                // 管理员跳到的每个不同年份的综测审核页面
-                path: '/compAssReview/:compAssId/:compAssName',
-                name: 'compAssReview',
-                component: () => import('@/Views/compAssReview.vue'),
-            }
-        ]
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: Login
-    },
-    // {
-    //     // 管理员跳到的每个学生综测详情页面
-    //     path: '/compAssDetail/:studentId',
-    //     name: 'compAssDetail',
-    //     component: () => import('@/Views/compAssDetail.vue'),
-    // },
-    // {
-    //     // 管理员跳到的每个不同年份的综测审核页面
-    //     path: '/compAssReview/:compAssId/:compAssName',
-    //     name: 'compAssReview',
-    //     component: () => import('@/Views/compAssReview.vue'),
-    // }
-]
+  // 主路由
+  {
+    path: "/",
+    name: "Main",
+    component: Main,
+    redirect: "/home", // 重定向
+    children: [
+      {
+        // 管理员跳到的每个学生综测详情页面
+        path: "/compAssDetail/:id/:sid",
+        name: "compAssDetail",
+        component: () => import("@/Views/compAssDetail.vue"),
+      },
+      {
+        // 管理员跳到的每个不同年份的综测审核页面
+        path: "/compAssReview/:id/:name",
+        name: "compAssReview",
+        component: () => import("@/Views/compAssReview.vue"),
+      },
+    ],
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+  },
+  // {
+  //     // 管理员跳到的每个学生综测详情页面
+  //     path: '/compAssDetail/:studentId',
+  //     name: 'compAssDetail',
+  //     component: () => import('@/Views/compAssDetail.vue'),
+  // },
+  // {
+  //     // 管理员跳到的每个不同年份的综测审核页面
+  //     path: '/compAssReview/:id/:name',
+  //     name: 'compAssReview',
+  //     component: () => import('@/Views/compAssReview.vue'),
+  // }
+];
 
 const router = new VueRouter({
     routes
