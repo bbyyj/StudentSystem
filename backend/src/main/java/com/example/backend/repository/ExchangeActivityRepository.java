@@ -14,14 +14,14 @@ import java.util.Map;
 @Repository
 public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivity, Integer> {
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a " +
             "join student s on a.sid = s.sid",
             nativeQuery = true)
     List<Map<String, Object>> getAll();
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a " +
             "join student s on a.sid = s.sid " +
             "where s.name = :name",
@@ -29,7 +29,7 @@ public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivi
     List<Map<String, Object>> getExchangeByStudent(@Param("name") String name);
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a join student s on a.sid = s.sid " +
             "where a.name = :name",
             nativeQuery = true)
@@ -37,14 +37,14 @@ public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivi
 
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a " +
             "join student s on a.sid = s.sid where s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
             nativeQuery = true)
     List<Map<String, Object>> getClassAll(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate);
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a " +
             "join student s on a.sid = s.sid " +
             "where s.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
@@ -52,7 +52,7 @@ public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivi
     List<Map<String, Object>> getClassExchangeByStudent(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
     @Modifying
-    @Query(value = "select a.*, s.name " +
+    @Query(value = "select a.*, s.name as student_name " +
             "from exchange_activity a join student s on a.sid = s.sid " +
             "where a.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassExchangeByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);

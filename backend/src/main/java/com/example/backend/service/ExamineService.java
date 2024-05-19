@@ -109,8 +109,10 @@ public interface ExamineService {
 
     ListResponse getClassMonographByMonographName(String classId, String year, Boolean isUndergraduate, String search);
 
+    @Transactional
     ResponseEntity<String> monograph_check(CheckRequest request);
 
+    @Transactional
     ResponseEntity<String> monograph_del(int id);
 
     ListResponse getAllExchangeList();
@@ -125,8 +127,10 @@ public interface ExamineService {
 
     ListResponse getClassExchangeByActivityName(String classId, String year, Boolean isUndergraduate, String search);
 
+    @Transactional
     ResponseEntity<String> activity_check(CheckRequest request);
 
+    @Transactional
     ResponseEntity<String> activity_del(int id);
 
     ListResponse getAllVolunteerList();
@@ -137,7 +141,9 @@ public interface ExamineService {
 
     ListResponse getClassVolunteerByStudentName(String classId, String year, Boolean isUndergraduate, String search);
 
+    @Transactional
     ResponseEntity<String> volunteer_time_check(CheckRequest request);
 
+    @Transactional
     ResponseEntity<String> volunteer_time_del(int id);
 }

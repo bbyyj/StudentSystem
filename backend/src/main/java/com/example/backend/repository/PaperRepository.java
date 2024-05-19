@@ -67,7 +67,7 @@ public interface PaperRepository extends JpaRepository<Paper, Integer> {
 
     @Modifying
     @Query(value = "select p.*, s.name " +
-            "from paper c join student s on p.sid = s.sid " +
+            "from paper p join student s on p.sid = s.sid " +
             "where p.paper_type = :result_type and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPaperByType(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("result_type") String result_type);
 
