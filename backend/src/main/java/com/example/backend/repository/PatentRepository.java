@@ -14,14 +14,14 @@ import java.util.Map;
 @Repository
 public interface PatentRepository extends JpaRepository<Patent, Integer> {
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p " +
             "join student s on p.sid = s.sid",
             nativeQuery = true)
     List<Map<String, Object>> getAll();
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p " +
             "join student s on p.sid = s.sid " +
             "where s.name = :name",
@@ -29,7 +29,7 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
     List<Map<String, Object>> getPatentByStudent(@Param("name") String name);
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p join student s on p.sid = s.sid " +
             "where p.name = :name",
             nativeQuery = true)
@@ -37,14 +37,14 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
 
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p " +
             "join student s on p.sid = s.sid where s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
             nativeQuery = true)
     List<Map<String, Object>> getClassAll(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate);
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p " +
             "join student s on p.sid = s.sid " +
             "where s.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
@@ -52,7 +52,7 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
     List<Map<String, Object>> getClassPatentByStudent(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
     @Modifying
-    @Query(value = "select p.*, s.name " +
+    @Query(value = "select p.*, s.name as student_name " +
             "from patent p join student s on p.sid = s.sid " +
             "where p.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassPatentByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);

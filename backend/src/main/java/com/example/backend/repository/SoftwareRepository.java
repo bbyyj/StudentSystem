@@ -14,14 +14,14 @@ import java.util.Map;
 @Repository
 public interface SoftwareRepository extends JpaRepository<Software, Integer> {
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss " +
             "join student s on ss.sid = s.sid",
             nativeQuery = true)
     List<Map<String, Object>> getAll();
 
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss " +
             "join student s on ss.sid = s.sid " +
             "where s.name = :name",
@@ -29,7 +29,7 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
     List<Map<String, Object>> getSoftwareByStudent(@Param("name") String name);
 
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss join student s on ss.sid = s.sid " +
             "where ss.name = :name",
             nativeQuery = true)
@@ -37,14 +37,14 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
 
 
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss " +
             "join student s on ss.sid = s.sid where s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
             nativeQuery = true)
     List<Map<String, Object>> getClassAll(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate);
 
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss " +
             "join student s on ss.sid = s.sid " +
             "where s.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
@@ -52,7 +52,7 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
     List<Map<String, Object>> getClassSoftwareByStudent(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
     @Modifying
-    @Query(value = "select ss.*, s.name " +
+    @Query(value = "select ss.*, s.name as student_name " +
             "from software ss join student s on ss.sid = s.sid " +
             "where ss.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassSoftwareByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);

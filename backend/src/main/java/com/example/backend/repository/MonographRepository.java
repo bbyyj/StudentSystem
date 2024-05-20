@@ -14,14 +14,14 @@ import java.util.Map;
 @Repository
 public interface MonographRepository extends JpaRepository<Monograph, Integer> {
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m " +
             "join student s on m.sid = s.sid",
             nativeQuery = true)
     List<Map<String, Object>> getAll();
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m " +
             "join student s on m.sid = s.sid " +
             "where s.name = :name",
@@ -29,7 +29,7 @@ public interface MonographRepository extends JpaRepository<Monograph, Integer> {
     List<Map<String, Object>> getMonographByStudent(@Param("name") String name);
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m join student s on m.sid = s.sid " +
             "where m.title = :name",
             nativeQuery = true)
@@ -37,14 +37,14 @@ public interface MonographRepository extends JpaRepository<Monograph, Integer> {
 
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m " +
             "join student s on m.sid = s.sid where s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
             nativeQuery = true)
     List<Map<String, Object>> getClassAll(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate);
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m " +
             "join student s on m.sid = s.sid " +
             "where s.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
@@ -52,7 +52,7 @@ public interface MonographRepository extends JpaRepository<Monograph, Integer> {
     List<Map<String, Object>> getClassMonographByStudent(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
 
     @Modifying
-    @Query(value = "select m.*, s.name " +
+    @Query(value = "select m.*, s.name as student_name " +
             "from monograph m join student s on m.sid = s.sid " +
             "where m.title = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate", nativeQuery = true)
     List<Map<String, Object>> getClassMonographByName(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate, @Param("name") String name);
