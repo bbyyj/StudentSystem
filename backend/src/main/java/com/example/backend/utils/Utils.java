@@ -271,7 +271,15 @@ public class Utils {
             lc.add(new_map);
         }
         Pageable pageable= PageRequest.of(page, size);
-        Page<Map<String, Object>> plc = new PageImpl<>(lc, pageable, lc.size());
+        int start = (int) pageable.getOffset();
+        int theend = Math.min((start + pageable.getPageSize()), lc.size());
+        List<Map<String, Object>> pagedData = lc.subList(start, theend);
+
+// Create the Page object
+        Page<Map<String, Object>> plc = new PageImpl<>(pagedData, pageable, lc.size());
+        System.out.println("size:"+size);
+        System.out.println("lc.size:"+lc.size());
+
         return plc;
 
     }
