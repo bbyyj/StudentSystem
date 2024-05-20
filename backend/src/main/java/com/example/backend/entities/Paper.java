@@ -62,7 +62,7 @@ public class Paper {
     private String doi_pmid; // DOI/PMID
 
     @Column(name = "paper_type")
-    private String paper_type; // 论文类型
+    private String paper_type; // 论文类型-->填期刊/会议
 
     @Column(name = "ccf_level")
     private String ccf; // CCF推荐情况

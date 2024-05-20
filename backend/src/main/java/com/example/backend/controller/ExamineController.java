@@ -93,7 +93,7 @@ public class ExamineController {
         boolean none = Objects.equals(search, "") && Objects.equals(select, "");
         boolean stu_name = Objects.equals(select, "学生姓名") && !Objects.equals(search, "");
         boolean paper_name = Objects.equals(select, "论文名称") && !Objects.equals(search, "");
-        boolean type = Objects.equals(select, "期刊/会议") && !Objects.equals(search, "");
+        boolean type = Objects.equals(select, "论文类型") && !Objects.equals(search, "");
         boolean CCF = Objects.equals(select, "CCF等级") && !Objects.equals(search, "");
 
 

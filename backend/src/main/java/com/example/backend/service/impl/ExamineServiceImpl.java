@@ -371,6 +371,7 @@ public class ExamineServiceImpl implements ExamineService {
     @Override
     public ResponseEntity<String> monograph_check(CheckRequest request) {
         try {
+            // System.out.println(request);
             monograph.updateCheckingStatus(
                     request.getId(),
                     request.getStatus(),
