@@ -205,8 +205,8 @@ public class RuleReviewServiceImpl implements RuleReviewService {
                     scorePractice+=checkScore;
                 }
             }
-            if(scorePractice>3.0){
-                scorePractice=3;
+            if(scorePractice>4.0){
+                scorePractice=4;
             }
             float scoreStudy=0;
             for (Map<String, Object> entry : DataStudy) {
@@ -226,8 +226,8 @@ public class RuleReviewServiceImpl implements RuleReviewService {
                     scoreStudy+=checkScore;
                 }
             }
-            if(scoreStudy>3.0){
-                scoreStudy=3;
+            if(scoreStudy>6.0){
+                scoreStudy=6;
             }
             double score=scoreMorality+scoreWork+scorePractice+scoreStudy;
             for (Map<String, Object> entry : data) {
