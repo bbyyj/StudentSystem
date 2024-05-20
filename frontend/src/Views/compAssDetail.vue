@@ -204,7 +204,17 @@ export default {
 
         // 审核完毕，将数据发送到后端
         approveApplication() {
-            let payload = this.record.tableData;
+            let payload = [
+                {
+                    "review_id": this.id,
+                    "student_id": this.sid
+                },
+                ...this.record.tableData.map(item => {
+                    let newItem = JSON.parse(JSON.stringify(item));
+                    newItem.check_score = parseInt(newItem.check_score, 10);
+                    return newItem;
+                })
+            ];
             console.log(payload)
             axios.post('http://127.0.0.1:8080/ruleReview/submitReview', payload)
                 .then(response => {
