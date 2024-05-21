@@ -63,10 +63,10 @@ public class Monograph {
     private String rule_detail; // 细则
 
     @Column(name = "rule_score")
-    private float rule_score; // 细则分数
+    private Float rule_score; // 细则分数
 
     @Column(name = "check_score")
-    private float check_score; // 审核分数
+    private Float check_score; // 审核分数
 
     @Column(name = "rule_accept")
     private Integer rule_accept; // 是否加入综测，默认为0, not null

@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.Others;
 import com.example.backend.entities.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -101,4 +102,10 @@ public interface PaperRepository extends JpaRepository<Paper, Integer> {
     @Query(value = "update paper set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select p.*, s.name " +
+            "from paper p join student s on p.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Paper> getPaperBySid(@Param("sid") String sid);
 }

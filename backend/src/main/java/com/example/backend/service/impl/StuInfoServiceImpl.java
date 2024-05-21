@@ -6,12 +6,14 @@ import com.example.backend.dao.request.StuUpdateExcelRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.request.StuUpdateExcelRequest;
 import com.example.backend.dao.response.CombinedCA;
-import com.example.backend.entities.Student;
+import com.example.backend.entities.*;
 import com.example.backend.repository.*;
 import com.example.backend.service.StuInfoService;
+import com.example.backend.utils.ConvertEntityUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -21,12 +23,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -41,6 +46,9 @@ public class StuInfoServiceImpl implements StuInfoService {
     private final MonographRepository monographRepository;
     private final ExchangeActivityRepository activityRepository;
     private final VolunteerRepository volunteerRepository;
+    private final SocialWorkRepository socialWorkRepository;
+    private final IdeologyMoralityRepository ideologyMoralityRepository;
+    private final OthersRepository othersRepository;
 
 
     private int getColumnIndex(Row headerRow, String columnName) {
@@ -375,8 +383,48 @@ public class StuInfoServiceImpl implements StuInfoService {
 
 
     public List<CombinedCA> getMyCA(String sid, int page, int size) {
-        List<Map<String, Object>> competition = competitionRepository.getCompetitionsBySid(sid);
-        return null;
+        ConvertEntityUtil Converter = new ConvertEntityUtil();
+
+        List<Competition> competitions = competitionRepository.getCompetitionsBySid(sid);
+        List<CombinedCA> competitionCAs = Converter.convertCompetitionsToCombinedCA(competitions);
+
+        List<Paper> papers = paperRepository.getPaperBySid(sid);
+        List<CombinedCA> paperCAs = Converter.convertPapersToCombinedCA(papers);
+
+        List<Patent> patents = patentRepository.getPatentBySid(sid);
+        List<CombinedCA> patentCAs = Converter.convertPatentsToCombinedCA(patents);
+
+        List<ExchangeActivity> exchangeActivitys = activityRepository.getExchangeActivityBySid(sid);
+        List<CombinedCA> exchangeActivityCAs = Converter.convertExchangeActivitiesToCombinedCA(exchangeActivitys);
+
+        List<Volunteer> volunteers = volunteerRepository.getVolunteerBySid(sid);
+        List<CombinedCA> volunteerCAs = Converter.convertVolunteersToCombinedCA(volunteers);
+
+        List<Software> softwares = softwareRepository.getSoftwareBySid(sid);
+        List<CombinedCA> softwareCAs = Converter.convertSoftwaresToCombinedCA(softwares);
+
+        List<Monograph> monographs = monographRepository.getMonographBySid(sid);
+        List<CombinedCA> monographCAs = Converter.convertMonographsToCombinedCA(monographs);
+
+        List<SocialWork> socialWorks = socialWorkRepository.getSocialWorkBySid(sid);
+        List<CombinedCA> socialWorkCAs = Converter.convertSocialWorksToCombinedCA(socialWorks);
+
+        List<IdeologyMorality> ideologyMoralitys = ideologyMoralityRepository.getIdeologyMoralityBySid(sid);
+        List<CombinedCA> ideologyMoralityCAs = Converter.convertIdeologyMoralitiesToCombinedCA(ideologyMoralitys);
+
+        List<Others> others = othersRepository.getOthersBySid(sid);
+        List<CombinedCA> othersCAs = Converter.convertOthersToCombinedCA(others);
+
+
+        List<CombinedCA> allCAs = Stream.of(
+                        competitionCAs, paperCAs, patentCAs, exchangeActivityCAs, volunteerCAs, softwareCAs, monographCAs
+                ).flatMap(combinedCAList -> combinedCAList.stream())
+                .collect(Collectors.toList());
+
+        List<CombinedCA> pagedCAs = ConvertEntityUtil.getPage(allCAs, size, page);
+
+        return pagedCAs;
+
     }
 
 }

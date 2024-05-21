@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.Competition;
 import com.example.backend.entities.ExchangeActivity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,4 +82,10 @@ public interface ExchangeActivityRepository extends JpaRepository<ExchangeActivi
     @Query(value = "update exchange_activity set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select a.*" +
+            "from exchange_activity a join student s on a.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<ExchangeActivity> getExchangeActivityBySid(@Param("sid") String sid);
 }

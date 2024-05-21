@@ -107,6 +107,6 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query(value = "select c.*, s.name " +
             "from competition c join student s on c.sid = s.sid " +
             "where s.sid = :sid", nativeQuery = true)
-    List<Map<String, Object>> getCompetitionsBySid(@Param("sid") String sid);
+    List<Competition> getCompetitionsBySid(@Param("sid") String sid);
 
 }
