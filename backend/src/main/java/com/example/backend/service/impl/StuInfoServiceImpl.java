@@ -5,14 +5,16 @@ import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StuUpdateExcelRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.request.StuUpdateExcelRequest;
+import com.example.backend.dao.response.CombinedCA;
 import com.example.backend.entities.Student;
-import com.example.backend.repository.StudentRepository;
+import com.example.backend.repository.*;
 import com.example.backend.service.StuInfoService;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,7 @@ import java.io.InputStream;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -31,6 +34,14 @@ import java.util.List;
 public class StuInfoServiceImpl implements StuInfoService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CompetitionRepository competitionRepository;
+    private final PaperRepository paperRepository;
+    private final PatentRepository patentRepository;
+    private final SoftwareRepository softwareRepository;
+    private final MonographRepository monographRepository;
+    private final ExchangeActivityRepository activityRepository;
+    private final VolunteerRepository volunteerRepository;
+
 
     private int getColumnIndex(Row headerRow, String columnName) {
         for (Cell cell: headerRow) {
@@ -102,6 +113,8 @@ public class StuInfoServiceImpl implements StuInfoService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while processing the file.");
         }
     }
+
+
 
     private void parseInformationUpdatesFromExcel(InputStream inputStream) throws IOException {
         List<StuUpdateExcelRequest> updates = new ArrayList<>();
@@ -316,9 +329,54 @@ public class StuInfoServiceImpl implements StuInfoService {
         }
     }
 
-    public Page<Student> searchStuInfo(String keyword, int page, int size) {
+    public Page<Student> searchStuInfo(String keyname, String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return studentRepository.findByKeyword(keyword, pageable);
+        switch (keyname) {
+            case "name":
+                return studentRepository.findByNameKeyword(keyword, pageable);
+            case "sid":
+                return studentRepository.findBySidKeyword(keyword, pageable);
+            case "type":
+                return studentRepository.findByTypeKeyword(keyword, pageable);
+            case "nation":
+                return studentRepository.findByNationKeyword(keyword, pageable);
+            case "pid":
+                return studentRepository.findByPidKeyword(keyword, pageable);
+            case "birth":
+                return studentRepository.findByBirthKeyword(keyword, pageable);
+            case "politics":
+                return studentRepository.findByPoliticsKeyword(keyword, pageable);
+            case "dormitory":
+                return studentRepository.findByDormitoryKeyword(keyword, pageable);
+            case "nativePlace":
+                return studentRepository.findByNativePlaceKeyword(keyword, pageable);
+            case "phone":
+                return studentRepository.findByPhoneKeyword(keyword, pageable);
+            case "address":
+                return studentRepository.findByAddressKeyword(keyword, pageable);
+            case "urgentPhone":
+                return studentRepository.findByUrgentPhoneKeyword(keyword, pageable);
+            case "wechat":
+                return studentRepository.findByWechatKeyword(keyword, pageable);
+            case "email":
+                return studentRepository.findByEmailKeyword(keyword, pageable);
+            case "classId":
+                return studentRepository.findByClassId(Integer.parseInt(keyword), pageable);
+            case "admissionYear":
+                return studentRepository.findByAdmissionYear(Integer.parseInt(keyword), pageable);
+            case "isUndergraduate":
+                return studentRepository.findByIsUndergraduate(Boolean.parseBoolean(keyword), pageable);
+            case "studentRole":
+                return studentRepository.findByStudentRole(keyword, pageable);
+            default:
+                throw new IllegalArgumentException("Invalid keyname: " + keyname);
+        }
+    }
+
+
+    public List<CombinedCA> getMyCA(String sid, int page, int size) {
+        List<Map<String, Object>> competition = competitionRepository.getCompetitionsBySid(sid);
+        return null;
     }
 
 }

@@ -91,5 +91,66 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT s FROM Student s WHERE s.name LIKE %:keyword% OR s.sid LIKE %:keyword%")
     Page<Student> findByKeyword(String keyword, Pageable pageable);
 
+    @Query("SELECT s FROM Student s WHERE s.name LIKE %:keyword%")
+    Page<Student> findByNameKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.sid LIKE %:keyword%")
+    Page<Student> findBySidKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.type =:keyword")
+    Page<Student> findByTypeKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.nation LIKE %:keyword%")
+    Page<Student> findByNationKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.pid LIKE %:keyword%")
+    Page<Student> findByPidKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.birth LIKE %:keyword%")
+    Page<Student> findByBirthKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.politics LIKE %:keyword%")
+    Page<Student> findByPoliticsKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.dormitory LIKE %:keyword%")
+    Page<Student> findByDormitoryKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.nativePlace LIKE %:keyword%")
+    Page<Student> findByNativePlaceKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.phone LIKE %:keyword%")
+    Page<Student> findByPhoneKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.address LIKE %:keyword%")
+    Page<Student> findByAddressKeyword(String keyword, Pageable pageable);
+
+
+    @Query("SELECT s FROM Student s WHERE s.urgentPhone LIKE %:keyword%")
+    Page<Student> findByUrgentPhoneKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.wechat LIKE %:keyword%")
+    Page<Student> findByWechatKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.email LIKE %:keyword%")
+    Page<Student> findByEmailKeyword(String keyword, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.classId = :classId")
+    Page<Student> findByClassId(Integer classId, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.admissionYear = :admissionYear")
+    Page<Student> findByAdmissionYear(Integer admissionYear, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.isUndergraduate = :isUndergraduate")
+    Page<Student> findByIsUndergraduate(Boolean isUndergraduate, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.studentRole = :studentRole")
+    Page<Student> findByStudentRole(String studentRole, Pageable pageable);
 
 }
