@@ -10,6 +10,7 @@ import com.example.backend.entities.*;
 import com.example.backend.repository.*;
 import com.example.backend.service.StuInfoService;
 import com.example.backend.utils.ConvertEntityUtil;
+import com.example.backend.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.data.domain.Page;
@@ -415,9 +416,8 @@ public class StuInfoServiceImpl implements StuInfoService {
         List<Others> others = othersRepository.getOthersBySid(sid);
         List<CombinedCA> othersCAs = Converter.convertOthersToCombinedCA(others);
 
-
         List<CombinedCA> allCAs = Stream.of(
-                        competitionCAs, paperCAs, patentCAs, exchangeActivityCAs, volunteerCAs, softwareCAs, monographCAs
+                        competitionCAs, paperCAs, patentCAs, exchangeActivityCAs, volunteerCAs, softwareCAs, monographCAs,socialWorkCAs,ideologyMoralityCAs,othersCAs
                 ).flatMap(combinedCAList -> combinedCAList.stream())
                 .collect(Collectors.toList());
 

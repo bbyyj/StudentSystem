@@ -14,7 +14,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class CombinedCA {
     private BasicCA basicInfo;
-    private Map<String, Object> DetailCA;
-
+    private Map<String, Object> detailCA;
 }
 
