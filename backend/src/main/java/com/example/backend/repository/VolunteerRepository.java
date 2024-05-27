@@ -14,14 +14,14 @@ import java.util.Map;
 @Repository
 public interface VolunteerRepository extends JpaRepository<Volunteer, Integer> {
     @Modifying
-    @Query(value = "select v.*, s.name " +
+    @Query(value = "select v.*, s.name as student_name " +
             "from volunteer v " +
             "join student s on v.sid = s.sid",
             nativeQuery = true)
     List<Map<String, Object>> getAll();
 
     @Modifying
-    @Query(value = "select v.*, s.name " +
+    @Query(value = "select v.*, s.name as student_name " +
             "from volunteer v " +
             "join student s on v.sid = s.sid " +
             "where s.name = :name",
@@ -31,14 +31,14 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Integer> {
 
 
     @Modifying
-    @Query(value = "select v.*, s.name " +
+    @Query(value = "select v.*, s.name as student_name " +
             "from volunteer v " +
             "join student s on v.sid = s.sid where s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
             nativeQuery = true)
     List<Map<String, Object>> getClassAll(@Param("classId") String classId, @Param("year") String year, @Param("isUndergraduate") Boolean isUndergraduate);
 
     @Modifying
-    @Query(value = "select v.*, s.name " +
+    @Query(value = "select v.*, s.name as student_name " +
             "from volunteer v " +
             "join student s on v.sid = s.sid " +
             "where s.name = :name and s.class_id = :classId and s.admission_year = :year and s.is_undergraduate = :isUndergraduate",
