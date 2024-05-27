@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.ExchangeActivity;
 import com.example.backend.entities.Monograph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,4 +82,10 @@ public interface MonographRepository extends JpaRepository<Monograph, Integer> {
     @Query(value = "update monograph set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select m.*" +
+            "from monograph m join student s on m.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Monograph> getMonographBySid(@Param("sid") String sid);
 }

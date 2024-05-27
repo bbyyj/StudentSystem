@@ -4,10 +4,10 @@
         
         <h1>基本信息</h1>
 
-        <el-form :model="info" ref="basicInfoForm" label-position="top">
+        <el-form :model="info1" ref="basicInfoForm" label-position="top">
           <div class="wrapper">
             <el-form-item v-for="(item, index) in items1" :key="index" :label="item.label" :prop="item.model" class="blockitem">
-              <el-input class="elinput" v-model="info[item.model]" :disabled="true"></el-input>
+              <el-input class="elinput" v-model="info1[item.model]" :disabled="true"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -16,10 +16,10 @@
 
         <h1>联系方式</h1>
 
-        <el-form :model="info" ref="contactForm" label-position="top">
+        <el-form :model="info2" ref="contactForm" label-position="top">
           <div class="wrapper">
             <el-form-item v-for="(item, index) in items2" :key="index" :label="item.label" :prop="item.model" class="blockitem">
-              <el-input class="elinput" v-model="info[item.model]"></el-input>
+              <el-input class="elinput" v-model="info2[item.model]"></el-input>
             </el-form-item>
           </div>
         </el-form>
@@ -40,28 +40,29 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-if="error" class="error-message">{{ error }}</div>
         <el-button type="primary" round @click="submitPasswordChange" :loading="isSubmitting" style="margin-top: 20px;">提交</el-button>
       </el-card>
     </div>
   </template>
   
 <script>
+import axios from 'axios';
+
   export default {
     data() {
       return {
         //基本信息
         items1: [
           { model: 'admissionYear', label: '入学年份'},
-          { model: 'class_id', label: '班级'},
+          { model: 'classId', label: '班级'},
           { model: 'name', label: '姓名' },
           { model: 'type', label: '学生类别' },
           { model: 'sex', label: '性别' },
           { model: 'nation', label: '民族' },
           { model: 'sid', label: '学号' },
           { model: 'pid', label: '身份证号' },
-          { model: 'birthday', label: '出生年月' },
-          { model: 'is_undergraduate', label: '培养层次' },
+          { model: 'birth', label: '出生年月' },
+          { model: 'undergraduate', label: '培养层次' },
           { model: 'politics', label: '政治面貌'},
           { model: 'native_place', label: '籍贯'},
           { model: 'dormitory', label: '宿舍' },
@@ -70,27 +71,31 @@
         items2: [
           { model: 'phone', label: '个人联系电话' },
           { model: 'address', label: '详细家庭住址' },
-          { model: 'urgent_Phone', label: '紧急联系人电话' },
-          { model: 'urgent_Name', label: '紧急联系人' },
+          { model: 'urgentPhone', label: '紧急联系人电话' },
+          { model: 'urgentName', label: '紧急联系人' },
           { model: 'email', label: '邮箱' },
           { model: 'wechat', label: '微信' }
         ],
-        info: {
-          name: '张三',
-          type: '本科生',
-          sex: '女',
+        info1: {
+          admissionYear: '',
+          classId: '',
+          name: '',
+          type: '',
+          sex: '',
           nation: '',
           sid: '',
-          id: '',
-          birthday: '',
-          class: '',
-          categories: '',
-          //省略部分
-          //联系方式
-          pnumber: '123456',
+          pid: '',
+          birth: '',
+          undergraduate: '',
+          politics: '',
+          native_place: '',
+          dormitory: '',
+        },
+        info2: {
+          phone: '',
           address: '',
-          ecnumber: '',
-          econtact: '',
+          urgentPhone: '',
+          urgentName: '',
           email: '',
           wechat: ''
         },
@@ -106,43 +111,108 @@
           ],
           confirmPassword: [
             { required: true, message: '确认密码不能为空' },
-            { validator: this.validateConfirmPassword, trigger: 'blur' }
+            { validator: this.validateConfirmPassword }
           ]
         },
-        error: '',
         isSubmitting: false
       };
     },
+  created() {
+    this.loadInfo();
+  },
   methods: {
-    submitContactForm() {
-      this.$refs.contactForm.validate(async valid => {
-        if (!valid) return;
-        // 后端API
-        // 提交成功提示操作成功
+    loadInfo(){
+      const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161865206';
+      const params = { netId: 'imnotmonitor' };
+      axios.get(apiUrl,params)
+        .then(response => {
+          this.fillData(response.data);
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+        });
+    },
+    fillData(responseData) {
+      const studentData = responseData.data.student;
+      
+      // 填充基本信息到info1
+      this.items1.forEach(item => {
+        if (item.model === 'undergraduate' && studentData.hasOwnProperty(item.model)) {
+          this.info1[item.model] = studentData[item.model] ? '本科生' : '研究生';
+        }
+        else if (studentData.hasOwnProperty(item.model)) {
+          this.info1[item.model] = studentData[item.model];
+        }
+      });
+
+      // 填充联系方式到info2
+      this.items2.forEach(item => {
+        if (studentData.hasOwnProperty(item.model)) {
+          this.info2[item.model] = studentData[item.model];
+        }
       });
     },
-    validateConfirmPassword(_, value, callback) {
-      if (value !== this.passwordForm.newPassword) {
-        this.error = '新密码和确认密码不一致';
-        callback(true);
-      } else {
-        this.error = '';
-        callback(false);
+
+    async submitContactForm() {
+      try {
+        // 验证至少有一项不为空
+        const hasValue = Object.keys(this.info2).some(key => this.info2[key]);
+        if (!hasValue) {
+          this.$message.error('请至少填写一项信息');
+          return; // 阻止表单提交
+        }
+
+        const formData = this.info2;
+        const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161870137';
+        const response = await axios.post(apiUrl, formData);
+
+        if (response.status === 200) {
+          this.$message.success('提交成功！');
+        } else {
+          this.$message.error('提交失败，请稍后重试！');
+        }
+      } catch (error) {
+        console.error('提交时发生错误:', error);
+        this.$message.error('操作失败，请联系管理员！');
       }
     },
+
+    validateConfirmPassword(_, value, callback) {
+      if (value !== this.passwordForm.newPassword) {
+        callback(new Error('两次输入密码不一致!')); 
+      } else {
+        callback(); 
+      }
+    },
+
     async submitPasswordChange() {
       this.isSubmitting = true;
-      this.error = null;
-
       try {
-        await this.$refs.form.validate();
+        const isValid = await this.$refs.form.validate();
+        if (!isValid) {
+          this.$message.error('请检查输入信息是否符合要求');
+          this.isSubmitting = false;
+          return;
+        }
 
-        // 调用后端API
-        // 更新后清空表单,提示用户操作成功
+        const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161881150';
+        const params = {
+          netId: "ajiu9",
+          password: this.passwordForm.newPassword
+        };
+
+        const response = await axios.put(apiUrl, params);
+        if (response.status === 200) {
+          this.$message.success('修改成功！');
+          // this.passwordForm = {
+          //   newPassword: '',
+          //   confirmPassword: ''
+          // };
+        } else {
+          this.$message.error('修改失败，请稍后重试！');
+        }
 
       } catch (e) {
-        console.error(e);
-        this.error = '密码修改失败，请稍后重试';
       } finally {
         this.isSubmitting = false;
       }

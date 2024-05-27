@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.Software;
 import com.example.backend.entities.Volunteer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -70,4 +71,10 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Integer> {
     @Query(value = "update volunteer set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select v.*" +
+            "from volunteer v join student s on v.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Volunteer> getVolunteerBySid(@Param("sid") String sid);
 }

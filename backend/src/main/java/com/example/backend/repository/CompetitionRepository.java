@@ -102,4 +102,11 @@ public interface CompetitionRepository extends JpaRepository<Competition, Intege
     @Query(value = "update competition set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select c.*, s.name " +
+            "from competition c join student s on c.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Competition> getCompetitionsBySid(@Param("sid") String sid);
+
 }

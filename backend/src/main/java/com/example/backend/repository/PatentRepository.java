@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.Paper;
 import com.example.backend.entities.Patent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,4 +82,10 @@ public interface PatentRepository extends JpaRepository<Patent, Integer> {
     @Query(value = "update patent set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select p.*" +
+            "from patent p join student s on p.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Patent> getPatentBySid(@Param("sid") String sid);
 }

@@ -24,37 +24,47 @@
                 <span>以下是学生的综测申请项目，请参照综测表进行不合规分值的修改</span>
             </div>
 
-            <el-form inline class="search-form" @submit.native.prevent="getList">
-                <el-form-item label="类别">
-                    <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
-                        <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
-                            :label="item1.label"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="加分条件">
-                    <el-input v-model="searchTerms.b" placeholder="请输入加分条件"></el-input>
-                </el-form-item>
-
-                <!-- <el-form-item>
-                    <el-button type="primary" @click="fetchListData">搜索</el-button>
-                </el-form-item> -->
-
-            </el-form>
-
             <el-table :data="record.tableData" style="width: 100%">
-                <el-table-column prop="time" label="时间"></el-table-column>
-                <el-table-column prop="a" label="类别"></el-table-column>
-                <el-table-column prop="b" label="加分条件"></el-table-column>
-                <el-table-column prop="c" label="备注"></el-table-column>
-                <el-table-column prop="d" label="分值"></el-table-column>
+                <el-table-column prop="rule_type" label="综测大类">
+                    <template #default="scope">
+                        {{ scope.row.rule_type === null ? "空" : scope.row.rule_type }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="rule_detail" label="综测细则">
+                    <template #default="scope">
+                        {{ scope.row.rule_detail === null ? "空" : scope.row.rule_detail }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="source" label="来源"></el-table-column>
+                <el-table-column prop="name" label="名称"></el-table-column>
+
+                <el-table-column prop="rule_score" label="分数"></el-table-column>
+                <el-table-column prop="check_score" label="审核分数"></el-table-column>
+
+                <el-table-column prop="rule_accept" label="加入综测分数">
+                    <template #default="scope">
+                        <el-radio-group v-model="scope.row.rule_accept">
+                            <el-radio :label="null">待定</el-radio>
+                            <el-radio :label="1">加入</el-radio>
+                            <el-radio :label="0">不加入</el-radio>
+                        </el-radio-group>
+                    </template>
+                </el-table-column>
+
+                <el-table-column prop="others" label="其他">
+
+                </el-table-column>
+
+
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button size="mini" type="success" @click="modifyItem(scope.row)">修改分值</el-button>
+                        <el-button size="mini" type="success" @click="showModifyDialog(scope.row)">修改分值</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- 分页-->
 
         </el-card>
 
@@ -65,7 +75,7 @@
                 <el-button type="success" @click="approveApplication">审核完毕</el-button>
             </el-col>
             <el-col :span="3">
-                <el-button type="primary" @click="rejectApplication">返回</el-button>
+                <el-button type="primary" @click="goBack">返回</el-button>
             </el-col>
         </el-row>
 
@@ -73,6 +83,19 @@
             :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
             :total="total" class="pagination">
         </el-pagination>
+
+        <!-- 修改分值对话框 -->
+        <el-dialog title="修改审核分数" :visible.sync="modifyDialogVisible">
+            <el-form :model="currentItem">
+                <el-form-item label="审核分数">
+                    <el-input v-model="currentItem.check_score" type="number"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="modifyDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="modifyScore">确定</el-button>
+            </span>
+        </el-dialog>
 
     </div>
 </template>
@@ -86,33 +109,17 @@ export default {
             id: parseInt(this.$route.params.id), // 当前学年的综测
             sid: this.$route.params.sid, // 当前学生的综测
 
-            searchTerms: {
-                a: "",
-                b: "",
-                c: "",
-                d: "",
-                e:"",
-                time:""
-            },
             record: {
                 id: 1,
                 studentID:"21311111",
                 name: "乔羿童",
                 score: "5.0",
                 remark:"无",
-                // list: [
-                //     { a: "社会工作类", b: "院团委副书记", c: "软件工程学院院团委副书记", d: "3.0分",fileUrl:"https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E6%8F%90%E4%BA%A4%E8%AF%81%E6%98%8E.png"  },
-                //     { a: "政治思想道德类", b: "全国三好学生", c: "无", d: "1.5分",fileUrl: "https://attachment-1325509405.cos.ap-guangzhou.myqcloud.com/%E9%99%84%E4%BB%B61.%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%A62023%E5%B9%B4%E5%BA%A6%E6%B0%91%E4%B8%BB%E8%AF%84%E8%AE%AE%E5%85%9A%E5%91%98%E7%99%BB%E8%AE%B0%E8%A1%A8.pdf" },
-                //     { a: "政治思想道德类", b: "校级马研班、青马班获评优秀学员", c: "无", d: "0.8分" },
-                //     { a: "社会工作类", b: "班委委员", c: "软件工程学院2021级3班文体委员", d: "0.5分" },
-                // ],
-                // 列表数据
                 tableData: [],
             },
             
 
-            selectedRuleType:"",
-
+            // 固定写死的综测大类
             RootCategory: [
                 {
                     id: 1,
@@ -141,11 +148,11 @@ export default {
             pageSize: 5,
             total: 0,
 
-            showDialogReject: false, // 控制拒绝理由对话框的显示
-            rejectReason: "", // 存储用户输入的拒绝理由
-            currentRejectItem: null, // 当前打算拒绝的项目
+            modifyDialogVisible: false, // 控制修改分值对话框的显示
+            currentItem: {}, // 当前要修改的项目
         };
     },
+   
     created(){
         this.getList();
     },
@@ -161,6 +168,7 @@ export default {
             this.currentPage = currentPage;
             this.getList(currentPage);
         },
+
         // 获取列表数据
         getList(page = this.currentPage, size = this.pageSize) {
             // 将页码增加1，并确保page和size是字符串
@@ -169,8 +177,6 @@ export default {
 
             let id =this.id; // 综测学年id
             let sid = this.sid; // 学生的id
-            console.log(id);
-            console.log(sid);
 
             axios.get(`http://127.0.0.1:8080/ruleReview/getStudentMatiarial?id=${id}&sid=${sid}&page=${nextPage}&size=${pageSize}`).then((response) => {
                 console.log(response)
@@ -185,48 +191,51 @@ export default {
         },
 
 
-        // 修改新的分值
-        modifyItem(item) {
-            // 弹出对话框或通过其他UI方式接受新分值
-            let newScore = prompt("请输入新的分值：", item.d); // 使用prompt作为简单示例
-            if (newScore !== null && newScore.trim() !== '' && !isNaN(newScore)) {
-                item.d = parseFloat(newScore).toFixed(1) + "分"; // 更新项目分数
-                this.updateTotalScore(); // 更新总分
-            }
+        // 显示修改分值对话框
+        showModifyDialog(item) {
+            this.currentItem = item;
+            this.modifyDialogVisible = true;
         },
-        showRejectDialog(item) {
-            this.currentRejectItem = item;
-            this.rejectReason = ""; // 清空上次的输入
-            this.showDialogReject = true;
+
+        // 修改分值
+        modifyScore() {
+            this.modifyDialogVisible = false;
         },
-        
-       
-        editItem(item) {
-            // 修改列表项，可能需要弹窗或导航到编辑表单页面
-            console.log("编辑项目", item);
-        },
-        approveItem(item) {
-            // 通过审批 发送到后端 修改单项条目状态
-            console.log("通过审批", item);
-        },
-        rejectItem(item) {
-            // 不通过审批 发送到后端 修改单项条目状态
-            console.log("不通过审批", item);
-        },
+
+        // 审核完毕，将数据发送到后端
         approveApplication() {
-            // 审批通过整个申请单 修改整个表单状态
-            console.log("整个申请单通过审批");
+            let payload = [
+                {
+                    "review_id": this.id,
+                    "student_id": this.sid
+                },
+                ...this.record.tableData.map(item => {
+                    let newItem = JSON.parse(JSON.stringify(item));
+                    newItem.check_score = parseInt(newItem.check_score, 10);
+                    return newItem;
+                })
+            ];
+            console.log(payload)
+            axios.post('http://127.0.0.1:8080/ruleReview/submitReview', payload)
+                .then(response => {
+                    console.log(response)
+                    if (response.data.code === 200) {
+                        this.$message.success('审核数据已成功提交');
+                    } else {
+                        this.$message.error('提交失败，请重试');
+                    }
+                })
+                .catch(error => {
+                    console.error('提交数据失败:', error);
+                    this.$message.error('提交失败，请重试');
+                });
         },
-        rejectApplication() {
-            // 审批不通过整个申请单 修改整个表单状态
-            console.log("整个申请单不通过审批");
+
+        // 返回上一个路由
+        goBack() {
+            this.$router.go(-1);
         },
-        // 设置不通过的理由
-        submitRejectReason() {},
     },
-    // mounted() {
-    //     // 页面加载完成后获取数据
-    //     this.fetchListData();
-    // },
+   
 };
 </script>
