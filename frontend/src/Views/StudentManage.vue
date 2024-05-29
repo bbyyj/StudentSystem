@@ -5,6 +5,7 @@
     <el-row style="margin-bottom: 20px;">
       <el-col :span="4">
         <el-select v-model="searchKeyword" placeholder="请选择查询条件">
+          <el-option value="全部">全部</el-option>
           <el-option v-for="item in studentForm" :key="item.model" :label="item.label" :value="item.model" />
         </el-select>    
       </el-col>
@@ -186,7 +187,6 @@ export default {
         .then(response => {
           const data = response.data;
           const studentList = data.data.content;
-          console.log(data)
 
           // 判断学生类型，并替换为本科生或研究生
           studentList.forEach(student => {
@@ -242,7 +242,6 @@ export default {
       this.loadStudents(this.pageSize, this.currentPage);
     },
 
-
     // 增删改查
     async searchStudents() {
       // 检查是否有选择的查询条件
@@ -255,19 +254,37 @@ export default {
       const selectedKeyword = this.searchKeyword;
       const searchContent = this.searchvalue;
 
-      // 根据选择的查询条件，构建请求参数
-      const params = {keyname: selectedKeyword, keyword: searchContent};
+      if(selectedKeyword === '全部'){
+        this.loadStudents(this.pageSize, this.currentPage);
+        return;
+      }
 
-      // 发送请求，假设API接受一个名为'query'的参数来表示查询条件
-      axios.get( 'https://mock.apifox.com/m2/4212159-3852880-default/161870137', { params })
+      if(selectedKeyword === '培养层次' && searchContent === '本科生'){
+        searchContent = true;
+      }
+      if(selectedKeyword === '培养层次' && searchContent === '研究生'){
+        searchContent = false;
+      }
+
+      const params = {keyname: selectedKeyword, keyword: searchContent, page: this.currentPage, size: this.pageSize};
+
+      axios.get( 'https://mock.apifox.com/m2/4212159-3852880-default/176452671', { params })
         .then(response => {
           const data = response.data;
-          const studentList = data.data.studentList;
+          const studentList = data.data.content;
+
+          studentList.forEach(student => {
+            if (student.undergraduate) {
+              student.undergraduate = '本科生';
+            } else {
+              student.undergraduate = '研究生';
+            }
+          });
           
           // 更新表格数据
           this.Students = studentList;
           // 更新总条数，如果API返回
-          this.totalStudents = data.data.count;
+          this.totalStudents = data.data.numberOfElements;
         })
         .catch(error => {
           console.error('Error during search:', error);
