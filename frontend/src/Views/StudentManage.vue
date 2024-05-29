@@ -180,7 +180,7 @@ export default {
       // 定义请求参数
       const params = {
         page: currentPage, // 添加当前页码参数
-        pageSize: pageSize // 添加每页大小参数
+        size: pageSize // 添加每页大小参数
       };
 
       axios.get(apiUrl, { params }) // 将参数对象作为配置传递给GET请求
