@@ -33,20 +33,20 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("提交时间", competition.getSubmit_time());
-            typeDetailCA.put("所属学年", competition.getAcademic_year());
-            typeDetailCA.put("成果类别", competition.getType());
-            typeDetailCA.put("获得时间", competition.getTime());
-            typeDetailCA.put("比赛名称", competition.getCompetition_name());
-            typeDetailCA.put("获奖名称", competition.getAward_name());
-            typeDetailCA.put("成果等级", competition.getResult_level());
-            typeDetailCA.put("成果级别", competition.getResult_type());
-            typeDetailCA.put("评奖组织单位", competition.getOrganization());
-            typeDetailCA.put("其他参与人员", competition.getTeammate());
-            typeDetailCA.put("负责人", competition.getCaptain());
-            typeDetailCA.put("分数", competition.getRule_score());
-            typeDetailCA.put("审核分数", competition.getCheck_score());
-            typeDetailCA.put("是否接受", competition.getRule_accept());
+            typeDetailCA.put("submit_time", competition.getSubmit_time());
+            typeDetailCA.put("academic_year", competition.getAcademic_year());
+            typeDetailCA.put("type", competition.getType());
+            typeDetailCA.put("time", competition.getTime());
+            typeDetailCA.put("competition_name", competition.getCompetition_name());
+            typeDetailCA.put("award_name", competition.getAward_name());
+            typeDetailCA.put("result_level", competition.getResult_level());
+            typeDetailCA.put("result_type", competition.getResult_type());
+            typeDetailCA.put("organization", competition.getOrganization());
+            typeDetailCA.put("teammate", competition.getTeammate());
+            typeDetailCA.put("captain", competition.getCaptain());
+            typeDetailCA.put("rule_score", competition.getRule_score());
+            typeDetailCA.put("check_score", competition.getCheck_score());
+            typeDetailCA.put("rule_accept", competition.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -74,32 +74,32 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("论文标题", paper.getTitle());
-            typeDetailCA.put("作者类型", paper.getAuthor_type());
-            typeDetailCA.put("全部作者姓名", paper.getAuthors());
-            typeDetailCA.put("通讯作者", paper.getCor_author());
-            typeDetailCA.put("发表期刊或会议", paper.getJc_name());
-            typeDetailCA.put("ISSN/CN", paper.getIssn_cn());
-            typeDetailCA.put("影响因子", paper.getImpact_factor());
-            typeDetailCA.put("是否有最佳论文奖", paper.is_award());
-            typeDetailCA.put("发表状态", paper.getPub_status());
-            typeDetailCA.put("投稿日期", paper.getSub_date());
-            typeDetailCA.put("接收日期", paper.getAcc_date());
-            typeDetailCA.put("发表日期", paper.getPub_date());
-            typeDetailCA.put("卷（期）/页码范围", paper.getPage());
-            typeDetailCA.put("DOI/PMID", paper.getDoi_pmid());
-            typeDetailCA.put("论文类型", paper.getPaper_type());
-            typeDetailCA.put("CCF推荐情况", paper.getCcf());
-            typeDetailCA.put("中科院分区", paper.getSci());
-            typeDetailCA.put("期刊收录情况", paper.getInclude());
-            typeDetailCA.put("出版单位", paper.getPublisher());
-            typeDetailCA.put("论文语言", paper.getLanguage());
-            typeDetailCA.put("是否国际合作论文", paper.getIs_internation());
-            typeDetailCA.put("是否本单位合作论文", paper.getIs_institution());
-            typeDetailCA.put("备注", paper.getRemark());
-            typeDetailCA.put("分数", paper.getRule_score());
-            typeDetailCA.put("审核分数", paper.getCheck_score());
-            typeDetailCA.put("是否接受", paper.getRule_accept());
+            typeDetailCA.put("title", paper.getTitle());
+            typeDetailCA.put("author_type", paper.getAuthor_type());
+            typeDetailCA.put("authors", paper.getAuthors());
+            typeDetailCA.put("cor_author", paper.getCor_author());
+            typeDetailCA.put("jc_name", paper.getJc_name());
+            typeDetailCA.put("issn_cn", paper.getIssn_cn());
+            typeDetailCA.put("impact_factor", paper.getImpact_factor());
+            typeDetailCA.put("is_award", paper.is_award());
+            typeDetailCA.put("pub_status", paper.getPub_status());
+            typeDetailCA.put("sub_date", paper.getSub_date());
+            typeDetailCA.put("acc_date", paper.getAcc_date());
+            typeDetailCA.put("pub_date", paper.getPub_date());
+            typeDetailCA.put("page", paper.getPage());
+            typeDetailCA.put("doi_pmid", paper.getDoi_pmid());
+            typeDetailCA.put("paper_type", paper.getPaper_type());
+            typeDetailCA.put("ccf_level", paper.getCcf());
+            typeDetailCA.put("sci_level", paper.getSci());
+            typeDetailCA.put("include", paper.getInclude());
+            typeDetailCA.put("publisher", paper.getPublisher());
+            typeDetailCA.put("language", paper.getLanguage());
+            typeDetailCA.put("is_internation", paper.getIs_internation());
+            typeDetailCA.put("is_institution", paper.getIs_institution());
+            typeDetailCA.put("remark", paper.getRemark());
+            typeDetailCA.put("rule_score", paper.getRule_score());
+            typeDetailCA.put("check_score", paper.getCheck_score());
+            typeDetailCA.put("rule_accept", paper.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -127,24 +127,24 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("专利名称", patent.getName());
-            typeDetailCA.put("专利申请号", patent.getApply_number());
-            typeDetailCA.put("专利证书编号", patent.getCertificate_number());
-            typeDetailCA.put("全部发明人", patent.getInventors());
-            typeDetailCA.put("专利类型", patent.getType());
-            typeDetailCA.put("是否已受理", patent.is_accept());
-            typeDetailCA.put("受理时间", patent.getAcc_date());
-            typeDetailCA.put("是否已公开", patent.is_public());
-            typeDetailCA.put("公开时间", patent.getPub_date());
-            typeDetailCA.put("是否已授权", patent.is_auth());
-            typeDetailCA.put("授权时间", patent.getAuth_date());
-            typeDetailCA.put("是否已转让", patent.is_transfer());
-            typeDetailCA.put("转让时间", patent.getTrans_date());
-            typeDetailCA.put("转让收入", patent.getTrans_income());
-            typeDetailCA.put("备注", patent.getRemark());
-            typeDetailCA.put("分数", patent.getRule_score());
-            typeDetailCA.put("审核分数", patent.getCheck_score());
-            typeDetailCA.put("是否接受", patent.getRule_accept());
+            typeDetailCA.put("name", patent.getName());
+            typeDetailCA.put("apply_number", patent.getApply_number());
+            typeDetailCA.put("certificate_number", patent.getCertificate_number());
+            typeDetailCA.put("inventors", patent.getInventors());
+            typeDetailCA.put("type", patent.getType());
+            typeDetailCA.put("is_accept", patent.is_accept());
+            typeDetailCA.put("acc_date", patent.getAcc_date());
+            typeDetailCA.put("is_public", patent.is_public());
+            typeDetailCA.put("pub_date", patent.getPub_date());
+            typeDetailCA.put("is_auth", patent.is_auth());
+            typeDetailCA.put("auth_date", patent.getAuth_date());
+            typeDetailCA.put("is_transfer", patent.is_transfer());
+            typeDetailCA.put("trans_date", patent.getTrans_date());
+            typeDetailCA.put("trans_income", patent.getTrans_income());
+            typeDetailCA.put("remark", patent.getRemark());
+            typeDetailCA.put("rule_score", patent.getRule_score());
+            typeDetailCA.put("check_score", patent.getCheck_score());
+            typeDetailCA.put("rule_accept", patent.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -172,24 +172,24 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("项目名称", activity.getName());
-            typeDetailCA.put("事由类型", activity.getType());
-            typeDetailCA.put("经费来源", activity.getFunding());
-            typeDetailCA.put("前往国家", activity.getDest_country());
-            typeDetailCA.put("前往城市", activity.getDest_city());
-            typeDetailCA.put("前往院校", activity.getDest_institution());
-            typeDetailCA.put("项目期限", activity.getDuration());
-            typeDetailCA.put("出发时间", activity.getBegin());
-            typeDetailCA.put("返校时间", activity.getEnd());
-            typeDetailCA.put("目前状态", activity.getStatus());
-            typeDetailCA.put("是否申报", activity.is_apply());
-            typeDetailCA.put("是否参加行前教育", activity.is_pre_edu());
-            typeDetailCA.put("是否已签订", activity.is_signed());
-            typeDetailCA.put("是否谈话", activity.is_talk());
-            typeDetailCA.put("备注", activity.getRemark());
-            typeDetailCA.put("分数", activity.getRule_score());
-            typeDetailCA.put("审核分数", activity.getCheck_score());
-            typeDetailCA.put("是否接受", activity.getRule_accept());
+            typeDetailCA.put("name", activity.getName());
+            typeDetailCA.put("type", activity.getType());
+            typeDetailCA.put("funding", activity.getFunding());
+            typeDetailCA.put("dest_country", activity.getDest_country());
+            typeDetailCA.put("dest_city", activity.getDest_city());
+            typeDetailCA.put("dest_institution", activity.getDest_institution());
+            typeDetailCA.put("duration", activity.getDuration());
+            typeDetailCA.put("begin", activity.getBegin());
+            typeDetailCA.put("end", activity.getEnd());
+            typeDetailCA.put("status", activity.getStatus());
+            typeDetailCA.put("is_apply", activity.is_apply());
+            typeDetailCA.put("is_pre_edu", activity.is_pre_edu());
+            typeDetailCA.put("is_signed", activity.is_signed());
+            typeDetailCA.put("is_talk", activity.is_talk());
+            typeDetailCA.put("remark", activity.getRemark());
+            typeDetailCA.put("rule_score", activity.getRule_score());
+            typeDetailCA.put("check_score", activity.getCheck_score());
+            typeDetailCA.put("rule_accept", activity.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -217,15 +217,15 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("志愿组织团体（全称）", volunteer.getOrganization());
-            typeDetailCA.put("志愿活动名称（全称）", volunteer.getName());
-            typeDetailCA.put("志愿活动类型", volunteer.getType());
-            typeDetailCA.put("参与志愿活动开始时间", volunteer.getBegin());
-            typeDetailCA.put("参与志愿活动结束时间", volunteer.getEnd());
-            typeDetailCA.put("志愿服务时长（X小时）", volunteer.getTime());
-            typeDetailCA.put("分数", volunteer.getRule_score());
-            typeDetailCA.put("审核分数", volunteer.getCheck_score());
-            typeDetailCA.put("是否接受", volunteer.getRule_accept());
+            typeDetailCA.put("organization", volunteer.getOrganization());
+            typeDetailCA.put("name", volunteer.getName());
+            typeDetailCA.put("type", volunteer.getType());
+            typeDetailCA.put("begin", volunteer.getBegin());
+            typeDetailCA.put("end", volunteer.getEnd());
+            typeDetailCA.put("time", volunteer.getTime());
+            typeDetailCA.put("rule_score", volunteer.getRule_score());
+            typeDetailCA.put("check_score", volunteer.getCheck_score());
+            typeDetailCA.put("rule_accept", volunteer.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -253,15 +253,15 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("软件著作权名称", software.getName());
-            typeDetailCA.put("第几发明人", software.getInv_type());
-            typeDetailCA.put("全部完成人", software.getInventors());
-            typeDetailCA.put("申请状态", software.getApp_status());
-            typeDetailCA.put("状态时间", software.getStatus_date());
-            typeDetailCA.put("备注", software.getRemark());
-            typeDetailCA.put("分数", software.getRule_score());
-            typeDetailCA.put("审核分数", software.getCheck_score());
-            typeDetailCA.put("是否接受", software.getRule_accept());
+            typeDetailCA.put("name", software.getName());
+            typeDetailCA.put("inv_type", software.getInv_type());
+            typeDetailCA.put("inventors", software.getInventors());
+            typeDetailCA.put("app_status", software.getApp_status());
+            typeDetailCA.put("status_date", software.getStatus_date());
+            typeDetailCA.put("remark", software.getRemark());
+            typeDetailCA.put("rule_score", software.getRule_score());
+            typeDetailCA.put("check_score", software.getCheck_score());
+            typeDetailCA.put("rule_accept", software.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -289,17 +289,17 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("专著名称", monograph.getTitle());
-            typeDetailCA.put("第几作者", monograph.getAuthor_type());
-            typeDetailCA.put("该著作全部作者", monograph.getAuthors());
-            typeDetailCA.put("出版单位", monograph.getPublisher());
-            typeDetailCA.put("著作类别", monograph.getCategory());
-            typeDetailCA.put("ISBN", monograph.getIsbn());
-            typeDetailCA.put("出版时间", monograph.getPub_date());
-            typeDetailCA.put("备注", monograph.getRemark());
-            typeDetailCA.put("分数", monograph.getRule_score());
-            typeDetailCA.put("审核分数", monograph.getCheck_score());
-            typeDetailCA.put("是否接受", monograph.getRule_accept());
+            typeDetailCA.put("title", monograph.getTitle());
+            typeDetailCA.put("author_type", monograph.getAuthor_type());
+            typeDetailCA.put("authors", monograph.getAuthors());
+            typeDetailCA.put("publisher", monograph.getPublisher());
+            typeDetailCA.put("category", monograph.getCategory());
+            typeDetailCA.put("isbn", monograph.getIsbn());
+            typeDetailCA.put("pub_date", monograph.getPub_date());
+            typeDetailCA.put("remark", monograph.getRemark());
+            typeDetailCA.put("rule_score", monograph.getRule_score());
+            typeDetailCA.put("check_score", monograph.getCheck_score());
+            typeDetailCA.put("rule_accept", monograph.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -327,11 +327,11 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("参与时间", morality.getAttend_time());
-            typeDetailCA.put("获得表彰", morality.getCommendation());
-            typeDetailCA.put("分数", morality.getRule_score());
-            typeDetailCA.put("审核分数", morality.getCheck_score());
-            typeDetailCA.put("是否接受", morality.getRule_accept());
+            typeDetailCA.put("attend_time", morality.getAttend_time());
+            typeDetailCA.put("commendation", morality.getCommendation());
+            typeDetailCA.put("rule_score", morality.getRule_score());
+            typeDetailCA.put("check_score", morality.getCheck_score());
+            typeDetailCA.put("rule_accept", morality.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -359,11 +359,11 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("参与时间", others.getAttend_time());
-            typeDetailCA.put("具体描述", others.getDiscribe());
-            typeDetailCA.put("分数", others.getRule_score());
-            typeDetailCA.put("审核分数", others.getCheck_score());
-            typeDetailCA.put("是否接受", others.getRule_accept());
+            typeDetailCA.put("attend_time", others.getAttend_time());
+            typeDetailCA.put("discribe", others.getDiscribe());
+            typeDetailCA.put("rule_score", others.getRule_score());
+            typeDetailCA.put("check_score", others.getCheck_score());
+            typeDetailCA.put("rule_accept", others.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
@@ -391,11 +391,11 @@ public class ConvertEntityUtil {
             combinedCA.setBasicInfo(basicCA);
 
             Map<String, Object> typeDetailCA = new HashMap<>();
-            typeDetailCA.put("参与时间", socialWork.getAttend_time());
-            typeDetailCA.put("获得表彰", socialWork.getCommendation());
-            typeDetailCA.put("分数", socialWork.getRule_score());
-            typeDetailCA.put("审核分数", socialWork.getCheck_score());
-            typeDetailCA.put("是否接受", socialWork.getRule_accept());
+            typeDetailCA.put("attend_time", socialWork.getAttend_time());
+            typeDetailCA.put("commendation", socialWork.getCommendation());
+            typeDetailCA.put("rule_score", socialWork.getRule_score());
+            typeDetailCA.put("check_score", socialWork.getCheck_score());
+            typeDetailCA.put("rule_accept", socialWork.getRule_accept());
 
             combinedCA.setDetailCA(typeDetailCA);
 
