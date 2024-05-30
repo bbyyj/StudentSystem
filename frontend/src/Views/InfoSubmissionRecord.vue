@@ -18,9 +18,13 @@
   
       <!-- 表格部分 -->
       <el-table :data="Infos" style="width: 100%" size="mini">
-        <el-table-column v-for="item in recordForm" :key="item.model" :prop="item.model" :label="item.label" :width="item.width">
+        <el-table-column v-for="item in recordForm" 
+          :key="item.fieldName" 
+          :prop="item.fieldName" 
+          :label="item.label" 
+          :width="item.width">
           <template #default="scope">
-            {{ scope.row.basicInfo[item.model] }}
+            {{ scope.row.basicInfo[item.fieldName] }}
           </template>
         </el-table-column>
 
@@ -29,11 +33,13 @@
             <el-button type="text" size="small" @click="showPhoto(row)" style="margin-right: 8px;">查看</el-button>
             </template>
         </el-table-column>
+
         <el-table-column label="详细信息" width="80">
           <template #default="{ row }">
             <el-button type="text" size="small" @click="showInfoDetails(row)" style="margin-right: 8px;">查看</el-button>
           </template>
         </el-table-column>
+
       </el-table>
   
       <!-- 分页 -->
@@ -53,16 +59,28 @@
     <el-dialog :visible.sync="photoDialogVisible" title="图片预览">
       <img v-if="imageUrl" :src="imageUrl" alt="图片预览" />
     </el-dialog>
+
     <!-- 查看详细信息 -->
     <el-dialog title="详细信息" :visible.sync="dialogVisible" >
-      <el-form :model="Info" label-width="80px" size="mini" class="wrapper">
-        <el-form-item v-for="item in recordForm" :label="item.label" :key="item.model" class="blockitem">
-          <el-input :disabled="true" v-model="Info[item.model]" :placeholder="item.label" />
+      <el-form :model="Info" label-width="170px" class="wrapper">
+        <el-form-item 
+          v-for="item in detailForm" 
+          :label="item.label" 
+          :key="item.fieldName" 
+          class="blockitem">
+
+          <el-input 
+            :disabled="true" 
+            v-model="Info[item.fieldName]" 
+            :placeholder="item.label" />
+
         </el-form-item>
       </el-form>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
       </span>
+
     </el-dialog>
   
     </div>
@@ -76,47 +94,74 @@ export default {
   data() {
     return {
       Infos: [
-        { "basicInfo": 
-          {
-            "sid": "20311000",
-            "type": "比赛获奖",
-            "rule_type": null,
-            "rule_detail": null,
-            "url": "https://student-system-1325533066.cos.ap-guangzhou.myqcloud.com/images/abe7afe8-9b42-48f4-a0cb-7ace479d625d.epub",
-            "check_status": "未审核",
-            "check_msg": "无"
-          },
-          "detailCA": 
-          {
-            "分数": null,
-            "提交时间": null,
-            "成果等级": "一等奖",
-            "所属学年": 2023,
-            "比赛名称": "数学建模大赛",
-            "获得时间": "2023-06-14T16:00:00.000+00:00",
-            "评奖组织单位": "中国高等教育学会",
-            "其他参与人员": "Jane Smith, Jack Brown",
-            "是否接受": null,
-            "负责人": "John Doe",
-            "成果级别": "国家级",
-            "审核分数": null,
-            "成果类别": "学科竞赛",
-            "获奖名称": "一等奖"
-          }
+      {
+        "basicInfo": {
+          "sid": "20311000",
+          "type": "比赛获奖",
+          "rule_type": null,
+          "rule_detail": null,
+          "url": "https://student-system-1325533066.cos.ap-guangzhou.myqcloud.com/images/abe7afe8-9b42-48f4-a0cb-7ace479d625d.epub",
+          "check_status": "未审核",
+          "check_msg": "无"
+        },
+        "detailCA": {
+          "rule_score": null,
+          "result_type": "国家级",
+          "award_name": "一等奖",
+          "submit_time": null,
+          "result_level": "一等奖",
+          "captain": "John Doe",
+          "type": "学科竞赛",
+          "check_score": null,
+          "competition_name": "数学建模大赛",
+          "academic_year": 2023,
+          "teammate": "Jane Smith, Jack Brown",
+          "organization": "中国高等教育学会",
+          "time": "2023-06-14T16:00:00.000+00:00",
+          "rule_accept": null
         }
-      ],
-      recordForm: [
-        { model: 'sid', label: '编号', width: '100px' },
-        { model: 'type', label: '类别', width: '120px' },
-        { model: 'rule_type', label: '综测大类', width: '150px' },
-        { model: 'rule_detail', label: '综测细则', width: '260px'},
-        { model: 'check_status', label: '状态', width: '100px' },
-        { model: 'check_msg', label: '审核意见', width: '250px' },
-      ],
-      //修改或添加时的表单
-      Info: { 
-        
       },
+      {
+        "basicInfo": {
+          "sid": "20311000",
+          "type": "比赛获奖",
+          "rule_type": null,
+          "rule_detail": null,
+          "url": "https://student-system-1325533066.cos.ap-guangzhou.myqcloud.com/images/4933bc93-fda5-40e6-88e3-72398b2e739c.epub",
+          "check_status": "未审核",
+          "check_msg": "无"
+        },
+        "detailCA": {
+          "rule_score": null,
+          "result_type": "Individual",
+          "award_name": "First Prize",
+          "submit_time": null,
+          "result_level": "Regional",
+          "captain": "you",
+          "type": "Research Paper",
+          "check_score": null,
+          "competition_name": "Science Fair 2022",
+          "academic_year": 2023,
+          "teammate": "John Doe, Jane Smith",
+          "organization": "Science Association",
+          "time": "2022-08-14T16:00:00.000+00:00",
+          "rule_accept": null
+        }
+      },
+      ],
+      // 基础信息
+      recordForm: [
+        { fieldName: 'sid', label: '编号', width: '100px' },
+        { fieldName: 'type', label: '类别', width: '120px' },
+        { fieldName: 'rule_type', label: '综测大类', width: '150px' },
+        { fieldName: 'rule_detail', label: '综测细则', width: '260px'},
+        { fieldName: 'check_status', label: '状态', width: '100px' },
+        { fieldName: 'check_msg', label: '审核意见', width: '250px' },
+      ],
+      // 详细信息（根据类型不同而不同）
+      detailForm: {},
+      // 查看详细信息时显示的数据
+      Info: {},
       // 图片预览相关属性
       photoDialogVisible: false,
       imageUrl: '',
@@ -134,6 +179,7 @@ export default {
   },
   created() {
     this.loadInfo(this.pageSize, this.currentPage);
+    this.detailForm = InfoSubmissionsData[0].items
   },
   computed: {
     getBasicInfoProp(model) {
@@ -192,36 +238,67 @@ export default {
     },
 
     showInfoDetails(row) {
-      if(row.basicInfo.type == '比赛获奖'){
+      this.getInfoType(row.basicInfo.type);
+
+      // 由于基础信息和详细信息中存在相同的键值type，因此不显示基础信息中的type
+      // 从recordForm中过滤掉fieldName为"type"的项
+      const filteredRecordForm = this.recordForm.filter(item => item.fieldName !== 'type');
+
+      // 从basicInfo中去除键名为"type"的项
+      const filteredBasicInfo = { ...row.basicInfo };
+      delete filteredBasicInfo.type;
+
+      this.detailForm = [
+        ...filteredRecordForm,
+        ...InfoSubmissionsData[this.infoType].items
+      ];
+
+      this.Info = {
+        ...filteredBasicInfo,
+        ...row.detailCA
+      };
+
+      // 处理Info数据
+      for (let key in this.Info) {
+        if (this.Info.hasOwnProperty(key) && this.Info[key] === true) { 
+          this.Info[key] = '是'; 
+        } else if(this.Info.hasOwnProperty(key) && this.Info[key] === false){
+          this.Info[key] = '否'; 
+        }
+      }
+
+      this.dialogVisible = true;
+    },
+
+    getInfoType(type){
+      if(type == '比赛获奖'){
         this.infoType = '0';
       }
-      else if(row.basicInfo.type == '论文发表'){
+      else if(type == '论文发表'){
         this.infoType = '1';
       }
-      else if(row.basicInfo.type == '专利发明'){
+      else if(type == '专利发明'){
         this.infoType = '2';
       }
-      else if(row.basicInfo.type == '软件著作权发明'){
+      else if(type == '软件著作权发明'){
         this.infoType = '3';
       }
-      else if(row.basicInfo.type == '专著出版'){
+      else if(type == '专著出版'){
         this.infoType = '4';
       }
-      else if(row.basicInfo.type == '赴外校交流'){
+      else if(type == '赴外校交流'){
         this.infoType = '5';
       }
-      else if(row.basicInfo.type == '志愿服务'){
+      else if(type == '志愿服务'){
         this.infoType = '6';
       }
-      else if(row.basicInfo.type == '其他'){
+      else if(type == '其他'){
         this.infoType = '7';
       }
       else{
         this.infoType = '8';
       }
-      this.info = row.detailCA;
-      this.dialogVisible = true;
-    },
+    }
 
   
   }

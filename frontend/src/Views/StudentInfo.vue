@@ -6,8 +6,15 @@
 
         <el-form :model="info1" ref="basicInfoForm" label-position="top">
           <div class="wrapper">
-            <el-form-item v-for="(item, index) in items1" :key="index" :label="item.label" :prop="item.model" class="blockitem">
+            <el-form-item 
+              v-for="(item, index) in items1" 
+              :key="index" 
+              :label="item.label" 
+              :prop="item.model" 
+              class="blockitem">
+
               <el-input class="elinput" v-model="info1[item.model]" :disabled="true"></el-input>
+            
             </el-form-item>
           </div>
         </el-form>
@@ -18,29 +25,43 @@
 
         <el-form :model="info2" ref="contactForm" label-position="top">
           <div class="wrapper">
-            <el-form-item v-for="(item, index) in items2" :key="index" :label="item.label" :prop="item.model" class="blockitem">
+            <el-form-item 
+              v-for="(item, index) in items2" 
+              :key="index" 
+              :label="item.label" 
+              :prop="item.model" 
+              class="blockitem">
+
               <el-input class="elinput" v-model="info2[item.model]"></el-input>
+              
             </el-form-item>
           </div>
         </el-form>
 
         <el-button type="primary" round style="margin-bottom: 20px;" @click="submitContactForm">提交</el-button>
+
+
         <hr>
 
         <h1>修改密码</h1>
         <div class="wrapper">
           <el-form :model="passwordForm" :rules="rules" ref="form">
+
             <el-form-item label="新密码" prop="newPassword">
               <el-input class="elinput" type="password" v-model="passwordForm.newPassword" show-password>
               </el-input>
             </el-form-item>
+
             <el-form-item label="确认密码" prop="confirmPassword">
               <el-input class="elinput" type="password" v-model="passwordForm.confirmPassword" show-password>
               </el-input>
             </el-form-item>
+
           </el-form>
         </div>
+
         <el-button type="primary" round @click="submitPasswordChange" :loading="isSubmitting" style="margin-top: 20px;">提交</el-button>
+
       </el-card>
     </div>
   </template>
@@ -124,6 +145,7 @@ import axios from 'axios';
     loadInfo(){
       const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161865206';
       const params = { netId: 'imnotmonitor' };
+
       axios.get(apiUrl,params)
         .then(response => {
           this.fillData(response.data);
@@ -132,6 +154,7 @@ import axios from 'axios';
           console.error("Error fetching data:", error);
         });
     },
+    
     fillData(responseData) {
       const studentData = responseData.data.student;
       
