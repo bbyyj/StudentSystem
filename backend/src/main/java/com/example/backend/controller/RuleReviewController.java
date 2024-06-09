@@ -5,12 +5,14 @@ import com.example.backend.dao.request.ReviewAddRequest;
 import com.example.backend.dao.request.StudentReviewListRequest;
 import com.example.backend.entities.Review;
 import com.example.backend.entities.StudentReviewList;
+import com.example.backend.entities.StudentReviewListDTO;
 import com.example.backend.service.RuleReviewService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
 import java.time.Year;
@@ -72,6 +74,23 @@ public class RuleReviewController {
     @PostMapping("/submitReview")
     public ResponseEntity<String>  submitReview(@RequestBody List<Map<String, Object>> data){
         return ruleReviewService.submitReview(data);
+    }
+
+    @GetMapping("/getAllStudentReviewList")
+    public Page<StudentReviewList> getAllStudentReviewList(@RequestParam int id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size){
+
+        return ruleReviewService.getAllStudentReviewList(id,page, size);
+    }
+
+    @GetMapping("/getStudentReviewListByTeacher")
+    public Page<StudentReviewList> getStudentReviewListByTeacher(@RequestParam int id, @RequestParam(defaultValue = "1") boolean isUndergraduate, @RequestParam(defaultValue = "2021") Year admission_year,@RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "8") int size){
+
+        return ruleReviewService.getStudentReviewListByTeacher(id,isUndergraduate,admission_year,page, size);
+    }
+    @PutMapping("/upLoadExamScore")//老师批量导入学生信息excel
+    public ResponseEntity<String> upLoadExamScore(@RequestParam int id, @RequestParam("file") MultipartFile file) {
+        return ruleReviewService.upLoadExamScore(id,file);
     }
 
 

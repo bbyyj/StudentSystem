@@ -37,4 +37,8 @@ public class StudentReviewList {
     private String state;
     @Column(name = "score")
     private float score;
+    @Column(name = "exam_score")
+    private float exam_score;
+    @Column(name = "final_score")
+    private float final_score;
 }
