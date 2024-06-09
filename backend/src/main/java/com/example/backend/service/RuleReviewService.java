@@ -5,7 +5,7 @@ import com.example.backend.dao.request.ReviewAddRequest;
 import com.example.backend.dao.request.StudentReviewListRequest;
 import com.example.backend.entities.Review;
 import com.example.backend.entities.StudentReviewList;
-import com.example.backend.entities.StudentReviewListDTO;
+//import com.example.backend.entities.StudentReviewListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,7 +3,7 @@ package com.example.backend.repository;
 import com.example.backend.entities.Review;
 import com.example.backend.entities.RuleType;
 import com.example.backend.entities.StudentReviewList;
-import com.example.backend.entities.StudentReviewListDTO;
+//import com.example.backend.entities.StudentReviewListDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

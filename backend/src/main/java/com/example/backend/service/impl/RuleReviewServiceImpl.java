@@ -7,7 +7,7 @@ import com.example.backend.dao.request.StudentReviewListRequest;
 import com.example.backend.entities.Review;
 import com.example.backend.entities.Student;
 import com.example.backend.entities.StudentReviewList;
-import com.example.backend.entities.StudentReviewListDTO;
+//import com.example.backend.entities.StudentReviewListDTO;
 import com.example.backend.repository.ReviewRepository;
 import com.example.backend.repository.StudentRepository;
 import com.example.backend.repository.StudentReviewListRepository;
