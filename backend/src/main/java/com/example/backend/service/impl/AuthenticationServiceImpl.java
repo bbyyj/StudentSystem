@@ -71,7 +71,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public JwtAuthenticationResponse signupStudent(StudentSignUpRequest request) {
         var student = Student.builder()
                 .netId(request.getNetId())
-                .password(passwordEncoder.encode(request.getPassword()))
+//                .password(passwordEncoder.encode(request.getPassword()))
                 .studentRole(request.getStudentRole())
                 .isUndergraduate(request.isUndergraduate())
                 .admissionYear(request.getAdmissionYear())
@@ -79,6 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .sid(request.getSid())
                 .name(request.getName())
                 .build();
+        student.setPassword("123456");
         studentRepository.save(student);
         var jwt = jwtService.generateToken(student);
         return JwtAuthenticationResponse.builder().token(jwt).build();
