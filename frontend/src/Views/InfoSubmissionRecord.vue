@@ -2,7 +2,7 @@
     <div>
     <el-card>
       <!-- 搜索部分 -->
-      <el-row style="margin-bottom: 20px;">
+      <!-- <el-row style="margin-bottom: 20px;">
         <el-col :span="4">
           <el-select v-model="searchKeyword" placeholder="请选择查询条件">
             <el-option v-for="item in recordForm" :key="item.model" :label="item.label" :value="item.model" />
@@ -12,27 +12,34 @@
           <el-input v-model="searchvalue" placeholder="请输入查询内容" />
         </el-col>
         <el-col :span="4">
-          <el-button @click="searchStudents" icon="el-icon-search">查询</el-button>
+          <el-button @click="searchInfos" icon="el-icon-search">查询</el-button>
         </el-col>
-  
-      </el-row>
+      </el-row> -->
   
       <!-- 表格部分 -->
-      <el-table :data="Students" style="width: 100%" size="mini">
+      <el-table :data="Infos" style="width: 100%" size="mini">
         <el-table-column v-for="item in recordForm" 
-          :key="item.model" :prop="item.model" :label="item.label" :width="item.width"  />
-  
+          :key="item.fieldName" 
+          :prop="item.fieldName" 
+          :label="item.label" 
+          :width="item.width">
+          <template #default="scope">
+            {{ scope.row.basicInfo[item.fieldName] }}
+          </template>
+        </el-table-column>
+
         <el-table-column label="附件" width="80">
           <template #default="{ row }">
-            <el-button type="text" size="small"  style="margin-right: 8px;">查看</el-button>
-            <!-- <el-button type="text" size="small" @click="editStudent(row)" style="margin-right: 8px;">查看</el-button> -->
-          </template>
+            <el-button type="text" size="small" @click="showPhoto(row)" style="margin-right: 8px;">查看</el-button>
+            </template>
         </el-table-column>
+
         <el-table-column label="详细信息" width="80">
           <template #default="{ row }">
-            <el-button type="text" size="small" @click="editStudent(row)" style="margin-right: 8px;">查看</el-button>
+            <el-button type="text" size="small" @click="showInfoDetails(row)" style="margin-right: 8px;">查看</el-button>
           </template>
         </el-table-column>
+
       </el-table>
   
       <!-- 分页 -->
@@ -43,158 +50,275 @@
         :page-sizes="[5, 10, 20, 50]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalStudents">
+        :total="totalInfos">
       </el-pagination>
   
     </el-card>
       
+    <!-- 查看图片 -->
+    <el-dialog :visible.sync="photoDialogVisible" title="图片预览">
+      <img v-if="imageUrl" :src="imageUrl" alt="图片预览" />
+    </el-dialog>
+
+    <!-- 查看详细信息 -->
     <el-dialog title="详细信息" :visible.sync="dialogVisible" >
-      <el-form :model="student" label-width="80px" size="mini" class="wrapper">
-        <el-form-item v-for="item in recordForm" :label="item.label" :key="item.model" class="blockitem">
-          <el-input  v-model="student[item.model]" :placeholder="item.label" />
+      <el-form :model="Info" label-width="170px" class="wrapper">
+        <el-form-item 
+          v-for="item in detailForm" 
+          :label="item.label" 
+          :key="item.fieldName" 
+          class="blockitem">
+
+          <el-input 
+            :disabled="true" 
+            v-model="Info[item.fieldName]" 
+            :placeholder="item.label" />
+
         </el-form-item>
       </el-form>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
       </span>
+
     </el-dialog>
   
     </div>
-  </template>
+ </template>
   
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        Students: [
-        { "admissionYear": "1",
-          "classId": "xxx",
-          "name": "xxxxxx",
-          "type": "xxxxxxx",
-          "sex": "通过",
-          "nation": "xxxxxxxxx",
-          }
-        ],
-        recordForm: [
-          { model: 'admissionYear', label: '编号', width: '70px' },
-          { model: 'classId', label: '类别', width: '70px' },
-          { model: 'name', label: '综测大类', width: '150px' },
-          { model: 'type', label: '综测细则', width: '250px'},
-          { model: 'sex', label: '状态', width: '100px' },
-          { model: 'nation', label: '审核意见', width: '250px' },
-        ],
-        //修改或添加时的表单
-        student: { 
-          "admissionYear": "",
-          "class_Id": "",
-          "name": "",
-          "type": "",
-          "sex": "",
-          "nation": "",
-          "sid": "",
-          "pid": "",
-          "birthday": "",
-          "politics": "",
-          "dormitory": "",
-          "phone": "",
-          "address": "",
-          "urgent_Phone": "",
-          "urgent_Name": "null",
-          "wechat": "",
-          "email": "",
+<script>
+import axios from 'axios';
+import InfoSubmissionsData from '@/data/InfoSubmissionsData.js';
+
+export default {
+  data() {
+    return {
+      Infos: [
+      {
+        "basicInfo": {
+          "sid": "20311000",
+          "type": "比赛获奖",
+          "rule_type": null,
+          "rule_detail": null,
+          "url": "https://student-system-1325533066.cos.ap-guangzhou.myqcloud.com/images/abe7afe8-9b42-48f4-a0cb-7ace479d625d.epub",
+          "check_status": "未审核",
+          "check_msg": "无"
         },
-        // 单个添加和修改信息的对话框
-        dialogVisible: false,
-        // 搜索相关属性
-        searchvalue: '',
-        searchKeyword: '',
-        // 分页相关属性
-        currentPage: 1,
-        pageSize: 5,
-        totalStudents: 0,
+        "detailCA": {
+          "rule_score": null,
+          "result_type": "国家级",
+          "award_name": "一等奖",
+          "submit_time": null,
+          "result_level": "一等奖",
+          "captain": "John Doe",
+          "type": "学科竞赛",
+          "check_score": null,
+          "competition_name": "数学建模大赛",
+          "academic_year": 2023,
+          "teammate": "Jane Smith, Jack Brown",
+          "organization": "中国高等教育学会",
+          "time": "2023-06-14T16:00:00.000+00:00",
+          "rule_accept": null
+        }
+      },
+      {
+        "basicInfo": {
+          "sid": "20311000",
+          "type": "比赛获奖",
+          "rule_type": null,
+          "rule_detail": null,
+          "url": "https://student-system-1325533066.cos.ap-guangzhou.myqcloud.com/images/4933bc93-fda5-40e6-88e3-72398b2e739c.epub",
+          "check_status": "未审核",
+          "check_msg": "无"
+        },
+        "detailCA": {
+          "rule_score": null,
+          "result_type": "Individual",
+          "award_name": "First Prize",
+          "submit_time": null,
+          "result_level": "Regional",
+          "captain": "you",
+          "type": "Research Paper",
+          "check_score": null,
+          "competition_name": "Science Fair 2022",
+          "academic_year": 2023,
+          "teammate": "John Doe, Jane Smith",
+          "organization": "Science Association",
+          "time": "2022-08-14T16:00:00.000+00:00",
+          "rule_accept": null
+        }
+      },
+      ],
+      // 基础信息
+      recordForm: [
+        { fieldName: 'sid', label: '编号', width: '100px' },
+        { fieldName: 'type', label: '类别', width: '120px' },
+        { fieldName: 'rule_type', label: '综测大类', width: '150px' },
+        { fieldName: 'rule_detail', label: '综测细则', width: '260px'},
+        { fieldName: 'check_status', label: '状态', width: '100px' },
+        { fieldName: 'check_msg', label: '审核意见', width: '250px' },
+      ],
+      // 详细信息（根据类型不同而不同）
+      detailForm: {},
+      // 查看详细信息时显示的数据
+      Info: {},
+      // 图片预览相关属性
+      photoDialogVisible: false,
+      imageUrl: '',
+      // 详细信息显示相关属性
+      dialogVisible: false,
+      infoType: '0',
+      // 搜索相关属性
+      searchvalue: '',
+      searchKeyword: '',
+      // 分页相关属性
+      currentPage: 1,
+      pageSize: 5,
+      totalInfos: 0,
+    };
+  },
+  created() {
+    this.loadInfo(this.pageSize, this.currentPage);
+    this.detailForm = InfoSubmissionsData[0].items
+  },
+  computed: {
+    getBasicInfoProp(model) {
+      
+      return (info) => {
+          return info.basicInfo[model];
       };
-    },
-    created() {
-      this.loadStudents(this.pageSize, this.currentPage);
-    },
-    methods: {
-      // 获取学生数据并加载到表格中
-      loadStudents(pageSize, currentPage) {
-        const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161881456'; 
-        const startIndex = (currentPage - 1) * pageSize;
-        const endIndex = startIndex + pageSize;
-  
-        axios.get(apiUrl)
-          .then(response => {
-            const data = response.data;
-            const studentList = data.data.studentList;
-            // 判断学生类型，并替换为本科生或研究生
-            studentList.forEach(student => {
-              if (student.undergraduate) {
-                student.undergraduate = '本科生';
-              } else {
-                student.undergraduate = '研究生';
-              }
-            });
-            this.totalStudents = studentList.length;
-            this.Students = studentList.slice(startIndex, endIndex); // 将从后端返回的学生数据赋值给表格数据
-          })
-          .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-          });
-      },
-  
-      
-      // 页面相关
-      // 处理每页显示数量变化
-      handleSizeChange(pageSize) {
-        this.pageSize = pageSize;
-        this.loadStudents(this.pageSize, this.currentPage);
-      },
-      // 处理当前页变化
-      handleCurrentChange(currentPage) {
-        this.currentPage = currentPage;
-        this.loadStudents(this.pageSize, this.currentPage);
-      },
-  
-  
-      // 增删改查
-      async searchStudents() {
-        
-      },
-      
-      editStudent(row) {
-        // 编辑
-        this.dialogVisible = true;
-      },
-      deleteStudent(row) {
-        // 删除
-      },
-      saveStudent(){
-        this.dialogVisible = false;
-      },
-  
-    
     }
+  },
+  methods: {
+    // 获取学生数据并加载到表格中
+    loadInfo(pageSize, currentPage) {
+      const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/173896609';
+
+      // 定义请求参数
+      const params = {
+        sid: '20311000',
+        page: currentPage, // 添加当前页码参数
+        size: pageSize // 添加每页大小参数
+      };
+
+      axios.get(apiUrl, { params }) 
+        .then(response => {
+          const data = response.data;
+          const infoList = data.data;
+
+          this.totalInfos = infoList.length; 
+          this.Infos = infoList; 
+          
+        })
+        .catch(error => {
+          console.error('There was a problem with your fetch operation:', error);
+        });
+    },
+
     
-  };
-  </script>
+    // 页面相关
+    // 处理每页显示数量变化
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.loadInfo(this.pageSize, this.currentPage);
+    },
+    // 处理当前页变化
+    handleCurrentChange(currentPage) {
+      this.currentPage = currentPage;
+      this.loadInfo(this.pageSize, this.currentPage);
+    },
+
+    async searchInfos() {
+      
+    },
+    
+    showPhoto(row) {
+      this.imageUrl = row.basicInfo.url;
+      this.photoDialogVisible = true;
+    },
+
+    showInfoDetails(row) {
+      this.getInfoType(row.basicInfo.type);
+
+      // 由于基础信息和详细信息中存在相同的键值type，因此不显示基础信息中的type
+      // 从recordForm中过滤掉fieldName为"type"的项
+      const filteredRecordForm = this.recordForm.filter(item => item.fieldName !== 'type');
+
+      // 从basicInfo中去除键名为"type"的项
+      const filteredBasicInfo = { ...row.basicInfo };
+      delete filteredBasicInfo.type;
+
+      this.detailForm = [
+        ...filteredRecordForm,
+        ...InfoSubmissionsData[this.infoType].items
+      ];
+
+      this.Info = {
+        ...filteredBasicInfo,
+        ...row.detailCA
+      };
+
+      // 处理Info数据
+      for (let key in this.Info) {
+        if (this.Info.hasOwnProperty(key) && this.Info[key] === true) { 
+          this.Info[key] = '是'; 
+        } else if(this.Info.hasOwnProperty(key) && this.Info[key] === false){
+          this.Info[key] = '否'; 
+        }
+      }
+
+      this.dialogVisible = true;
+    },
+
+    getInfoType(type){
+      if(type == '比赛获奖'){
+        this.infoType = '0';
+      }
+      else if(type == '论文发表'){
+        this.infoType = '1';
+      }
+      else if(type == '专利发明'){
+        this.infoType = '2';
+      }
+      else if(type == '软件著作权发明'){
+        this.infoType = '3';
+      }
+      else if(type == '专著出版'){
+        this.infoType = '4';
+      }
+      else if(type == '赴外校交流'){
+        this.infoType = '5';
+      }
+      else if(type == '志愿服务'){
+        this.infoType = '6';
+      }
+      else if(type == '其他'){
+        this.infoType = '7';
+      }
+      else{
+        this.infoType = '8';
+      }
+    }
+
   
-  <style scoped>
-  .wrapper {
-    width: 100%;
-    height: 100%;
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: space-between;
   }
-  .blockitem {
-    width: 45%; 
-    height: auto;
-    margin-bottom: 2%;
-  }
   
-  
-  </style>
+};
+</script>
+
+<style scoped>
+.wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: space-between;
+}
+.blockitem {
+  width: 45%; 
+  height: auto;
+  margin-bottom: 2%;
+}
+
+
+</style>

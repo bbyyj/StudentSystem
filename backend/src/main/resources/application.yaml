@@ -17,7 +17,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ca?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: AKASHI1220
 token:
   signing:
     key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351

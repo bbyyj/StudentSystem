@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entities.SocialWork;
 import com.example.backend.entities.Software;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -81,4 +82,10 @@ public interface SoftwareRepository extends JpaRepository<Software, Integer> {
     @Query(value = "update software set rule_accept = :rule_accept " +
             "where id = :id", nativeQuery = true)
     void updateRuleAcceptById(@Param("id") int id, @Param("rule_accept") int rule_accept);
+
+    @Modifying
+    @Query(value = "select sw.*" +
+            "from software sw join student s on sw.sid = s.sid " +
+            "where s.sid = :sid", nativeQuery = true)
+    List<Software> getSoftwareBySid(@Param("sid") String sid);
 }

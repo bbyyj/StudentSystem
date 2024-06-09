@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.dao.request.MyInfoModifyRequest;
 import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
+import com.example.backend.dao.response.CombinedCA;
 import com.example.backend.entities.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,9 @@ public interface StuInfoService {
     @Transactional
     ResponseEntity<String> deleteStuInfo(String netId);
 
-    Page<Student>  searchStuInfo(String netId, int page, int size);
+    Page<Student>  searchStuInfo(String keyname, String keyword, int page, int size);
 
     ResponseEntity<String> modifyStuInfoExcel(MultipartFile file);
+
+    List<CombinedCA> getMyCA(String sid, int page, int size);
 }

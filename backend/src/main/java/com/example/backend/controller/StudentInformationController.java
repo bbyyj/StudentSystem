@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dao.request.MyInfoModifyRequest;
 import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
+import com.example.backend.dao.response.CombinedCA;
 import com.example.backend.dao.response.StudentListResponse;
 import com.example.backend.entities.Student;
 import com.example.backend.service.StuInfoService;
@@ -62,10 +63,10 @@ public class StudentInformationController {
     }
 
     @GetMapping("/headTeacher/searchStuInfo")//老师查询学生的信息
-    public Page<Student> searchStuInfo(@RequestParam String keyword,
+    public Page<Student> searchStuInfo(@RequestParam String keyname, @RequestParam String keyword,
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "8") int size) {
-        return stuInfoService.searchStuInfo(keyword, page, size);
+        return stuInfoService.searchStuInfo(keyname, keyword, page, size);
     }
 
     @GetMapping("/headTeacher/getClassStudent")//返回班级学生的全部信息
@@ -75,5 +76,12 @@ public class StudentInformationController {
                                              @RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "8") int size) {
         return stuInfoService.getClassStudent(isUndergraduate, admissionYear, classId, page, size);
+    }
+
+    @GetMapping("/student/getMyCA")//返回单个学生的全部综测
+    public List<CombinedCA> getMyCA(@RequestParam String sid,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size) {
+        return stuInfoService.getMyCA(sid, page, size);
     }
 }

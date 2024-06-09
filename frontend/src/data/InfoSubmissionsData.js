@@ -394,7 +394,7 @@ const InfoSubmissionsData = [
         }
     },
     {
-        // 项目
+        // 赴校外交流
         items: [
             { fieldName: "name", controlType: "input", label: "项目名称" },
             { fieldName: "type", controlType: "select", label: "事由类型" },
@@ -546,8 +546,42 @@ const InfoSubmissionsData = [
                 { required: true, message: '请填写志愿服务时长', trigger: 'change' }
             ]
         }
-    }
-    
+    },
+    {
+        // 其他
+        items: [
+            { fieldName: "discribe", controlType: "input", label: "具体描述" },
+            { fieldName: "attend_time", controlType: "datepicker", label: "参与时间" },
+        ],
+        selectOptions: {
+        },
+        rules: {
+            discribe: [
+                { required: true, message: '请填写具体描述', trigger: 'change' }
+            ],
+            attend_time: [
+                { required: true, message: '请选择开始时间', trigger: 'change' }
+            ]
+        }
+    },
+    {
+        // 社会工作 思想品德
+        items: [
+            { fieldName: "commendation", controlType: "input", label: "获得表彰" },
+            { fieldName: "attend_time", controlType: "datepicker", label: "参与时间" },
+        ],
+        selectOptions: {
+        },
+        rules: {
+            commendation: [
+                { required: true, message: '请填写获得表彰', trigger: 'change' }
+            ],
+            attend_time: [
+                { required: true, message: '请选择开始时间', trigger: 'change' }
+            ]
+        }
+    },
+
     
 ]
 
