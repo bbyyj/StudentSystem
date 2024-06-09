@@ -343,6 +343,10 @@ public class StuInfoServiceImpl implements StuInfoService {
         switch (keyname) {
             case "name":
                 return studentRepository.findByNameKeyword(keyword, pageable);
+            case "netid":
+                return studentRepository.findByNetIdKeyword(keyword, pageable);
+            case "urgentName":
+                return studentRepository.findByUrgentNameKeyword(keyword, pageable);
             case "sid":
                 return studentRepository.findBySidKeyword(keyword, pageable);
             case "type":
@@ -379,6 +383,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                 return studentRepository.findByStudentRole(keyword, pageable);
             default:
                 throw new IllegalArgumentException("Invalid keyname: " + keyname);
+
         }
     }
 

@@ -153,4 +153,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("SELECT s FROM Student s WHERE s.studentRole = :studentRole")
     Page<Student> findByStudentRole(String studentRole, Pageable pageable);
 
+    @Query("SELECT s FROM Student s WHERE s.netId LIKE %:netid%")
+    Page<Student> findByNetIdKeyword(String netid, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.urgentName LIKE %:urgentName%")
+    Page<Student> findByUrgentNameKeyword(String urgentName, Pageable pageable);
 }
