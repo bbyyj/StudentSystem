@@ -17,13 +17,6 @@ export default {
                             url: 'Home.vue'
                         },
                         {
-                            path: '/mall',
-                            name: 'mall',
-                            label: '商品管理',
-                            icon: 'video-play',
-                            url: 'Mall.vue'
-                        },
-                        {
                             path: '/studentmanage',
                             name: 'studentmanage',
                             label: '学生信息管理',
@@ -118,13 +111,6 @@ export default {
                             url: 'Home.vue'
                         },
                         {
-                            path: '/video',
-                            name: 'video',
-                            label: '商品管理',
-                            icon: 'video-play',
-                            url: 'Mall.vue'
-                        },
-                        {
                             path: '/student/info',
                             name: 'stufentInfo',
                             label: '个人信息',
@@ -181,6 +167,20 @@ export default {
                                     path: '/InfoSubmission/Volunteerism',
                                     name: 'VolunteerismSubmission',
                                     label: '志愿服务',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Community',
+                                    name: 'CommunitySubmission',
+                                    label: '社会工作',
+                                    icon: 'setting',
+                                    url: 'InfoSubmission.vue'
+                                },
+                                {
+                                    path: '/InfoSubmission/Ideological',
+                                    name: 'IdeologicalSubmission',
+                                    label: '思想道德',
                                     icon: 'setting',
                                     url: 'InfoSubmission.vue'
                                 },

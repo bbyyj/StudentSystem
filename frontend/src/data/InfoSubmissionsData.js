@@ -14,16 +14,16 @@ const InfoSubmissionsData = [
     ],
     selectOptions: {
         type: [
-            { value: 'option1', label: '学科竞赛' },
-            { value: 'option2', label: '艺术比赛' },
-            { value: 'option3', label: '体育比赛' },
-            { value: 'option4', label: '其他' }
+            { value: '学科竞赛', label: '学科竞赛' },
+            { value: '艺术比赛', label: '艺术比赛' },
+            { value: '体育比赛', label: '体育比赛' },
+            { value: '其他', label: '其他' }
         ],
         result_type: [
-            { value: 'optionA', label: '国际级' },
-            { value: 'optionB', label: '国家级' },
-            { value: 'optionC', label: '省部级' },
-            { value: 'optionD', label: '校级' },
+            { value: '国际级', label: '国际级' },
+            { value: '国家级', label: '国家级' },
+            { value: '省部级', label: '省部级' },
+            { value: '校级', label: '校级' },
         ],
     },
     rules: {
@@ -53,6 +53,9 @@ const InfoSubmissionsData = [
         ],
         teammate: [
             { required: true, message: '请填写其他参与人员', trigger: 'change' }
+        ],
+        file: [
+            { required: true, message: '请上传文件', trigger: 'change' }
         ]
     },
     },
@@ -203,6 +206,9 @@ const InfoSubmissionsData = [
             ],
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -288,6 +294,9 @@ const InfoSubmissionsData = [
             ],
             trans_income: [
                 { required: false, message: '已转让请填', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -334,6 +343,9 @@ const InfoSubmissionsData = [
             ],
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -390,6 +402,9 @@ const InfoSubmissionsData = [
             ],
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -494,6 +509,9 @@ const InfoSubmissionsData = [
             ],
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -544,6 +562,9 @@ const InfoSubmissionsData = [
             ],
             time: [
                 { required: true, message: '请填写志愿服务时长', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -561,6 +582,9 @@ const InfoSubmissionsData = [
             ],
             attend_time: [
                 { required: true, message: '请选择开始时间', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },
@@ -578,6 +602,9 @@ const InfoSubmissionsData = [
             ],
             attend_time: [
                 { required: true, message: '请选择开始时间', trigger: 'change' }
+            ],
+            file: [
+                { required: true, message: '请上传文件', trigger: 'change' }
             ]
         }
     },

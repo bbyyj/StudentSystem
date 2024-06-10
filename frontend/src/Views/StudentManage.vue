@@ -27,8 +27,14 @@
           </el-radio-group>
           
           <el-upload 
-            action="https://mock.apifox.com/m2/4212159-3852880-default/161865323"  :multiple="false" :limit="1"  :file-list="fileList" :show-file-list="true" accept="xlsx" 
-            :on-exceed="handleExceed" :on-error="handleError" :before-upload="validate" :on-success="handleSuccess">
+            :action="uploadUrl"  
+            :multiple="false" :limit="1"  
+            :file-list="fileList" 
+            :show-file-list="true" accept="xlsx" 
+            :on-exceed="handleExceed" 
+            :on-error="handleError" 
+            :before-upload="validate" 
+            :on-success="handleSuccess">
             <el-button size="small" type="plain">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
           </el-upload>
@@ -40,10 +46,6 @@
 
     <!-- 表格部分 -->
     <el-table :data="Students" style="width: 100%" size="mini">
-      <!-- <el-table-column v-for="item in studentForm" 
-        :key="item.model" :prop="item.model" :label="item.label" :width="item.width" 
-        :filters="item.filters" :filter-method="item.filters ? filterMethod : null" /> -->
-      
         <el-table-column v-for="item in studentForm" 
         :key="item.model" :prop="item.model" :label="item.label" :width="item.width" />
 
@@ -57,12 +59,12 @@
       </el-table-column>
     </el-table>
 
-    <!-- 分页，有bug -->
+    <!-- 分页 -->
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[5, 10, 20, 50]"
+      :page-sizes="[5, 10, 20]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="totalStudents">
@@ -82,6 +84,18 @@
     </span>
   </el-dialog>
 
+  <el-dialog title="添加学生信息" :visible.sync="addDialogVisible" >
+    <el-form :model="student" label-width="80px" size="mini" class="wrapper">
+      <el-form-item v-for="item in studentAddForm" :label="item.label" :key="item.model" class="blockitem">
+        <el-input  v-model="student[item.model]" :placeholder="item.label" />
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="closeDialog">取 消</el-button>
+      <el-button type="primary" @click="saveAddStudent">保存</el-button>
+    </span>
+  </el-dialog>
+
   </div>
 </template>
 
@@ -91,12 +105,14 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      //正常使用的数据
       Students: [
       { "admissionYear": "2023",
         "classId": 1,
         "name": "罗翔",
+        "studentRole": "NOT_MONITOR",
         "type": "境内生",
-        "sex": "男",
+        "netId": "",
         "nation": "汉",
         "sid": "23xxxxxx",
         "pid": "身份证号",
@@ -115,8 +131,31 @@ export default {
         { model: 'admissionYear', label: '入学年份', width: '70px' },
         { model: 'classId', label: '班级', width: '70px' },
         { model: 'name', label: '姓名', width: '100px' },
+        { model: 'studentRole', label: '学生职位', width: '100px' },
         { model: 'type', label: '学生类别', width: '90px' },
-        { model: 'sex', label: '性别', width: '60px' },
+        { model: 'netId', label: 'netId', width: '60px' },
+        { model: 'nation', label: '民族', width: '60px' },
+        { model: 'sid', label: '学号', width: '100px' },
+        { model: 'pid', label: '身份证号', width: '200px' },
+        { model: 'birth', label: '出生年月', width: '100px' },
+        { model: 'undergraduate', label: '培养层次', width: '100px' },
+        { model: 'politics', label: '政治面貌', width: '90px' },
+        { model: 'nativePlace', label: '籍贯', width: '150px' },
+        { model: 'dormitory', label: '宿舍', width: '150px' },
+        { model: 'phone', label: '个人联系电话', width: '150px' },
+        { model: 'address', label: '详细家庭住址', width: '250px' },
+        { model: 'urgentPhone', label: '紧急联系人电话', width: '150px' },
+        { model: 'urgentName', label: '紧急联系人', width: '110px' },
+        { model: 'email', label: '邮箱', width: '150px' },
+        { model: 'wechat', label: '微信', width: '150px' }
+      ],
+      //添加时用到的，去掉了学生职位
+      studentAddForm: [
+        { model: 'admissionYear', label: '入学年份', width: '70px' },
+        { model: 'classId', label: '班级', width: '70px' },
+        { model: 'name', label: '姓名', width: '100px' },
+        { model: 'type', label: '学生类别', width: '90px' },
+        { model: 'netId', label: 'netId', width: '60px' },
         { model: 'nation', label: '民族', width: '60px' },
         { model: 'sid', label: '学号', width: '100px' },
         { model: 'pid', label: '身份证号', width: '200px' },
@@ -137,8 +176,9 @@ export default {
         "admissionYear": "",
         "classId": "",
         "name": "",
+        "studentRole": "",
         "type": "",
-        "sex": "",
+        "netId": "",
         "nation": "",
         "sid": "",
         "pid": "",
@@ -156,14 +196,14 @@ export default {
       },
       // 单个添加和修改信息的对话框
       dialogVisible: false,
-      dialogtype: 'add',
+      addDialogVisible: false,
       // 搜索相关属性
       searchvalue: '',
       searchKeyword: '',
       // 文件导入相关
       selectedType: '1', // 初始选中项
       fileList: [], // 上传文件列表
-      uploadUrl: 'https://mock.apifox.com/m2/4212159-3852880-default/161865323', // 批批处理批量生成的默认接口
+      uploadUrl: 'http://127.0.0.1:8080/auth/signupStudentExcel', // 批批处理批量生成的默认接口
       // 分页相关属性
       currentPage: 1,
       pageSize: 5,
@@ -175,11 +215,11 @@ export default {
   },
   methods: {
     loadStudents(pageSize, currentPage) {
-      const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161881456';
+      const apiUrl = 'http://127.0.0.1:8080/topAdmin/getAllStudent';
 
       // 定义请求参数
       const params = {
-        page: currentPage, // 添加当前页码参数
+        page: currentPage - 1, // 添加当前页码参数
         size: pageSize // 添加每页大小参数
       };
 
@@ -197,8 +237,8 @@ export default {
             }
           });
 
-          this.totalStudents = data.data.totalElements; // 假设totalStudents应为实际返回的总条数，需后端支持
-          this.Students = studentList; // 直接使用返回的分页数据
+          this.totalStudents = data.data.totalElements; 
+          this.Students = studentList;
           
         })
         .catch(error => {
@@ -206,30 +246,6 @@ export default {
         });
     },
 
-    // // 筛选
-    // filterMethod(filterValue, row) {
-    //   // 如果未选择筛选项，则返回 true，表示不进行筛选
-    //   if (filterValue === undefined || filterValue === '') {
-    //     return true;
-    //   }
-      
-    //   // 遍历每一列的筛选值
-    //   for (const key in row) {
-    //     if (Object.hasOwnProperty.call(row, key)) {
-    //       // 获取当前列的值
-    //       const cellValue = row[key];
-          
-    //       // 如果当前列的值包含筛选值，则返回 true，表示当前行满足筛选条件
-    //       if (cellValue !== null && cellValue !== undefined && cellValue.toString().includes(filterValue)) {
-    //         return true;
-    //       }
-    //     }
-    //   }
-      
-    //   // 如果当前行的所有列都不包含筛选值，则返回 false，表示当前行不满足筛选条件
-    //   return false;
-    // },
-    
     // 页面相关
     // 处理每页显示数量变化
     handleSizeChange(pageSize) {
@@ -238,6 +254,7 @@ export default {
     },
     // 处理当前页变化
     handleCurrentChange(currentPage) {
+      // 用户看到的页码减1，因为后端返回页面从0开始
       this.currentPage = currentPage;
       this.loadStudents(this.pageSize, this.currentPage);
     },
@@ -266,9 +283,13 @@ export default {
         searchContent = false;
       }
 
-      const params = {keyname: selectedKeyword, keyword: searchContent, page: this.currentPage, size: this.pageSize};
+      const params = {  keyname: selectedKeyword, 
+                        keyword: searchContent, 
+                        page: this.currentPage, 
+                        size: this.pageSize
+                      };
 
-      axios.get( 'https://mock.apifox.com/m2/4212159-3852880-default/176452671', { params })
+      axios.get( 'http://127.0.0.1:8080/headTeacher/searchStuInfo', { params })
         .then(response => {
           const data = response.data;
           const studentList = data.data.content;
@@ -285,6 +306,8 @@ export default {
           this.Students = studentList;
           // 更新总条数，如果API返回
           this.totalStudents = data.data.numberOfElements;
+
+          console.log(this.Students);
         })
         .catch(error => {
           console.error('Error during search:', error);
@@ -293,8 +316,7 @@ export default {
 
     addStudent() {
       // 单个学生导入
-      this.dialogVisible = true;
-      this.dialogtype = 'add';
+      this.addDialogVisible = true;
     },
     importStudents() {
       // 批量导入
@@ -307,8 +329,9 @@ export default {
       this.student.admissionYear = row.admissionYear;
       this.student.classId = row.classId;
       this.student.name = row.name;
+      this.student.studentRole = row.studentRole;
       this.student.type = row.type;
-      this.student.sex = row.sex;
+      this.student.netId = row.netId;
       this.student.nation = row.nation;
       this.student.sid = row.sid;
       this.student.pid = row.pid;
@@ -326,6 +349,23 @@ export default {
     },
     deleteStudent(row) {
       // 删除
+      const params = {  netId: row.netId};
+
+      axios.delete( 'http://127.0.0.1:8080/headTeacher/deleteStuInfo', { params })
+        .then(response => {
+          const code = response.data.code; 
+          if(code === 200){
+            this.$message.success('删除成功！');
+            this.loadStudents(this.pageSize, this.currentPage); // 刷新数据
+          }
+          else
+          {
+            this.$message.error('删除失败，请稍后再试！');
+          }
+        })
+        .catch(error => {
+          console.error('Error during search:', error);
+        });
     },
     async saveStudent() {
       try {
@@ -340,16 +380,47 @@ export default {
           payload.undergraduate = false; // 研究生
         }
 
-        // 判断是添加还是编辑
-        if (this.dialogtype === 'add') {
-          apiEndpoint = 'https://mock.apifox.com/m2/4212159-3852880-default/161870892'; // 添加学生的API地址
-          method = 'post'; 
-        } else if (this.dialogtype === 'edit') {
-          apiEndpoint = 'https://mock.apifox.com/m2/4212159-3852880-default/161870892'; // 编辑学生的API地址，实际应包含学生ID
-          method = 'put';
-        }
-        console.log('payload:', payload);
+        apiEndpoint = 'http://127.0.0.1:8080/headTeacher/modifyStuInfo'; 
+        method = 'put';
+      
+        // 发送请求
+        const response = await axios({
+          url: apiEndpoint,
+          method: method,
+          data: payload
+        });
 
+        if (response.status === 200) {
+          this.$message('操作成功');
+          this.closeDialog();
+          this.loadStudents(this.pageSize, this.currentPage); // 刷新数据
+        } else {
+          this.$message('操作失败，请重试');
+        }
+      } catch (error) {
+        console.error('错误:', error);
+      }
+    },
+
+    async saveAddStudent() {
+      try {
+        let apiEndpoint;
+        let method;
+        let payload = JSON.parse(JSON.stringify(this.student)); // 创建payload的深拷贝，防止修改原始数据
+
+        delete payload.studentRole;
+        // 根据undergraduate的值调整payload
+        if (payload.undergraduate === '本科生') {
+          payload.undergraduate = true;
+        } else {
+          payload.undergraduate = false; // 研究生
+        }
+
+        apiEndpoint = 'http://127.0.0.1:8080/auth/signupStudent'; // 添加学生的API地址 
+        method = 'post'; 
+
+        console.log('payload:', payload);
+        
         // 发送请求
         const response = await axios({
           url: apiEndpoint,
@@ -362,7 +433,7 @@ export default {
         if (response.status === 200) {
           this.$message('操作成功');
           this.closeDialog();
-          this.loadStudents(); // 刷新数据
+          this.loadStudents(this.pageSize, this.currentPage); // 刷新数据
         } else {
           this.$message('操作失败，请重试');
         }
@@ -373,12 +444,14 @@ export default {
 
     closeDialog(){
       this.dialogVisible = false;
+      this.addDialogVisible = false;
       this.student = {
         "admissionYear": "",
         "classId": "",
         "name": "",
+        "studentRole": "",
         "type": "",
-        "sex": "",
+        "netId": "",
         "nation": "",
         "sid": "",
         "pid": "",
@@ -399,8 +472,8 @@ export default {
     handleActionChange(value) {
       this.selectedType = value; // 更新选中状态
       this.uploadUrl = value === '1'
-        ? 'https://mock.apifox.com/m2/4212159-3852880-default/161865323' // 批量生成接口
-        : 'https://mock.apifox.com/m2/4212159-3852880-default/170643731'; // 仅更新接口
+        ? 'http://127.0.0.1:8080/auth/signupStudentExcel' // 批量生成接口
+        : 'http://127.0.0.1:8080/headTeacher/modifyStuInfoExcel'; // 仅更新接口
     },
 
     handleExceed(fileList) {
@@ -423,8 +496,7 @@ export default {
     handleSuccess(response, file) {
       console.log(response);
       this.$message('上传成功');
-      //成功提示
-      // 这里可以处理响应逻辑，如更新状态或列表等
+      this.loadStudents(this.pageSize, this.currentPage);
     }
   }
   
