@@ -52,7 +52,7 @@ public class StudentInformationController {
         return stuInfoService.modifyStuInfo(request);
     }
 
-    @PutMapping("/headTeacher/modifyStuInfoExcel")//老师批量导入学生信息excel
+    @PostMapping("/headTeacher/modifyStuInfoExcel")//老师批量导入学生信息excel
     public ResponseEntity<String> modifyStuInfoExcel(@RequestParam("file") MultipartFile file) {
         return stuInfoService.modifyStuInfoExcel(file);
     }

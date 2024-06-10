@@ -343,7 +343,7 @@ public class StuInfoServiceImpl implements StuInfoService {
         switch (keyname) {
             case "name":
                 return studentRepository.findByNameKeyword(keyword, pageable);
-            case "netid":
+            case "netId":
                 return studentRepository.findByNetIdKeyword(keyword, pageable);
             case "urgentName":
                 return studentRepository.findByUrgentNameKeyword(keyword, pageable);
