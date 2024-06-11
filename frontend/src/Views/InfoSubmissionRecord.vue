@@ -192,7 +192,7 @@ export default {
   methods: {
     // 获取学生数据并加载到表格中
     loadInfo(pageSize, currentPage) {
-      const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/173896609';
+      const apiUrl = 'http://127.0.0.1:8080/student/getMyCA';
 
       // 定义请求参数
       const params = {

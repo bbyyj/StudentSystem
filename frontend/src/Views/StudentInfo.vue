@@ -78,7 +78,7 @@ import axios from 'axios';
           { model: 'classId', label: '班级'},
           { model: 'name', label: '姓名' },
           { model: 'type', label: '学生类别' },
-          { model: 'sex', label: '性别' },
+          { model: 'netId', label: 'netID' },
           { model: 'nation', label: '民族' },
           { model: 'sid', label: '学号' },
           { model: 'pid', label: '身份证号' },
@@ -143,10 +143,10 @@ import axios from 'axios';
   },
   methods: {
     loadInfo(){
-      const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161865206';
-      const params = { netId: 'imnotmonitor' };
+      const apiUrl = 'http://127.0.0.1:8080/auth/getStudentInfo';
+      const params = { netId: 'zhangsan1' };
 
-      axios.get(apiUrl,params)
+      axios.get(apiUrl, {params})
         .then(response => {
           this.fillData(response.data);
         })
@@ -186,11 +186,13 @@ import axios from 'axios';
         }
 
         const formData = this.info2;
-        const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161870137';
-        const response = await axios.post(apiUrl, formData);
+        formData.netId = 'zhangsan1';
+        const apiUrl = 'http://127.0.0.1:8080/student/modifyMyInfo';
+        const response = await axios.put(apiUrl, formData);
 
         if (response.status === 200) {
           this.$message.success('提交成功！');
+          this.loadInfo();
         } else {
           this.$message.error('提交失败，请稍后重试！');
         }
@@ -218,19 +220,23 @@ import axios from 'axios';
           return;
         }
 
-        const apiUrl = 'https://mock.apifox.com/m2/4212159-3852880-default/161881150';
+        const apiUrl = 'http://127.0.0.1:8080/student/modifyPassword';
         const params = {
-          netId: "ajiu9",
+          netId: this.info1.netId,
           password: this.passwordForm.newPassword
         };
 
         const response = await axios.put(apiUrl, params);
         if (response.status === 200) {
           this.$message.success('修改成功！');
-          // this.passwordForm = {
-          //   newPassword: '',
-          //   confirmPassword: ''
-          // };
+        
+          // 清空表单数据
+          this.$refs.form.resetFields();  
+          // 取消已触发的验证提示
+          this.$nextTick(() => {
+            this.$refs.form.clearValidate();
+          });
+
         } else {
           this.$message.error('修改失败，请稍后重试！');
         }
