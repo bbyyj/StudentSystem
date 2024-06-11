@@ -6,98 +6,110 @@ export default {
         // 判断账号和密码是否对应
         if (username === 'admin' && password === 'admin') {
             return {
-                code: 20000,
-                data: {
-                    menu: [
-                        {
-                            path: '/home',
-                            name: 'home',
-                            label: '首页',
-                            icon: 's-home',
-                            url: 'Home.vue'
-                        },
-                        {
-                            path: '/studentmanage',
-                            name: 'studentmanage',
-                            label: '学生信息管理',
-                            icon: 'user',
-                            url: 'StudentManage.vue'
-                        },
-                        {
-                            label: '资料审查',
-                            icon: 'location',
-                            children: [
-                                {
-                                    path: '/info/competition',
-                                    name: 'competition',
-                                    label: '比赛获奖',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                }, {
-                                    path: '/info/paper',
-                                    name: 'paper',
-                                    label: '论文发表',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                },{
-                                    path: '/info/patent',
-                                    name: 'patent',
-                                    label: '专利发明',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                },{
-                                    path: '/info/software',
-                                    name: 'software',
-                                    label: '软件著作权发明',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                },{
-                                    path: '/info/monograph',
-                                    name: 'monograph',
-                                    label: '专著出版',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                },{
-                                    path: '/info/exchange',
-                                    name: 'exchange',
-                                    label: '赴校外交流',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                },{
-                                    path: '/info/volunteer',
-                                    name: 'volunteer',
-                                    label: '志愿服务',
-                                    icon: 'setting',
-                                    url: 'InfoDetail.vue'
-                                }
-
-                            ]
-                        },
-                        {
-                            label: '综测',
-                            icon: 'location',
-                            children: [
-                                {
-                                    path: '/compAssessment/compAssManage',
-                                    name: 'compAssManage',
-                                    label: '综测表',
-                                    icon: 'setting',
-                                    url: 'compAssManage.vue'
-                                },
-                                {
-                                    path: '/compAssessment/compAssBegin',
-                                    name: 'compAssBegin',
-                                    label: '综测评审',
-                                    icon: 'setting',
-                                    url: 'compAssBegin.vue'
-                                },
-                            ]
-                        }
+              code: 20000,
+              data: {
+                menu: [
+                  {
+                    path: "/home",
+                    name: "home",
+                    label: "首页",
+                    icon: "s-home",
+                    url: "Home.vue",
+                  },
+                  {
+                    path: "/studentmanage",
+                    name: "studentmanage",
+                    label: "学生信息管理",
+                    icon: "user",
+                    url: "StudentManage.vue",
+                  },
+                  {
+                    label: "资料审查",
+                    icon: "location",
+                    children: [
+                      {
+                        path: "/info/competition",
+                        name: "competition",
+                        label: "比赛获奖",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/paper",
+                        name: "paper",
+                        label: "论文发表",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/patent",
+                        name: "patent",
+                        label: "专利发明",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/software",
+                        name: "software",
+                        label: "软件著作权发明",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/monograph",
+                        name: "monograph",
+                        label: "专著出版",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/exchange",
+                        name: "exchange",
+                        label: "赴校外交流",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
+                      {
+                        path: "/info/volunteer",
+                        name: "volunteer",
+                        label: "志愿服务",
+                        icon: "setting",
+                        url: "InfoDetail.vue",
+                      },
                     ],
-                    token: Mock.Random.guid(),
-                    message: '获取成功'
-                }
-            }
+                  },
+                  {
+                    label: "综测",
+                    icon: "location",
+                    children: [
+                      {
+                        path: "/compAssessment/compAssManage",
+                        name: "compAssManage",
+                        label: "综测表",
+                        icon: "setting",
+                        url: "compAssManage.vue",
+                      },
+                      {
+                        path: "/compAssessment/compAssBegin",
+                        name: "compAssBegin",
+                        label: "综测评审",
+                        icon: "setting",
+                        url: "compAssBegin.vue",
+                      },
+                      {
+                        path: "/compAssessment/getFinalScore",
+                        name: "getFinalScore",
+                        label: "最终分数",
+                        icon: "setting",
+                        url: "getFinalScore.vue",
+                      },
+                    ],
+                  },
+                ],
+                token: Mock.Random.guid(),
+                message: "获取成功",
+              },
+            };
         } else if (username === 'student' && password === 'student') {
             return {
                 code: 20000,
