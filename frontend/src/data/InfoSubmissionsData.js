@@ -54,9 +54,6 @@ const InfoSubmissionsData = [
         teammate: [
             { required: true, message: '请填写其他参与人员', trigger: 'change' }
         ],
-        file: [
-            { required: true, message: '请上传文件', trigger: 'change' }
-        ]
     },
     },
     {
@@ -207,9 +204,6 @@ const InfoSubmissionsData = [
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -295,9 +289,6 @@ const InfoSubmissionsData = [
             trans_income: [
                 { required: false, message: '已转让请填', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -344,9 +335,6 @@ const InfoSubmissionsData = [
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -403,9 +391,6 @@ const InfoSubmissionsData = [
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -510,9 +495,6 @@ const InfoSubmissionsData = [
             remark: [
                 { required: false, message: '请填写备注', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -563,9 +545,6 @@ const InfoSubmissionsData = [
             time: [
                 { required: true, message: '请填写志愿服务时长', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -583,9 +562,6 @@ const InfoSubmissionsData = [
             attend_time: [
                 { required: true, message: '请选择开始时间', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
     {
@@ -603,9 +579,6 @@ const InfoSubmissionsData = [
             attend_time: [
                 { required: true, message: '请选择开始时间', trigger: 'change' }
             ],
-            file: [
-                { required: true, message: '请上传文件', trigger: 'change' }
-            ]
         }
     },
 
