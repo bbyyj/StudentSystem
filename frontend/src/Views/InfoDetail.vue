@@ -171,7 +171,8 @@ export default {
   },
   methods: {
     loadingData(){
-      request.post(`/examine/loadingdata/${this.$route.name}`, this.params).then(response => {
+      // request.post(`/examine/loadingdata/${this.$route.name}`, this.params).then(response => {
+      axios.post(`http://127.0.0.1:8080/examine/loadingdata/${this.$route.name}`, this.params).then(response => {
         console.log(this.params);
         if(response.data.code === 200){
           // this.tableData = response.data.data.tableData;
@@ -186,7 +187,8 @@ export default {
       });
     },
     deleteItems(id){  // 删除
-      request.put(`/examine/${this.$route.name}/del`, {id: id}).then(res => {
+      // request.put(`/examine/${this.$route.name}/del`, {id: id}).then(res => {
+      axios.put(`http://127.0.0.1:8080/examine/${this.$route.name}/del`, {id: id}).then(res => {
         if (res.data.code === 200) {
           this.loadingData();
           this.$message.success(res.data.message);
@@ -196,7 +198,8 @@ export default {
       })
     },
     submitCheck(id,status){ // 审核
-      request.post(`/examine/${this.$route.name}/check`,{id: id,status: status,msg: this.rejectReason}).then(res => {
+      // request.post(`/examine/${this.$route.name}/check`,{id: id,status: status,msg: this.rejectReason}).then(res => {
+      axios.post(`http://127.0.0.1:8080/examine/${this.$route.name}/check`,{id: id,status: status,msg: this.rejectReason}).then(res => {
         if (res.data.code === 200) {
           this.rejectVisible = false;
           this.rejectReason = "";
