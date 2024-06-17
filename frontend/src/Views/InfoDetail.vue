@@ -10,6 +10,7 @@
         </el-input>
 
         <el-button @click="clearAll" type="primary" size="mini" class="filter-del-btn">清空</el-button>
+        <el-button type="success" size="mini" class="filter-del-btn" @click="handleSelectAllChange">一键全选</el-button>
         <el-button type="success" size="mini" class="filter-del-btn" @click="expData">批量导出</el-button>
       </div>
 
@@ -92,6 +93,7 @@
 import InfoExamineData from "@/data/InfoExamineData";
 import request from "@/utils/request";
 import axios from "axios";
+import * as XLSX from "xlsx";
 
 export default {
   data() {
@@ -108,6 +110,7 @@ export default {
       pageNum: 1,   // 前往第几页
       pageSize: 5,   // 每页显示的条数
 
+      allData: [],
       tableData: [],
       textVisible: false,
       rejectVisible: false,
@@ -175,7 +178,7 @@ export default {
       axios.post(`http://127.0.0.1:8080/examine/loadingdata/${this.$route.name}`, this.params).then(response => {
         console.log(this.params);
         if(response.data.code === 200){
-          // this.tableData = response.data.data.tableData;
+          this.allData = response.data.data.tableData;
           this.tableData = (response.data.data.tableData).slice((this.pageNum - 1) * this.pageSize, this.pageNum * this.pageSize);  // 分页
           this.total = response.data.data.count;
         }else{
@@ -224,17 +227,13 @@ export default {
         this.$message.warning("请勾选待导出项！");
         return;
       }
-      // 全选全部待完善
-      this.$message.success(this.multipleSelection.map(item => item.id).join(","));
 
-      // request.put("/examine/delbatch", this.multipleSelection).then(res => {
-      //   if (res.code === '200') {
-      //     this.$message.success("批量导出成功");
-      //     this.$refs.selection.clearSelection();
-      //   } else {
-      //     this.$message.error(res.errorMessage);
-      //   }
-      // })
+      // this.$message.success(this.multipleSelection.map(item => item.id).join(","));
+      const worksheet = XLSX.utils.json_to_sheet(this.multipleSelection); // 将数据转换为工作表
+
+      const workbook = XLSX.utils.book_new(); // 创建一个新的工作簿
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1'); // 将工作表添加到工作簿
+      XLSX.writeFile(workbook, `${this.$route.name}`+'_DataExport.xlsx'); // 导出工作簿为Excel文件
     },
 
     updateTableColumns() {  // 根据路由填入对应表项
@@ -324,6 +323,12 @@ export default {
     },
     handleSelectChange(value) { // 获取查询对象的文本
       this.params.select = this.tableColumns[value+1].label;
+    },
+    handleSelectAllChange(){  // 一键全选
+      this.$refs.filterTable.clearSelection();
+      this.allData.forEach(row => {
+        this.$refs.filterTable.toggleRowSelection(row, true);
+      });
     }
   }
 }
