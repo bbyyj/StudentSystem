@@ -9,15 +9,17 @@
             </el-breadcrumb>
         </div>
         <div class="r-content">
-            <el-dropdown @command="handleClick">
-                <span class="el-dropdown-link">
-                    <img class="user" src="../assets/images/user.png" alt="">
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人信息</el-dropdown-item>
-                    <el-dropdown-item command="logout">退出</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+<!--            <el-dropdown @command="handleClick">-->
+<!--                <span class="el-dropdown-link">-->
+<!--                    <img class="user" src="../assets/images/admin.jpeg" alt="">-->
+
+<!--                </span>-->
+<!--                <el-dropdown-menu slot="dropdown">-->
+<!--                    <el-dropdown-item>个人信息</el-dropdown-item>-->
+<!--                    <el-dropdown-item command="logout">退出</el-dropdown-item>-->
+<!--                </el-dropdown-menu>-->
+<!--            </el-dropdown>-->
+          <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
         </div>
     </div>
 </template>
@@ -31,11 +33,13 @@ export default {
             // 相当于调用这个方法
             this.$store.commit('CollapseMenu')
         },
-        handleClick(command) {
-            if (command === 'logout') {
-                Cookie.remove('token')
-                this.$router.push('/login')
-            }
+        handleClick() {
+            // if (command === 'logout') {
+            //     Cookie.remove('token')
+            //     this.$router.push('/login')
+            // }
+          Cookie.remove('token')
+          this.$router.push('/login')
         }
     },
     computed: {
@@ -95,4 +99,25 @@ export default {
         }
     }
 }
+
+.custom-button {
+  background-color: #ff4d4f; /* 自定义背景颜色 */
+  border-radius: 10px; /* 圆角 */
+  color: white; /* 字体颜色 */
+  padding: 10px 20px; /* 内边距 */
+  border: none; /* 去掉边框 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+  transition: background-color 0.3s, box-shadow 0.3s; /* 过渡效果 */
+}
+
+.custom-button:hover {
+  background-color: #ff7875; /* 悬停时的背景颜色 */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 悬停时的阴影效果 */
+}
+
+.custom-button:active {
+  background-color: #d9363e; /* 点击时的背景颜色 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 点击时的阴影效果 */
+}
+
 </style>
