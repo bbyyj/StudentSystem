@@ -158,4 +158,54 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("SELECT s FROM Student s WHERE s.urgentName LIKE %:urgentName%")
     Page<Student> findByUrgentNameKeyword(String urgentName, Pageable pageable);
+
+    @Query("SELECT s FROM Student s WHERE s.name LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByNameKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.sid LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByNetIdKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+    @Query("SELECT s FROM Student s WHERE s.urgentName LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByUrgentNameKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.sid LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findBySidKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.type =:keyword AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByTypeKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.nation LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByNationKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.pid LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByPidKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.birth LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByBirthKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.politics LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByPoliticsKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.dormitory LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByDormitoryKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.nativePlace LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByNativePlaceKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.phone LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByPhoneKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.address LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByAddressKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.urgentPhone LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByUrgentPhoneKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.wechat LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByWechatKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.email LIKE %:keyword% AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByEmailKeywordClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+
+    @Query("SELECT s FROM Student s WHERE s.studentRole = :keyword AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findByStudentRoleClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
 }

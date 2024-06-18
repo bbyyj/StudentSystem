@@ -38,4 +38,6 @@ public interface StuInfoService {
     ResponseEntity<String> modifyStuInfoExcel(MultipartFile file);
 
     List<CombinedCA> getMyCA(String sid, int page, int size);
+
+    Page<Student> searchClassStuInfo(Boolean isUndergraduate, Year admissionYear, Integer classId, String keyname, String keyword, int page, int size);
 }

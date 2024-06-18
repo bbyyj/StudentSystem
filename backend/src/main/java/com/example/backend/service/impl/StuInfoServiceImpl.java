@@ -383,7 +383,6 @@ public class StuInfoServiceImpl implements StuInfoService {
                 return studentRepository.findByStudentRole(keyword, pageable);
             default:
                 throw new IllegalArgumentException("Invalid keyname: " + keyname);
-
         }
     }
 
@@ -430,6 +429,49 @@ public class StuInfoServiceImpl implements StuInfoService {
 
         return pagedCAs;
 
+    }
+
+    @Override
+    public Page<Student> searchClassStuInfo(Boolean isUndergraduate, Year admissionYear, Integer classId, String keyname, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        switch (keyname) {
+            case "name":
+                return studentRepository.findByNameKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "netId":
+                return studentRepository.findByNetIdKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "urgentName":
+                return studentRepository.findByUrgentNameKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "sid":
+                return studentRepository.findBySidKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "type":
+                return studentRepository.findByTypeKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "nation":
+                return studentRepository.findByNationKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "pid":
+                return studentRepository.findByPidKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "birth":
+                return studentRepository.findByBirthKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "politics":
+                return studentRepository.findByPoliticsKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "dormitory":
+                return studentRepository.findByDormitoryKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "nativePlace":
+                return studentRepository.findByNativePlaceKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "phone":
+                return studentRepository.findByPhoneKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "address":
+                return studentRepository.findByAddressKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "urgentPhone":
+                return studentRepository.findByUrgentPhoneKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "wechat":
+                return studentRepository.findByWechatKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "email":
+                return studentRepository.findByEmailKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            case "studentRole":
+                return studentRepository.findByStudentRoleClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+            default:
+                throw new IllegalArgumentException("Invalid keyname: " + keyname);
+        }
     }
 
 }

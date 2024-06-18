@@ -69,6 +69,17 @@ public class StudentInformationController {
         return stuInfoService.searchStuInfo(keyname, keyword, page, size);
     }
 
+    @GetMapping("/headTeacher/searchClassStuInfo")//班长/班主任查询本班学生的信息
+    public Page<Student> searchClassStuInfo(@RequestParam Boolean isUndergraduate,
+                                            @RequestParam Year admissionYear,
+                                            @RequestParam Integer classId,
+                                            @RequestParam String keyname,
+                                            @RequestParam String keyword,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "8") int size) {
+        return stuInfoService.searchClassStuInfo(isUndergraduate,admissionYear,classId,keyname, keyword, page, size);
+    }
+
     @GetMapping("/headTeacher/getClassStudent")//返回班级学生的全部信息
     public Page<Student> getClassStudent(@RequestParam Boolean isUndergraduate,
                                              @RequestParam Year admissionYear,
