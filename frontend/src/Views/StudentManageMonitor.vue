@@ -1,0 +1,225 @@
+<template>
+    <div>
+    <el-card>
+      <!-- 搜索部分 -->
+      <el-row style="margin-bottom: 20px;">
+        <el-col :span="4">
+          <el-select v-model="searchKeyword" placeholder="请选择查询条件">
+            <el-option value="全部">全部</el-option>
+            <el-option v-for="item in studentSearchForm.items" :key="item.fieldName" :label="item.label" :value="item.fieldName" />
+          </el-select>    
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="searchvalue" placeholder="请输入查询内容" />
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search">查询</el-button>
+        </el-col>
+      </el-row>
+  
+      <!-- 表格部分 -->
+      <el-table :data="Students" style="width: 100%" size="small">
+          <el-table-column v-for="item in studentForm" 
+          :key="item.model" :prop="item.model" :label="item.label" :width="item.width" />
+  
+      </el-table>
+  
+      <!-- 分页 -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalStudents">
+      </el-pagination>
+      
+    </el-card>
+    </div>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  import Cookies from 'js-cookie';
+  import StudentInfoData from '@/data/StudentInfoData.js';
+  
+  export default {
+    data() {
+      return {
+        Students: [
+        { "admissionYear": "2023",
+          "classId": 1,
+          "name": "罗翔",
+          "type": "境内生",
+          "nation": "汉",
+          "sid": "23xxxxxx",
+          "birth": "出生年份",
+          "politics": "政治面貌",
+          "nativePlace": "籍贯",
+          "dormitory": "宿舍",
+          "phone": "电话",
+          "wechat": "null",
+          "email": "null",
+          }
+        ],
+        studentForm: [
+          { model: 'admissionYear', label: '入学年份', width: '70px' },
+          { model: 'classId', label: '班级', width: '70px' },
+          { model: 'name', label: '姓名', width: '100px' },
+          { model: 'type', label: '学生类别', width: '90px' },
+          { model: 'nation', label: '民族', width: '60px' },
+          { model: 'sid', label: '学号', width: '100px' },
+          { model: 'birth', label: '出生年月', width: '100px' },
+          { model: 'politics', label: '政治面貌', width: '90px' },
+          { model: 'nativePlace', label: '籍贯', width: '150px' },
+          { model: 'dormitory', label: '宿舍', width: '150px' },
+          { model: 'phone', label: '个人联系电话', width: '150px' },
+          { model: 'email', label: '邮箱', width: '150px' },
+          { model: 'wechat', label: '微信', width: '150px' }
+        ],
+        // 搜索相关属性
+        studentSearchForm: [],
+        searchvalue: '',
+        searchKeyword: '',
+        isseraching: false,
+        // 分页相关属性
+        currentPage: 1,
+        pageSize: 5,
+        totalStudents: 0,
+      };
+    },
+    created() {
+      this.loadStudents(this.pageSize, this.currentPage);
+      this.studentSearchForm = StudentInfoData[4];
+    },
+    methods: {
+      loadStudents(pageSize, currentPage) {
+        let  apiUrl = 'http://127.0.0.1:8080/headTeacher/getClassStudent';
+        let  params = {
+            isUndergraduate: Cookies.get('undergraduate'),
+            admissionYear: Cookies.get('admissionYear'),
+            classId: Cookies.get('classId'),
+            page: currentPage - 1, // 添加当前页码参数
+            size: pageSize // 添加每页大小参数
+            }
+          
+        axios.get(apiUrl, { params }) // 将参数对象作为配置传递给GET请求
+          .then(response => {
+            const data = response.data;
+            const studentList = data.data.content;
+  
+            // 判断学生类型，并替换为本科生或研究生
+            studentList.forEach(student => {
+              if (student.undergraduate) {
+                student.undergraduate = '本科生';
+              } else {
+                student.undergraduate = '研究生';
+              }
+            });
+  
+            this.totalStudents = data.data.totalElements; 
+            this.Students = studentList;
+            
+          })
+          .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+          });
+      },
+  
+      // 页面相关
+      // 处理每页显示数量变化
+      handleSizeChange(pageSize) {
+        this.pageSize = pageSize;
+        if(this.isseraching){
+          this.searchStudents(this.currentPage, this.pageSize);
+        }
+        else{
+          his.loadStudents(this.pageSize, this.currentPage);
+        }
+        t
+      },
+      // 处理当前页变化
+      handleCurrentChange(currentPage) {
+        // 用户看到的页码减1，因为后端返回页面从0开始
+        this.currentPage = currentPage;
+        if(this.isseraching){
+          this.searchStudents(this.currentPage, this.pageSize);
+        }
+        else{
+          this.loadStudents(this.pageSize, this.currentPage);
+        }
+      },
+  
+      //查询
+      async searchStudents(currentPage, pageSize) {
+        // 检查是否有选择的查询条件
+        if (!this.searchKeyword) {
+            this.$message('请选择查询条件后再进行搜索！');
+            return;
+          }
+  
+        // 获取用户选择的查询条件\查询内容
+        let selectedKeyword = this.searchKeyword;
+        let searchContent = this.searchvalue;
+  
+        if(selectedKeyword === '全部'){
+          this.isseraching = false;
+          this.loadStudents(pageSize, currentPage);
+          return;
+        }
+  
+        const params = {  keyname: selectedKeyword, 
+                          keyword: searchContent, 
+                          page: currentPage - 1, 
+                          size: pageSize
+                        };
+  
+        axios.get( 'http://127.0.0.1:8080/headTeacher/searchStuInfo', { params })
+          .then(response => {
+            const data = response.data;
+            const studentList = data.data.content;
+  
+            studentList.forEach(student => {
+              if (student.undergraduate) {
+                student.undergraduate = '本科生';
+              } else {
+                student.undergraduate = '研究生';
+              }
+            });
+            
+            // 更新表格数据
+            this.Students = studentList;
+            // 更新总条数，如果API返回
+            this.totalStudents = data.data.totalElements;
+            this.isseraching = true;
+  
+            console.log(this.Students);
+          })
+          .catch(error => {
+            console.error('Error during search:', error);
+          });
+      },
+    }
+    
+  };
+  </script>
+  
+  <style scoped>
+  .wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: space-between;
+  }
+  .blockitem {
+    width: 45%; 
+    height: auto;
+    margin-bottom: 2%;
+  }
+  
+  
+  </style>
+  
+  
