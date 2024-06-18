@@ -376,7 +376,7 @@ public class StuInfoServiceImpl implements StuInfoService {
             case "classId":
                 return studentRepository.findByClassId(Integer.parseInt(keyword), pageable);
             case "admissionYear":
-                return studentRepository.findByAdmissionYear(Integer.parseInt(keyword), pageable);
+                return studentRepository.findByAdmissionYear(Year.parse(keyword), pageable);
             case "isUndergraduate":
                 return studentRepository.findByIsUndergraduate(Boolean.parseBoolean(keyword), pageable);
             case "studentRole":

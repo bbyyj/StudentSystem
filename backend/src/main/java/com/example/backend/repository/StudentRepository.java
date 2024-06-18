@@ -145,7 +145,7 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Page<Student> findByClassId(Integer classId, Pageable pageable);
 
     @Query("SELECT s FROM Student s WHERE s.admissionYear = :admissionYear")
-    Page<Student> findByAdmissionYear(Integer admissionYear, Pageable pageable);
+    Page<Student> findByAdmissionYear(Year admissionYear, Pageable pageable);
 
     @Query("SELECT s FROM Student s WHERE s.isUndergraduate = :isUndergraduate")
     Page<Student> findByIsUndergraduate(Boolean isUndergraduate, Pageable pageable);
