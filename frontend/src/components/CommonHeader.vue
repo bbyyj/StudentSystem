@@ -9,17 +9,7 @@
             </el-breadcrumb>
         </div>
         <div class="r-content">
-<!--            <el-dropdown @command="handleClick">-->
-<!--                <span class="el-dropdown-link">-->
-<!--                    <img class="user" src="../assets/images/admin.jpeg" alt="">-->
-
-<!--                </span>-->
-<!--                <el-dropdown-menu slot="dropdown">-->
-<!--                    <el-dropdown-item>个人信息</el-dropdown-item>-->
-<!--                    <el-dropdown-item command="logout">退出</el-dropdown-item>-->
-<!--                </el-dropdown-menu>-->
-<!--            </el-dropdown>-->
-          <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
+            <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
         </div>
     </div>
 </template>
@@ -34,12 +24,13 @@ export default {
             this.$store.commit('CollapseMenu')
         },
         handleClick() {
-            // if (command === 'logout') {
-            //     Cookie.remove('token')
-            //     this.$router.push('/login')
-            // }
-          Cookie.remove('token')
-          this.$router.push('/login')
+            Cookie.remove('token')
+            Cookie.remove('netId')
+            Cookie.remove('Role')
+            Cookie.remove('sid')
+            this.$store.commit('setMenu', [])
+            this.$router.push('/login')
+                
         }
     },
     computed: {

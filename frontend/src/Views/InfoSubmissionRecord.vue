@@ -1,21 +1,6 @@
 <template>
     <div>
     <el-card>
-      <!-- 搜索部分 -->
-      <!-- <el-row style="margin-bottom: 20px;">
-        <el-col :span="4">
-          <el-select v-model="searchKeyword" placeholder="请选择查询条件">
-            <el-option v-for="item in recordForm" :key="item.model" :label="item.label" :value="item.model" />
-          </el-select>    
-        </el-col>
-        <el-col :span="4">
-          <el-input v-model="searchvalue" placeholder="请输入查询内容" />
-        </el-col>
-        <el-col :span="4">
-          <el-button @click="searchInfos" icon="el-icon-search">查询</el-button>
-        </el-col>
-      </el-row> -->
-  
       <!-- 表格部分 -->
       <el-table :data="Infos" style="width: 100%" size="mini">
         <el-table-column v-for="item in recordForm" 
@@ -89,6 +74,7 @@
 <script>
 import axios from 'axios';
 import InfoSubmissionsData from '@/data/InfoSubmissionsData.js';
+import Cookie from 'js-cookie'
 
 export default {
   data() {
@@ -196,7 +182,7 @@ export default {
 
       // 定义请求参数
       const params = {
-        sid: '20311000',
+        sid: Cookie.get('sid'),
         page: currentPage, // 添加当前页码参数
         size: pageSize // 添加每页大小参数
       };

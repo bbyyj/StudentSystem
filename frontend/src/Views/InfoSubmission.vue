@@ -81,11 +81,9 @@
 
 <script>
 import axios from 'axios';
-import customUpload from "@/components/upload";
 import InfoSubmissionsData from '@/data/InfoSubmissionsData.js';
-
+import Cookie from 'js-cookie'
 export default {
-    components: { customUpload },
     data() {
         return {
             //存储当前填写的表单数据
@@ -233,9 +231,7 @@ export default {
         },
         // 加载综测类型列表
         getRuleTypes() {
-            //const apiUrl = 'http://127.0.0.1:8080/rule/detailManage/getAllRuleDetail';
-            // 由于没有相关表格，暂时使用mock数据
-            const apiUrl = 'https://apifoxmock.com/m2/4212159-3852880-default/162417372';
+            const apiUrl = 'http://127.0.0.1:8080/rule/detailManage/getAllRuleDetail';
 
             axios.get(apiUrl) 
                 .then(response => {
@@ -300,7 +296,7 @@ export default {
                         [this.formDataKey]: JSON.stringify({
                             rule_type: this.ruleData.rule_type,
                             rule_detail: this.ruleData.rule_detail,
-                            sid: '20311000',
+                            sid: Cookie.get('sid'),
                             // 添加其他表单字段
                             ...this.formData
                         })
