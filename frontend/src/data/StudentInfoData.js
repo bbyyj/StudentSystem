@@ -1,5 +1,5 @@
 const StudentInfoData = [
-    // 0 编辑和查看信息用
+    // 0 管理员/班主任-编辑和查看信息用
     {
         items: [
             { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
@@ -52,7 +52,7 @@ const StudentInfoData = [
         
         },
     },
-    // 1 去掉职位，添加用，添加默认非班长
+    // 1 管理员/班主任-去掉职位，添加用，添加默认非班长
     {
         items: [
             { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
@@ -100,7 +100,7 @@ const StudentInfoData = [
         
         },
     },
-    // 2 top管理员搜索
+    // 2 top管理员-搜索
     {
         items:[
             { fieldName: 'admissionYear', label: '入学年份' },
@@ -122,11 +122,9 @@ const StudentInfoData = [
             { fieldName: 'urgentName', label: '紧急联系人' },
             { fieldName: 'email', label: '邮箱' },
             { fieldName: 'wechat', label: '微信' }
-        ],
-
-        
+        ], 
     },
-    // 3 班主任搜索，去掉班级相关信息
+    // 3 班主任-搜索，去掉班级相关信息
     {
         items:[
             { fieldName: 'name', label: '姓名' },
@@ -148,7 +146,7 @@ const StudentInfoData = [
             { fieldName: 'wechat', label: '微信' }
         ],
     },
-    // 4 班长搜索，去掉隐私信息
+    // 4 班长-搜索，去掉隐私信息
     {
         items:[
             { fieldName: 'name', label: '姓名' },
@@ -165,6 +163,24 @@ const StudentInfoData = [
         ],
 
         
+    },
+    // 5 班长-信息显示
+    {
+        items:[
+            { fieldName: 'admissionYear', label: '入学年份', width: '70px' },
+            { fieldName: 'classId', label: '班级', width: '70px' },
+            { fieldName: 'name', label: '姓名', width: '100px' },
+            { fieldName: 'type', label: '学生类别', width: '90px' },
+            { fieldName: 'nation', label: '民族', width: '60px' },
+            { fieldName: 'sid', label: '学号', width: '100px' },
+            { fieldName: 'birth', label: '出生年月', width: '100px' },
+            { fieldName: 'politics', label: '政治面貌', width: '90px' },
+            { fieldName: 'nativePlace', label: '籍贯', width: '150px' },
+            { fieldName: 'dormitory', label: '宿舍', width: '150px' },
+            { fieldName: 'phone', label: '个人联系电话', width: '150px' },
+            { fieldName: 'email', label: '邮箱', width: '150px' },
+            { fieldName: 'wechat', label: '微信', width: '150px' }
+        ], 
     },
 ]
 

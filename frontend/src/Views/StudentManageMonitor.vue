@@ -19,8 +19,8 @@
   
       <!-- 表格部分 -->
       <el-table :data="Students" style="width: 100%" size="small">
-          <el-table-column v-for="item in studentForm" 
-          :key="item.model" :prop="item.model" :label="item.label" :width="item.width" />
+          <el-table-column v-for="item in studentForm.items" 
+          :key="item.fieldName" :prop="item.fieldName" :label="item.label" :width="item.width" />
   
       </el-table>
   
@@ -47,6 +47,7 @@
   export default {
     data() {
       return {
+        // 存储获取到的学生列表信息
         Students: [
         { "admissionYear": "2023",
           "classId": 1,
@@ -63,21 +64,8 @@
           "email": "null",
           }
         ],
-        studentForm: [
-          { model: 'admissionYear', label: '入学年份', width: '70px' },
-          { model: 'classId', label: '班级', width: '70px' },
-          { model: 'name', label: '姓名', width: '100px' },
-          { model: 'type', label: '学生类别', width: '90px' },
-          { model: 'nation', label: '民族', width: '60px' },
-          { model: 'sid', label: '学号', width: '100px' },
-          { model: 'birth', label: '出生年月', width: '100px' },
-          { model: 'politics', label: '政治面貌', width: '90px' },
-          { model: 'nativePlace', label: '籍贯', width: '150px' },
-          { model: 'dormitory', label: '宿舍', width: '150px' },
-          { model: 'phone', label: '个人联系电话', width: '150px' },
-          { model: 'email', label: '邮箱', width: '150px' },
-          { model: 'wechat', label: '微信', width: '150px' }
-        ],
+        // 表格列
+        studentForm: [],
         // 搜索相关属性
         studentSearchForm: [],
         searchvalue: '',
@@ -92,6 +80,7 @@
     created() {
       this.loadStudents(this.pageSize, this.currentPage);
       this.studentSearchForm = StudentInfoData[4];
+      this.studentForm = StudentInfoData[5];
     },
     methods: {
       loadStudents(pageSize, currentPage) {
