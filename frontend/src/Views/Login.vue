@@ -82,7 +82,7 @@ export default {
                     const data = response.data;
                     const studentRole = data.data.student.studentRole;
 
-                    this.menu = studentRole === 'MONITOR' ? MenuData[2] : MenuData[3];
+                    this.menu = studentRole === 'MONITOR' ? MenuData[3] : MenuData[2];
                     Cookie.set('netId', this.login.netId);
                     Cookie.set('Role', studentRole);
                     Cookie.set('sid', data.data.student.sid);
