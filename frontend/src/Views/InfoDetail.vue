@@ -46,12 +46,12 @@
 
         <el-table-column label="操作" fixed="right">
           <template slot-scope="scope">
-            <el-popconfirm v-if="scope.row.check_status === '未审核'" title="该记录审核通过？" confirm-button-text='是的'
+            <el-popconfirm v-if="scope.row.check_status === '未审核' && identity === 'MONITOR'" title="该记录审核通过？" confirm-button-text='是的'
                            cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="submitCheck(scope.row.id,'已审核')">
               <el-button type="info" slot="reference" size="mini" class="btn-examined" @click.native.stop>审核</el-button>
             </el-popconfirm>
 
-            <el-popconfirm v-else-if="scope.row.check_status === '已审核'" title="确认删除？" @confirm="deleteItems(scope.row.id)">
+            <el-popconfirm v-else-if="scope.row.check_status === '已审核' && identity === 'TOP_ADMIN'" title="确认删除？" @confirm="deleteItems(scope.row.id)">
               <el-button type="danger" slot="reference" size="mini" class="btn-examined" @click.native.stop>删除</el-button>
             </el-popconfirm>
             <el-button @click.stop="showRichText(scope.row.url)" type="primary" size="mini" class="btn-examined">查看附件</el-button>
@@ -93,6 +93,7 @@
 import InfoExamineData from "@/data/InfoExamineData";
 import request from "@/utils/request";
 import axios from "axios";
+import Cookie from 'js-cookie'
 import * as XLSX from "xlsx";
 
 export default {
@@ -120,14 +121,19 @@ export default {
       multipleSelection: [],
       currentImgUrl: '', // 当前预览的图片URL
 
-      selectedText:''
+      selectedText:'',
+
+      identity: '',
     }
   },
 
   created() {
     this.updateTableColumns();
+    this.initID();
     this.loadingData();
+
   },
+
   computed: {
     displayedOptions() {  // 表头筛选项
       let options = [];
@@ -167,7 +173,6 @@ export default {
     $route(to, from) {
       this.updateTableColumns();
       this.clearAll();
-      // this.loadingData();
       this.$set(this.params, 'select', '')
 
     },
@@ -216,7 +221,7 @@ export default {
     },
     showRichText(url){ // 展示附件
       this.currentImgUrl = url;
-      console.log(url);
+      // console.log(url);
       if(url == null){
         this.tableData.currentImgUrl = "暂无信息！";
       }
@@ -230,12 +235,20 @@ export default {
 
       // this.$message.success(this.multipleSelection.map(item => item.id).join(","));
       const worksheet = XLSX.utils.json_to_sheet(this.multipleSelection); // 将数据转换为工作表
-
       const workbook = XLSX.utils.book_new(); // 创建一个新的工作簿
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1'); // 将工作表添加到工作簿
       XLSX.writeFile(workbook, `${this.$route.name}`+'_DataExport.xlsx'); // 导出工作簿为Excel文件
     },
 
+    initID(){
+      this.identity = Cookie.get('Role');
+      this.params.classId = Cookie.get('classId') === '0' ? '' : Cookie.get('classId');
+
+      let admissionYear = Cookie.get('admissionYear');
+      this.params.year = (admissionYear === 'null' || admissionYear === undefined) ? '' : admissionYear;
+      this.params.isUndergraduate = Cookie.get("undergraduate");
+
+    },
     updateTableColumns() {  // 根据路由填入对应表项
       if (InfoExamineData.length > 0) {
         let firstData = null;
@@ -264,12 +277,12 @@ export default {
       this.params = {
         select: '', // 选择的搜索项
         search: '', // 输入的搜索内容
-        classId: '', // 班级id
-        year: '', // 年份id
-        isUndergraduate: true, // 是否本科
       }
       this.rejectReason = "";
       this.$refs.filterTable.clearSelection();
+      this.initID();
+
+      this.$message.success(this.params.classId +" " + this.params.year + " " +this.params.isUndergraduate);
 
       this.loadingData();
     },

@@ -201,7 +201,6 @@ export default {
     initBar(data){
       let myChart = echarts.init(this.$refs.bar);
       let option;
-      console.log(data.data);
 
       option = {
         title: {
