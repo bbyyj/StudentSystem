@@ -35,7 +35,8 @@ public class UploadServiceImpl implements UploadService {
         software.setUrl(url);
         software.setCheck_msg("无");
         software.setCheck_status("未审核");
-//        software.setRule_score(ruleManageService.getRuleScore(software.getRule_type(),software.getRule_detail()));
+        software.setCheck_score((float) 0);
+        software.setRule_score(ruleManageService.getRuleScore(software.getRule_type(),software.getRule_detail()));
 
         softwareRepository.save(software);
 
@@ -49,7 +50,8 @@ public class UploadServiceImpl implements UploadService {
         competition.setUrl(url);
         competition.setCheck_msg("无");
         competition.setCheck_status("未审核");
-//        competition.setRule_score(ruleManageService.getRuleScore(competition.getRule_type(),competition.getRule_detail()));
+        competition.setCheck_score((float) 0);
+        competition.setRule_score(ruleManageService.getRuleScore(competition.getRule_type(),competition.getRule_detail()));
 
         competitionRepository.save(competition);
 
@@ -63,7 +65,8 @@ public class UploadServiceImpl implements UploadService {
         paper.setUrl(url);
         paper.setCheck_msg("无");
         paper.setCheck_status("未审核");
-//        paper.setRule_score(ruleManageService.getRuleScore(paper.getRule_type(),paper.getRule_detail()));
+        paper.setCheck_score((float) 0);
+        paper.setRule_score(ruleManageService.getRuleScore(paper.getRule_type(),paper.getRule_detail()));
 
         paperRepository.save(paper);
 
@@ -77,7 +80,8 @@ public class UploadServiceImpl implements UploadService {
         patent.setUrl(url);
         patent.setCheck_msg("无");
         patent.setCheck_status("未审核");
-//        patent.setRule_score(ruleManageService.getRuleScore(patent.getRule_type(),patent.getRule_detail()));
+        patent.setCheck_score((float) 0);
+        patent.setRule_score(ruleManageService.getRuleScore(patent.getRule_type(),patent.getRule_detail()));
 
         patentRepository.save(patent);
 
@@ -91,7 +95,8 @@ public class UploadServiceImpl implements UploadService {
         volunteer.setUrl(url);
         volunteer.setCheck_msg("无");
         volunteer.setCheck_status("未审核");
-//        volunteer.setRule_score(ruleManageService.getRuleScore(volunteer.getRule_type(),volunteer.getRule_detail()));
+        volunteer.setCheck_score((float) 0);
+        volunteer.setRule_score(ruleManageService.getRuleScore(volunteer.getRule_type(),volunteer.getRule_detail()));
 
         volunteerRepository.save(volunteer);
 
@@ -105,22 +110,21 @@ public class UploadServiceImpl implements UploadService {
         monograph.setUrl(url);
         monograph.setCheck_msg("无");
         monograph.setCheck_status("未审核");
-//        monograph.setRule_score(ruleManageService.getRuleScore(monograph.getRule_type(),monograph.getRule_detail()));
+        monograph.setCheck_score((float) 0);
+        monograph.setRule_score(ruleManageService.getRuleScore(monograph.getRule_type(),monograph.getRule_detail()));
 
         monographRepository.save(monograph);
 
     }
 
     public void uploadExchangeActivity(String url, String exchangeActivityJson){
-
         ExchangeActivity exchangeActivity = gson.fromJson(exchangeActivityJson, ExchangeActivity.class);
-
         exchangeActivity.setId(0);
         exchangeActivity.setUrl(url);
         exchangeActivity.setCheck_msg("无");
         exchangeActivity.setCheck_status("未审核");
-//        exchangeActivity.setRule_score(ruleManageService.getRuleScore(exchangeActivity.getRule_type(),exchangeActivity.getRule_detail()));
-
+        exchangeActivity.setCheck_score((float) 0);
+        exchangeActivity.setRule_score(ruleManageService.getRuleScore(exchangeActivity.getRule_type(),exchangeActivity.getRule_detail()));
         exchangeActivityRepository.save(exchangeActivity);
 
     }
@@ -133,7 +137,8 @@ public class UploadServiceImpl implements UploadService {
         others.setUrl(url);
         others.setCheck_msg("无");
         others.setCheck_status("未审核");
-//        others.setRule_score(ruleManageService.getRuleScore(others.getRule_type(),others.getRule_detail()));
+        others.setCheck_score((float) 0);
+        others.setRule_score(ruleManageService.getRuleScore(others.getRule_type(),others.getRule_detail()));
 
         othersRepository.save(others);
     }
@@ -146,7 +151,8 @@ public class UploadServiceImpl implements UploadService {
         ideologyMorality.setUrl(url);
         ideologyMorality.setCheck_msg("无");
         ideologyMorality.setCheck_status("未审核");
-//        ideologyMorality.setRule_score(ruleManageService.getRuleScore(ideologyMorality.getRule_type(),ideologyMorality.getRule_detail()));
+        ideologyMorality.setCheck_score((float) 0);
+        ideologyMorality.setRule_score(ruleManageService.getRuleScore(ideologyMorality.getRule_type(),ideologyMorality.getRule_detail()));
 
         ideologyMoralityRepository.save(ideologyMorality);
     }
@@ -159,7 +165,8 @@ public class UploadServiceImpl implements UploadService {
         socialWork.setUrl(url);
         socialWork.setCheck_msg("无");
         socialWork.setCheck_status("未审核");
-//        socialWork.setRule_score(ruleManageService.getRuleScore(socialWork.getRule_type(),socialWork.getRule_detail()));
+        socialWork.setCheck_score((float) 0);
+        socialWork.setRule_score(ruleManageService.getRuleScore(socialWork.getRule_type(),socialWork.getRule_detail()));
 
         socialWorkRepository.save(socialWork);
     }
