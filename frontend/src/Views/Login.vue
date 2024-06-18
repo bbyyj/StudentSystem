@@ -48,8 +48,6 @@ export default {
             this.$refs.form.validate(async (valid) => {
                 if (valid) {
                     // 传入表单数据
-                    console.log('identity:', this.identity);
-
                     try {
                         const loginResult = await logIn(this.login, this.identity);
                         if (loginResult.data.code === 200) {
@@ -86,7 +84,9 @@ export default {
                     Cookie.set('netId', this.login.netId);
                     Cookie.set('Role', studentRole);
                     Cookie.set('sid', data.data.student.sid);
-
+                    Cookie.set('classId', data.data.student.classId)
+                    Cookie.set('admissionYear', data.data.student.admissionYear)
+                    Cookie.set('undergraduate', data.data.student.undergraduate)
                 } catch (error) {
                     console.error('获取学生菜单时出现问题:', error);
                 }
@@ -101,6 +101,10 @@ export default {
                     this.menu = adminRole === 'TOP_ADMIN' ? MenuData[0] : MenuData[1];
                     Cookie.set('netId', this.login.netId);
                     Cookie.set('Role', adminRole);
+                    Cookie.set('classId', data.data.admin.classId)
+                    Cookie.set('admissionYear', data.data.admin.admissionYear)
+                    Cookie.set('undergraduate', data.data.admin.undergraduate)
+
                 } catch (error) {
                     console.error('获取学生菜单时出现问题:', error);
                 }
