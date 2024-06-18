@@ -1,12 +1,13 @@
 <template>
     <el-form ref="form" class="login_container" :model="login" status-icon :rules="rules" label-width="70px">
-        <el-tabs v-model="activeName" @tab-click="handleClick" style="margin-left: 90px; margin-right: 90px;">
-            <el-tab-pane label="学生" name="first"></el-tab-pane>
-            <el-tab-pane label="教师" name="second"></el-tab-pane>
+        <!-- 此处不想要radio的样式所以使用了el-tabs -->
+        <el-tabs v-model="identity" style="margin-left: 90px; margin-right: 90px;">
+            <el-tab-pane label="学生" name="student"></el-tab-pane>
+            <el-tab-pane label="教师" name="teacher"></el-tab-pane>
         </el-tabs>
         <!-- prop对应rules里的键 -->
-        <el-form-item label="用户名" prop="username">
-            <el-input v-model="login.username" autocomplete="off"></el-input>
+        <el-form-item label="netId" prop="netId">
+            <el-input v-model="login.netId" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="密码" prop="password">
@@ -20,47 +21,90 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Cookie from 'js-cookie'
-import { getMenu } from '../api/index'
+import { logIn } from '../api/index'
+import MenuData from '@/data/MenuData.js';
 export default {
     data() {
         return {
+            identity: 'student', // 默认选中学生选项
             // 登陆数据
             login: {
-                username: '',
+                netId: '',
                 password: ''
             },
+            menu: {},
             // 校验规则
             rules: {
-                username: [{ required: 'true', message: '请输入用户名', trigger: 'blur' }],
-                password: [{ required: 'true', message: '请输入用户名', trigger: 'blur' }]
+                netId: [{ required: 'true', message: '请输入netID', trigger: 'blur' }],
+                password: [{ required: 'true', message: '请输入密码', trigger: 'blur' }]
             }
         }
     },
     methods: {
         submit() {
             // 表单的校验
-            this.$refs.form.validate((valid) => {
+            this.$refs.form.validate(async (valid) => {
                 if (valid) {
                     // 传入表单数据
-                    getMenu(this.login).then((data) => {
-                        // console.log(data);
-                        if(data.data.code===20000){
+                    console.log('identity:', this.identity);
+
+                    try {
+                        const loginResult = await logIn(this.login, this.identity);
+                        if (loginResult.data.code === 200) {
                             // 记录cookie
-                            Cookie.set('token',data.data.data.token)
-                            // 设置菜单
-                            this.$store.commit('setMenu',data.data.data.menu)
-                            // 动态添加路由
-                            this.$store.commit('addMenu',this.$router)
-                            // 跳转到首页
-                            this.$router.push('/home')
-                        }else{
-                            // 验证失败的弹窗
-                            this.$message.error(data.data.data.message);
+                            Cookie.set('token', loginResult.data.data.token);
+
+                            // 等待 getMenu 方法执行完毕
+                            await this.getMenuAsync();
+
+                            this.$store.commit('setMenu', this.menu);
+                            this.$store.commit('addMenu', this.$router);
+                            this.$router.push('/home');
+                        } else {
+                            this.$message.error('身份或账号密码错误！');
                         }
-                    })
+                    } catch (error) {
+                        console.error('An error occurred during login or getMenu:', error);
+                        this.$message.error('登录过程中出现问题，请重试！');
+                    }
                 }
-            })
+            });
+        },
+
+        async getMenuAsync() {
+            if (this.identity === 'student') {
+                const apiUrl = 'http://127.0.0.1:8080/auth/getStudentInfo';
+                const params = { netId: this.login.netId };
+                try {
+                    const response = await axios.get(apiUrl, { params });
+                    const data = response.data;
+                    const studentRole = data.data.student.studentRole;
+
+                    this.menu = studentRole === 'MONITOR' ? MenuData[2] : MenuData[3];
+                    Cookie.set('netId', this.login.netId);
+                    Cookie.set('Role', studentRole);
+                    Cookie.set('sid', data.data.student.sid);
+
+                } catch (error) {
+                    console.error('获取学生菜单时出现问题:', error);
+                }
+            } else if (this.identity === 'teacher') {
+                const apiUrl = 'http://127.0.0.1:8080/auth/getAdminInfo';
+                const params = { netId: this.login.netId };
+                try {
+                    const response = await axios.get(apiUrl, { params });
+                    const data = response.data;
+                    const adminRole = data.data.admin.adminRole;
+
+                    this.menu = adminRole === 'TOP_ADMIN' ? MenuData[0] : MenuData[1];
+                    Cookie.set('netId', this.login.netId);
+                    Cookie.set('Role', adminRole);
+                } catch (error) {
+                    console.error('获取学生菜单时出现问题:', error);
+                }
+            }
         }
     }
 }

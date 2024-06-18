@@ -68,6 +68,7 @@
   
 <script>
 import axios from 'axios';
+import Cookie from 'js-cookie'
 
   export default {
     data() {
@@ -85,7 +86,7 @@ import axios from 'axios';
           { model: 'birth', label: '出生年月' },
           { model: 'undergraduate', label: '培养层次' },
           { model: 'politics', label: '政治面貌'},
-          { model: 'native_place', label: '籍贯'},
+          { model: 'nativePlace', label: '籍贯'},
           { model: 'dormitory', label: '宿舍' },
         ],
         //联系方式
@@ -144,7 +145,7 @@ import axios from 'axios';
   methods: {
     loadInfo(){
       const apiUrl = 'http://127.0.0.1:8080/auth/getStudentInfo';
-      const params = { netId: 'zhangsan1' };
+      const params = { netId: Cookie.get('netId') };
 
       axios.get(apiUrl, {params})
         .then(response => {
@@ -186,7 +187,7 @@ import axios from 'axios';
         }
 
         const formData = this.info2;
-        formData.netId = 'zhangsan1';
+        formData.netId = Cookie.get('netId');
         const apiUrl = 'http://127.0.0.1:8080/student/modifyMyInfo';
         const response = await axios.put(apiUrl, formData);
 

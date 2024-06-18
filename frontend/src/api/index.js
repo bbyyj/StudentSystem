@@ -25,8 +25,11 @@ export const updateUser = (data) => {
 }
 
 // 登录权限
-export const getMenu = (data) => {
-    return request.post('/permission/getMenu',data)
+export const logIn = (data,identity) => {
+  if(identity==='student')
+    return axios.post('http://127.0.0.1:8080/auth/signinStudent',data)
+  else if(identity==='teacher')
+    return axios.post('http://127.0.0.1:8080/auth/signinAdmin',data)
 }
 
 // 请求全部综测细则
