@@ -149,6 +149,10 @@ import Cookie from 'js-cookie'
 
       axios.get(apiUrl, {params})
         .then(response => {
+          if(response.data.code !== 200){
+            this.$message.error('获取学生信息失败');
+            return;
+          }
           this.fillData(response.data);
         })
         .catch(error => {
@@ -190,8 +194,7 @@ import Cookie from 'js-cookie'
         formData.netId = Cookie.get('netId');
         const apiUrl = 'http://127.0.0.1:8080/student/modifyMyInfo';
         const response = await axios.put(apiUrl, formData);
-
-        if (response.status === 200) {
+        if (response.data.code === 200) {
           this.$message.success('提交成功！');
           this.loadInfo();
         } else {
@@ -228,7 +231,7 @@ import Cookie from 'js-cookie'
         };
 
         const response = await axios.put(apiUrl, params);
-        if (response.status === 200) {
+        if (response.data.code === 200) {
           this.$message.success('修改成功！');
         
           // 清空表单数据
