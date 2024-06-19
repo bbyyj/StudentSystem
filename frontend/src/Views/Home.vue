@@ -6,8 +6,8 @@
                 <div class="user">
                     <img src="../assets/images/admin.jpeg" alt="">
                     <div class="userInfo">
-                        <p class="name">{{name}}</p>
-                        <p class="access">{{identity}}</p>
+                        <p class="name">{{identity}}</p>
+                        <p class="access">{{name}}</p>
                     </div>
                 </div>
                 <div class="loginInfo">
@@ -54,6 +54,7 @@
 import CountData from '../data/CountData'
 import * as echarts from 'echarts'
 
+import Cookie from 'js-cookie'
 import request from "@/utils/request";
 
 export default {
@@ -63,16 +64,30 @@ export default {
 
       loginTime: "2024-6-17",
       loginPlace: "广州",
-      identity: "辅导员",
-      name: "Admin",
+      identity: '',
+      name: 'aaa',
 
       value: [],
     }
+  },
+  created(){
+    this.initID();
   },
   mounted() {
     this.initFirst()
   },
   methods: {
+    initID(){
+      if(Cookie.get('Role') === "TOP_ADMIN"){
+        this.identity = "辅导员";
+      }else if(Cookie.get('Role') == "HEAD_TEACHER"){
+        this.identity = "班主任";
+      }else  if(Cookie.get('Role') == "MONITOR"){
+        this.identity = "班长";
+      }
+      // this.name = Cookie.get('name');
+    },
+
     initFirst(){  // 初始化各种图表
       request.get("/home/getData").then(res => {
         if (res.data.getStatisticalData.code === 200) {
@@ -276,7 +291,7 @@ export default {
 
     .userInfo {
         .name {
-            font-size: 28px;
+            font-size: 24px;
             margin-bottom: 10px;
         }
 

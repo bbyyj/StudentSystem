@@ -204,7 +204,7 @@ const MenuData= [
         name: 'home',
         label: '首页',
         icon: 's-home',
-        url: 'Home.vue'
+        url: 'HomeAirplane.vue'
     },
     {
         path: '/student/info',
