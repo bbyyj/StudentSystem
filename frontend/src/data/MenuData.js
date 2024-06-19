@@ -327,11 +327,11 @@ const MenuData= [
       url: "Home.vue",
     },
     {
-      path: "/studentmanage",
-      name: "studentmanage",
-      label: "学生信息管理",
+      path: "/studentmanageMonitor",
+      name: "studentmanageMonitor",
+      label: "学生信息查看",
       icon: "user",
-      url: "StudentManage.vue",
+      url: "StudentManageMonitor.vue",
     },
     {
       label: "资料审查",

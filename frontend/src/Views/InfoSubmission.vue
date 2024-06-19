@@ -40,7 +40,8 @@
                     <template v-else-if="field.controlType === 'datepicker'">
                         <el-date-picker :id="field.fieldName" 
                                         :name="field.fieldName" 
-                                        v-model="formData[field.fieldName]"></el-date-picker>
+                                        v-model="formData[field.fieldName]"
+                                        value-format="yyyy-MM-dd"></el-date-picker>
                     </template>
                     <template v-else-if="field.controlType === 'select'">
                         <el-select :id="field.fieldName" 
@@ -235,19 +236,23 @@ export default {
 
             axios.get(apiUrl) 
                 .then(response => {
-                const data = response.data;
-                const ruleList = data.data.content;
+                    if(response.data.code !== 200){
+                        this.$message.error('获取综测信息失败');
+                        return;
+                    }
+                    const data = response.data;
+                    const ruleList = data.data.content;
 
-                this.rulesContent = ruleList;
+                    this.rulesContent = ruleList;
 
-                // 提取出综测类型
-                const uniqueTypesSet = new Set(this.rulesContent.map(item => item.type));
-                this.rulestype = Array.from(uniqueTypesSet);
-                
-                })
-                .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-                });
+                    // 提取出综测类型
+                    const uniqueTypesSet = new Set(this.rulesContent.map(item => item.type));
+                    this.rulestype = Array.from(uniqueTypesSet);
+                    
+                    })
+                    .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                    });
             
         },
 
@@ -321,7 +326,7 @@ export default {
                             }
                         });
                         
-                        if (response.status === 200) {
+                        if (response.data.code === 200) {
                             this.$message.success('提交成功！');
                             // 清空表单数据和文件列表
                             this.$refs.formData.resetFields();

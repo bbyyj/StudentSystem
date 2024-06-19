@@ -189,6 +189,10 @@ export default {
 
       axios.get(apiUrl, { params }) 
         .then(response => {
+          if(response.data.code !== 200){
+            this.$message.error('获取信息失败');
+            return;
+          }
           const data = response.data;
           const infoList = data.data;
 
