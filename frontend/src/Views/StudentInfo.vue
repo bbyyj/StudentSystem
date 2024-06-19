@@ -168,6 +168,9 @@ import Cookie from 'js-cookie'
         if (item.model === 'undergraduate' && studentData.hasOwnProperty(item.model)) {
           this.info1[item.model] = studentData[item.model] ? '本科生' : '研究生';
         }
+        else if(item.model === 'classId' && studentData.hasOwnProperty(item.model)){
+          this.info1[item.model] = studentData[item.model] === 0 ? '研究生' : studentData[item.model];
+        }
         else if (studentData.hasOwnProperty(item.model)) {
           this.info1[item.model] = studentData[item.model];
         }

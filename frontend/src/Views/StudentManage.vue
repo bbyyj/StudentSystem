@@ -46,7 +46,7 @@
 
     <!-- 表格部分 -->
     <el-table :data="Students" style="width: 100%" size="mini">
-        <el-table-column v-for="item in studentForm.items" 
+      <el-table-column v-for="item in studentForm.items" 
         :key="item.fieldName" :prop="item.fieldName" :label="item.label" :width="item.width" />
 
       <el-table-column fixed="right" label="操作" width="180">
@@ -73,8 +73,8 @@
   </el-card>
     
   <el-dialog title="编辑学生信息" :visible.sync="dialogVisible" >
-    <el-form :model="student" label-width="80px"  class="wrapper" >
-      <el-form-item v-for="field in studentForm.items" 
+    <el-form :model="studentAddOrEditForm" label-width="80px"  class="wrapper" >
+      <el-form-item v-for="field in studentEditForm.items" 
                             :prop="field.fieldName"  
                             :key="field.fieldName" 
                             :label="field.label"
@@ -82,20 +82,20 @@
         <template v-if="field.controlType === 'input'">
             <el-input :id="field.fieldName" 
                     :name="field.fieldName" 
-                    v-model="student[field.fieldName]" 
+                    v-model="studentAddOrEditForm[field.fieldName]" 
                     :placeholder="field.message"></el-input>
         </template>
         <template v-else-if="field.controlType === 'datepicker'">
             <el-date-picker :id="field.fieldName" 
                             :name="field.fieldName" 
-                            v-model="student[field.fieldName]"
+                            v-model="studentAddOrEditForm[field.fieldName]"
                             type="month"
                             value-format="yyyy-MM"></el-date-picker>
         </template>
         <template v-else-if="field.controlType === 'select'">
             <el-select :id="field.fieldName" 
                     :name="field.fieldName" 
-                    v-model="student[field.fieldName]">
+                    v-model="studentAddOrEditForm[field.fieldName]">
                 <el-option v-for="item in studentForm.selectOptions[field.fieldName]" 
                         :key="item.value" 
                         :label="item.label" 
@@ -114,10 +114,7 @@
   </el-dialog>
 
   <el-dialog title="添加学生信息" :visible.sync="addDialogVisible" >
-    <el-form :model="student" label-width="80px" class="wrapper">
-      <!-- <el-form-item v-for="item in studentAddForm" :label="item.label" :key="item.model" class="blockitem">
-        <el-input  v-model="student[item.model]" :placeholder="item.label" />
-      </el-form-item> -->
+    <el-form :model="studentAddOrEditForm" label-width="80px" class="wrapper">
       <el-form-item v-for="field in studentAddForm.items" 
                             :prop="field.fieldName"  
                             :key="field.fieldName" 
@@ -126,20 +123,20 @@
         <template v-if="field.controlType === 'input'">
             <el-input :id="field.fieldName" 
                     :name="field.fieldName" 
-                    v-model="student[field.fieldName]" 
+                    v-model="studentAddOrEditForm[field.fieldName]" 
                     :placeholder="field.message"></el-input>
         </template>
         <template v-else-if="field.controlType === 'datepicker'">
             <el-date-picker :id="field.fieldName" 
                             :name="field.fieldName" 
-                            v-model="student[field.fieldName]"
+                            v-model="studentAddOrEditForm[field.fieldName]"
                             type="month"
                             value-format="yyyy-MM"></el-date-picker>
         </template>
         <template v-else-if="field.controlType === 'select'">
             <el-select :id="field.fieldName" 
                     :name="field.fieldName" 
-                    v-model="student[field.fieldName]">
+                    v-model="studentAddOrEditForm[field.fieldName]">
                 <el-option v-for="item in studentAddForm.selectOptions[field.fieldName]" 
                         :key="item.value" 
                         :label="item.label" 
@@ -168,7 +165,7 @@ import StudentInfoData from '@/data/StudentInfoData.js';
 export default {
   data() {
     return {
-      //正常使用的数据
+      //获取到的学生列表
       Students: [
       { "admissionYear": "2023",
         "classId": 1,
@@ -182,19 +179,16 @@ export default {
         "birth": "出生年份",
         "politics": "政治面貌",
         "dormitory": "宿舍",
-        "phone": "电话",
-        "address": "地址",
-        "urgentPhone": "",
-        "urgentName": "null",
-        "wechat": "null",
-        "email": "null",
         }
       ],
+      //查看信息用
       studentForm:[],
       //添加时用到的，去掉了学生职位
       studentAddForm: [],
-      //修改或添加时的表单
-      student: {
+      //编辑用
+      studentEditForm: [],
+      //修改或添加时保存信息的表单
+      studentAddOrEditForm: {
         "admissionYear": "",
         "classId": "",
         "name": "",
@@ -239,6 +233,7 @@ export default {
     this.loadStudents(this.pageSize, this.currentPage);
     this.studentForm = StudentInfoData[0];
     this.studentAddForm = StudentInfoData[1];
+    this.studentEditForm = StudentInfoData[6];
     const identity = Cookies.get('Role');
     if(identity === 'TOP_ADMIN'){
       this.studentSearchForm = StudentInfoData[2];
@@ -278,16 +273,9 @@ export default {
             return;
           }
           const data = response.data;
-          const studentList = data.data.content;
+          let studentList = data.data.content;
 
-          // 判断学生类型，并替换为本科生或研究生
-          studentList.forEach(student => {
-            if (student.undergraduate) {
-              student.undergraduate = '本科生';
-            } else {
-              student.undergraduate = '研究生';
-            }
-          });
+          this.inListDataProcess(studentList);
 
           this.totalStudents = data.data.totalElements; 
           this.Students = studentList;
@@ -298,6 +286,41 @@ export default {
         });
     },
 
+    inListDataProcess(studentList) {
+      studentList.forEach(student => {
+        // 判断学生类型，并替换为本科生或研究生
+        if (student.undergraduate) {
+          student.undergraduate = '本科生';
+        } else {
+          student.undergraduate = '研究生';
+        }
+        if(student.studentRole === 'NOT_MONITOR'){
+          student.studentRole = '学生';
+        } else {
+          student.studentRole = '班长';
+        }
+        if(student.classId === 0){
+          student.classId = '研究生';
+        }
+      });
+    },
+
+    outDataProcess(studentData){
+      if(studentData.undergraduate === '本科生'){
+        studentData.undergraduate = true;
+      } else {
+        studentData.undergraduate = false;
+      }
+      if(studentData.studentRole === '学生'){
+        studentData.studentRole = 'NOT_MONITOR';
+      } else {
+        studentData.studentRole = 'MONITOR';
+      }
+      if(studentData.classId === '研究生'){
+        studentData.classId = 0;
+      }
+
+    },
     // 页面相关
     // 处理每页显示数量变化
     handleSizeChange(pageSize) {
@@ -325,20 +348,26 @@ export default {
     async searchStudents(currentPage, pageSize) {
       // 检查是否有选择的查询条件
       if (!this.searchKeyword) {
-          this.$message('请选择查询条件后再进行搜索！');
-          return;
-        }
+            this.$message('请选择查询条件后再进行搜索！');
+            return;
+      }
+      if(!this.searchvalue && this.searchKeyword !== '全部'){
+        this.$message('请输入查询内容后再进行搜索！');
+        return;
+      }
 
       // 获取用户选择的查询条件\查询内容
       let selectedKeyword = this.searchKeyword;
       let searchContent = this.searchvalue;
 
+      // 加载所有数据
       if(selectedKeyword === '全部'){
         this.isseraching = false;
         this.loadStudents(pageSize, currentPage);
         return;
       }
-      console.log(selectedKeyword);
+
+      // 处理数据
       if(selectedKeyword === "undergraduate" && searchContent === '本科生'){
         selectedKeyword = 'isUndergraduate';
         searchContent = true;
@@ -346,6 +375,15 @@ export default {
       if(selectedKeyword === "undergraduate" && searchContent === '研究生'){
         selectedKeyword = 'isUndergraduate';
         searchContent = false;
+      }
+      if(selectedKeyword === "studentRole" && searchContent === '学生'){
+        searchContent = "NOT_MONITOR";
+      }
+      if(selectedKeyword === "studentRole" && searchContent === '班长'){
+        searchContent = "MONITOR";
+      }
+      if(selectedKeyword === "classId" && searchContent === '研究生'){
+        searchContent = 0;
       }
 
       const indentity = Cookies.get('Role');
@@ -381,15 +419,9 @@ export default {
             return;
           }
           const data = response.data;
-          const studentList = data.data.content;
+          let studentList = data.data.content;
 
-          studentList.forEach(student => {
-            if (student.undergraduate) {
-              student.undergraduate = '本科生';
-            } else {
-              student.undergraduate = '研究生';
-            }
-          });
+          this.inListDataProcess(studentList);
           
           // 更新表格数据
           this.Students = studentList;
@@ -397,7 +429,6 @@ export default {
           this.totalStudents = data.data.totalElements;
           this.isseraching = true;
 
-          console.log(this.Students);
         })
         .catch(error => {
           console.error('Error during search:', error);
@@ -416,26 +447,20 @@ export default {
       this.dialogVisible = true;
       this.dialogtype = 'edit';
       // 复制选中行数据到student对象
-      this.student.admissionYear = row.admissionYear;
-      this.student.classId = row.classId;
-      this.student.name = row.name;
-      this.student.studentRole = row.studentRole;
-      this.student.type = row.type;
-      this.student.netId = row.netId;
-      this.student.nation = row.nation;
-      this.student.sid = row.sid;
-      this.student.pid = row.pid;
-      this.student.birth = row.birth;
-      this.student.undergraduate = row.undergraduate;
-      this.student.politics = row.politics;
-      this.student.nativePlace = row.nativePlace;
-      this.student.dormitory = row.dormitory;
-      this.student.phone = row.phone;
-      this.student.address = row.address;
-      this.student.urgentPhone = row.urgentPhone;
-      this.student.urgentName = row.urgentName; 
-      this.student.wechat = row.wechat;
-      this.student.email = row.email;
+      this.studentAddOrEditForm.admissionYear = row.admissionYear;
+      this.studentAddOrEditForm.classId = row.classId;
+      this.studentAddOrEditForm.name = row.name;
+      this.studentAddOrEditForm.studentRole = row.studentRole;
+      this.studentAddOrEditForm.type = row.type;
+      this.studentAddOrEditForm.netId = row.netId;
+      this.studentAddOrEditForm.nation = row.nation;
+      this.studentAddOrEditForm.sid = row.sid;
+      this.studentAddOrEditForm.pid = row.pid;
+      this.studentAddOrEditForm.birth = row.birth;
+      this.studentAddOrEditForm.undergraduate = row.undergraduate;
+      this.studentAddOrEditForm.politics = row.politics;
+      this.studentAddOrEditForm.nativePlace = row.nativePlace;
+      this.studentAddOrEditForm.dormitory = row.dormitory;
     },
     deleteStudent(row) {
       // 删除
@@ -465,14 +490,9 @@ export default {
       try {
         let apiEndpoint;
         let method;
-        let payload = JSON.parse(JSON.stringify(this.student)); // 创建payload的深拷贝，防止修改原始数据
+        let payload = JSON.parse(JSON.stringify(this.studentAddOrEditForm)); // 创建payload的深拷贝，防止修改原始数据
 
-        // 根据undergraduate的值调整payload
-        if (payload.undergraduate === '本科生') {
-          payload.undergraduate = true;
-        } else {
-          payload.undergraduate = false; // 研究生
-        }
+        this.outDataProcess(payload);
 
         apiEndpoint = 'http://127.0.0.1:8080/headTeacher/modifyStuInfo'; 
         method = 'put';
@@ -499,20 +519,15 @@ export default {
       try {
         let apiEndpoint;
         let method;
-        let payload = JSON.parse(JSON.stringify(this.student)); // 创建payload的深拷贝，防止修改原始数据
+        let payload = JSON.parse(JSON.stringify(this.studentAddOrEditForm)); // 创建payload的深拷贝，防止修改原始数据
 
         delete payload.studentRole;
-        // 根据undergraduate的值调整payload
-        if (payload.undergraduate === '本科生') {
-          payload.undergraduate = true;
-        } else {
-          payload.undergraduate = false; // 研究生
-        }
-
+        this.outDataProcess(payload);
+        
         apiEndpoint = 'http://127.0.0.1:8080/auth/signupStudent'; // 添加学生的API地址 
         method = 'post'; 
 
-        console.log('payload:', payload);
+
         
         // 发送请求
         const response = await axios({
@@ -525,6 +540,7 @@ export default {
           this.$message('操作成功');
           this.closeDialog();
           this.loadStudents(this.pageSize, this.currentPage); // 刷新数据
+          
         } else {
           this.$message('操作失败，请检查输入！');
         }
@@ -536,7 +552,7 @@ export default {
     closeDialog(){
       this.dialogVisible = false;
       this.addDialogVisible = false;
-      this.student = {
+      this.studentAddOrEditForm = {
         "admissionYear": "",
         "classId": "",
         "name": "",
@@ -551,12 +567,7 @@ export default {
         "politics": "",
         "nativePlace": "",
         "dormitory": "",
-        "phone": "",
-        "address": "",
-        "urgentPhone": "",
-        "urgentName": "",
-        "wechat": "",
-        "email": "",};
+      };
     },
 
     // 文件处理
@@ -568,10 +579,9 @@ export default {
     },
 
     handleExceed(fileList) {
-      console.log('文件超过限制');
+      this.$message('文件超过限制');
     },
     handleError(err, file) {
-      console.error(err);
       this.$message('上传失败，请重试');
       // 显示错误提示给用户
     },
@@ -584,7 +594,6 @@ export default {
       return true; // 允许继续上传
     },
     handleSuccess(response, file) {
-      console.log(response);
       this.$message('上传成功');
       this.loadStudents(this.pageSize, this.currentPage);
     }

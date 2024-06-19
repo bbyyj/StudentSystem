@@ -259,7 +259,6 @@ export default {
         // 加载细则列表
         loadRuleDetails(selectedType) {
             this.rulesdetail = this.rulesContent.filter(item => item.type === selectedType);
-            console.log(this.rulesdetail)
         },
 
         handleFileChange(file, fileList) {
@@ -316,8 +315,6 @@ export default {
                     if (this.fileList.length > 0) {
                         formData.append('file', this.fileList[0].raw);
                     }
-
-                    console.log(formData);
 
                     try {
                         const response = await axios.post(this.uploadUrl, formData, {

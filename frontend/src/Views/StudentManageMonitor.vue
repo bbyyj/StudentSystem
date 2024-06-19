@@ -98,14 +98,8 @@
             const data = response.data;
             const studentList = data.data.content;
   
-            // 判断学生类型，并替换为本科生或研究生
-            studentList.forEach(student => {
-              if (student.undergraduate) {
-                student.undergraduate = '本科生';
-              } else {
-                student.undergraduate = '研究生';
-              }
-            });
+            // 处理数据
+            this.inListDataProcess(studentList);
   
             this.totalStudents = data.data.totalElements; 
             this.Students = studentList;
@@ -147,6 +141,10 @@
             this.$message('请选择查询条件后再进行搜索！');
             return;
           }
+        if(!this.searchvalue && this.searchKeyword !== '全部'){
+          this.$message('请输入查询内容后再进行搜索！');
+          return;
+        }
   
         // 获取用户选择的查询条件\查询内容
         let selectedKeyword = this.searchKeyword;
@@ -169,13 +167,8 @@
             const data = response.data;
             const studentList = data.data.content;
   
-            studentList.forEach(student => {
-              if (student.undergraduate) {
-                student.undergraduate = '本科生';
-              } else {
-                student.undergraduate = '研究生';
-              }
-            });
+            // 处理数据
+            this.inListDataProcess(studentList);
             
             // 更新表格数据
             this.Students = studentList;
@@ -183,11 +176,29 @@
             this.totalStudents = data.data.totalElements;
             this.isseraching = true;
   
-            console.log(this.Students);
           })
           .catch(error => {
             console.error('Error during search:', error);
           });
+      },
+
+      inListDataProcess(studentList) {
+        studentList.forEach(student => {
+          // 判断学生类型，并替换为本科生或研究生
+          if (student.undergraduate) {
+            student.undergraduate = '本科生';
+          } else {
+            student.undergraduate = '研究生';
+          }
+          if(student.studentRole === 'NOT_MONITOR'){
+            student.studentRole = '学生';
+          } else {
+            student.studentRole = '班长';
+          }
+          if(student.classId === 0){
+            student.classId = '研究生';
+          }
+        });
       },
     }
     

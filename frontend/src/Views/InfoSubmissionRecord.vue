@@ -183,7 +183,7 @@ export default {
       // 定义请求参数
       const params = {
         sid: Cookie.get('sid'),
-        page: currentPage, // 添加当前页码参数
+        page: currentPage - 1, // 添加当前页码参数
         size: pageSize // 添加每页大小参数
       };
 
@@ -216,10 +216,6 @@ export default {
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage;
       this.loadInfo(this.pageSize, this.currentPage);
-    },
-
-    async searchInfos() {
-      
     },
     
     showPhoto(row) {
@@ -305,7 +301,7 @@ export default {
   justify-content: space-between;
 }
 .blockitem {
-  width: 45%; 
+  width: 50%; 
   height: auto;
   margin-bottom: 2%;
 }
