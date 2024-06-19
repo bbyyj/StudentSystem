@@ -1,5 +1,5 @@
 const StudentInfoData = [
-    // 0 管理员/班主任-编辑和查看信息用
+    // 0 管理员/班主任-查看信息用
     {
         items: [
             { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
@@ -36,7 +36,7 @@ const StudentInfoData = [
                 { value: 'MONITOR', label: '班长' },
             ],
             type: [
-                { value: '港台生', label: '澳台生' },
+                { value: '港澳台生', label: '港澳台生' },
                 { value: '境内生', label: '境内生' },
                 { value: '国际生', label: '国际生' },
             ],
@@ -58,22 +58,16 @@ const StudentInfoData = [
             { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
             { fieldName: 'classId', label: '班级', width: '70px', controlType: 'select' },
             { fieldName: 'name', label: '姓名', width: '100px', controlType: 'input' },
-            { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
+            // { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
             { fieldName: 'netId', label: 'netId', width: '60px',  controlType: 'input' },
-            { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
+            // { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
             { fieldName: 'sid', label: '学号', width: '100px', controlType: 'input' },
-            { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
-            { fieldName: 'birth', label: '出生年月', width: '100px', controlType: 'datepicker' },
+            // { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
+            // { fieldName: 'birth', label: '出生年月', width: '100px', controlType: 'datepicker' },
             { fieldName: 'undergraduate', label: '培养层次', width: '100px', controlType: 'select' },
-            { fieldName: 'politics', label: '政治面貌', width: '90px', controlType: 'select' },
-            { fieldName: 'nativePlace', label: '籍贯', width: '150px', controlType: 'input' },
-            { fieldName: 'dormitory', label: '宿舍', width: '150px', controlType: 'input' },
-            { fieldName: 'phone', label: '个人联系电话', width: '150px', controlType: 'input' },
-            { fieldName: 'address', label: '详细家庭住址', width: '250px', controlType: 'input' },
-            { fieldName: 'urgentPhone', label: '紧急联系人电话', width: '150px', controlType: 'input' },
-            { fieldName: 'urgentName', label: '紧急联系人', width: '110px', controlType: 'input' },
-            { fieldName: 'email', label: '邮箱', width: '150px', controlType: 'input' },
-            { fieldName: 'wechat', label: '微信', width: '150px', controlType: 'input' }
+            // { fieldName: 'politics', label: '政治面貌', width: '90px', controlType: 'select' },
+            // { fieldName: 'nativePlace', label: '籍贯', width: '150px', controlType: 'input' },
+            // { fieldName: 'dormitory', label: '宿舍', width: '150px', controlType: 'input' },
         ],
         selectOptions: {
             classId: [
@@ -83,20 +77,20 @@ const StudentInfoData = [
                 { value: '3', label: '3班' },
                 { value: '4', label: '4班' },
             ],
-            type: [
-                { value: '港台生', label: '澳台生' },
-                { value: '境内生', label: '境内生' },
-                { value: '国际生', label: '国际生' },
-            ],
+            // type: [
+            //     { value: '港澳台生', label: '港澳台生' },
+            //     { value: '境内生', label: '境内生' },
+            //     { value: '国际生', label: '国际生' },
+            // ],
             undergraduate: [
                 { value: 'true', label: '本科生' },
                 { value: 'false', label: '研究生' },
             ],
-            politics: [
-                { value: '共青团员', label: '共青团员' },
-                { value: '群众', label: '群众' },
-                { value: '无', label: '无' },
-            ]
+            // politics: [
+            //     { value: '共青团员', label: '共青团员' },
+            //     { value: '群众', label: '群众' },
+            //     { value: '无', label: '无' },
+            // ]
         
         },
     },
@@ -106,6 +100,7 @@ const StudentInfoData = [
             { fieldName: 'admissionYear', label: '入学年份' },
             { fieldName: 'classId', label: '班级' },
             { fieldName: 'name', label: '姓名' },
+            { fieldName: 'studentRole', label: '学生职位' },
             { fieldName: 'type', label: '学生类别' },
             { fieldName: 'netId', label: 'netId' },
             { fieldName: 'nation', label: '民族' },
@@ -181,6 +176,53 @@ const StudentInfoData = [
             { fieldName: 'email', label: '邮箱', width: '150px' },
             { fieldName: 'wechat', label: '微信', width: '150px' }
         ], 
+    },
+    // 6 管理员/班主任-编辑信息用，去掉了联系方式
+    {
+        items: [
+            { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
+            { fieldName: 'classId', label: '班级', width: '70px', controlType: 'select' },
+            { fieldName: 'name', label: '姓名', width: '100px', controlType: 'input' },
+            { fieldName: 'studentRole', label: '学生职位', width: '100px', controlType: 'select' },
+            { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
+            { fieldName: 'netId', label: 'netId', width: '60px',  controlType: 'input' },
+            { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
+            { fieldName: 'sid', label: '学号', width: '100px', controlType: 'input' },
+            { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
+            { fieldName: 'birth', label: '出生年月', width: '100px', controlType: 'datepicker' },
+            { fieldName: 'undergraduate', label: '培养层次', width: '100px', controlType: 'select' },
+            { fieldName: 'politics', label: '政治面貌', width: '90px', controlType: 'select' },
+            { fieldName: 'nativePlace', label: '籍贯', width: '150px', controlType: 'input' },
+            { fieldName: 'dormitory', label: '宿舍', width: '150px', controlType: 'input' },
+        ],
+        selectOptions: {
+            classId: [
+                { value: '0', label: '研究生' },
+                { value: '1', label: '1班' },
+                { value: '2', label: '2班' },
+                { value: '3', label: '3班' },
+                { value: '4', label: '4班' },
+            ],
+            studentRole: [
+                { value: 'NOT_MONITOR', label: '学生' },
+                { value: 'MONITOR', label: '班长' },
+            ],
+            type: [
+                { value: '港澳台生', label: '港澳台生' },
+                { value: '境内生', label: '境内生' },
+                { value: '国际生', label: '国际生' },
+            ],
+            undergraduate: [
+                { value: 'true', label: '本科生' },
+                { value: 'false', label: '研究生' },
+            ],
+            politics: [
+                { value: '共青团员', label: '共青团员' },
+                { value: '群众', label: '群众' },
+                { value: '无', label: '无' },
+            ]
+        
+        },
     },
 ]
 
