@@ -1,5 +1,7 @@
 <template>
-  <div id="world"></div>
+  <div id="world">
+<!--    <span>说点什么……</span>-->
+  </div>
 </template>
 
 <script setup>
@@ -8,16 +10,16 @@ import { onMounted, onBeforeUnmount } from 'vue';
 import * as THREE from 'three';
 
 const Colors = {
-  red: 0xf25346,
-  yellow: 0xedeb27,
-  white: 0xd8d0d1,
+  red: 0xe9d7df,
+  yellow: 0xe3b4b8,
+  white: 0xf7f4ed,
   brown: 0x59332e,
   pink: 0xF5986E,
   brownDark: 0x23190f,
-  blue: 0x68c3c0,
-  green: 0x458248,
+  blue: 0xa61b29,
+  green: 0x6e9e71,
   purple: 0x551A8B,
-  lightgreen: 0x629265,
+  lightgreen: 0x85aa87,
 };
 
 let scene, camera, fieldOfView, aspectRatio, nearPlane, farPlane, HEIGHT, WIDTH, renderer, container;
@@ -30,7 +32,6 @@ onMounted(() => {
   createOrbit();
   createSun();
   createForest();
-  createPlane();
   loop();
   window.addEventListener('resize', handleWindowResize, false);
 });
@@ -44,7 +45,7 @@ function createScene() {
   WIDTH = window.innerWidth*0.85;
 
   scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
+  scene.fog = new THREE.Fog(0xf9f4dc, 100, 1250);
 
   aspectRatio = WIDTH / HEIGHT;
   fieldOfView = 65;
@@ -75,7 +76,7 @@ function handleWindowResize() {
 
 let hemisphereLight, shadowLight;
 function createLights() {
-  hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x000000, 0.9);
+  hemisphereLight = new THREE.HemisphereLight(0xaaaaaa, 0x4c4c4c, 0.9);
   shadowLight = new THREE.DirectionalLight(0xffffff, 0.9);
   shadowLight.position.set(0, 350, 350);
   shadowLight.castShadow = true;
@@ -102,7 +103,7 @@ class Land {
 
     const mat = new THREE.MeshPhongMaterial({
       color: Colors.lightgreen,
-      flatShading: true,
+      shading: true,
     });
 
     this.mesh = new THREE.Mesh(geom, mat);
@@ -123,9 +124,8 @@ class Sun {
   constructor() {
     this.mesh = new THREE.Object3D();
     const sunGeom = new THREE.SphereGeometry(400, 20, 10);
-    const sunMat = new THREE.MeshPhongMaterial({
-      color: 0xffd700, // Yellow
-      flatShading: THREE.FlatShading,
+    const sunMat = new THREE.MeshBasicMaterial({
+      color: 0xfcc307,
     });
     const sun = new THREE.Mesh(sunGeom, sunMat);
     sun.castShadow = false;
@@ -188,7 +188,7 @@ class Tree {
 
     const matTreeLeaves = new THREE.MeshPhongMaterial({
       color: Colors.green,
-      flatShading: THREE.FlatShading,
+      flatShading: true,
     });
 
     const geomTreeBase = new THREE.BoxGeometry(10, 20, 10);
@@ -230,7 +230,7 @@ class Flower {
     const geomStem = new THREE.BoxGeometry(5, 50, 5, 1, 1, 1);
     const matStem = new THREE.MeshPhongMaterial({
       color: Colors.green,
-      flatShading: THREE.FlatShading,
+      flatShading: true,
     });
     const stem = new THREE.Mesh(geomStem, matStem);
     stem.castShadow = false;
@@ -240,7 +240,7 @@ class Flower {
     const geomPetalCore = new THREE.BoxGeometry(10, 10, 10, 1, 1, 1);
     const matPetalCore = new THREE.MeshPhongMaterial({
       color: Colors.yellow,
-      flatShading: THREE.FlatShading,
+      flatShading: true,
     });
     const petalCore = new THREE.Mesh(geomPetalCore, matPetalCore);
     petalCore.castShadow = false;
@@ -321,149 +321,7 @@ class Forest {
   }
 }
 
-class AirPlane {
-  constructor() {
-    this.mesh = new THREE.Object3D();
-
-    // Create the cabin
-    const geomCockpit = new THREE.BoxGeometry(80, 50, 50);
-    const matCockpit = new THREE.MeshPhongMaterial({ color: Colors.red, flatShading: true });
-    this.modifyVertices(geomCockpit, [
-      { index: 4, y: -10, z: 20 },
-      { index: 5, y: -10, z: -20 },
-      { index: 6, y: 30, z: 20 },
-      { index: 7, y: 30, z: -20 }
-    ]);
-    const cockpit = new THREE.Mesh(geomCockpit, matCockpit);
-    cockpit.castShadow = true;
-    cockpit.receiveShadow = true;
-    this.mesh.add(cockpit);
-
-    // Create the engine
-    const geomEngine = new THREE.BoxGeometry(20, 50, 50);
-    const matEngine = new THREE.MeshPhongMaterial({ color: Colors.white, flatShading: true });
-    const engine = new THREE.Mesh(geomEngine, matEngine);
-    engine.position.x = 40;
-    engine.castShadow = true;
-    engine.receiveShadow = true;
-    this.mesh.add(engine);
-
-    // Create the tail
-    const geomTailPlane = new THREE.BoxGeometry(15, 20, 5);
-    const matTailPlane = new THREE.MeshPhongMaterial({ color: Colors.red, flatShading: true });
-    const tailPlane = new THREE.Mesh(geomTailPlane, matTailPlane);
-    tailPlane.position.set(-35, 25, 0);
-    tailPlane.castShadow = true;
-    tailPlane.receiveShadow = true;
-    this.mesh.add(tailPlane);
-
-    // Create the wing
-    const geomSideWing = new THREE.BoxGeometry(40, 4, 150);
-    const matSideWing = new THREE.MeshPhongMaterial({ color: Colors.red, flatShading: true });
-
-    const sideWingTop = new THREE.Mesh(geomSideWing, matSideWing);
-    const sideWingBottom = new THREE.Mesh(geomSideWing, matSideWing);
-    sideWingTop.castShadow = true;
-    sideWingTop.receiveShadow = true;
-    sideWingBottom.castShadow = true;
-    sideWingBottom.receiveShadow = true;
-
-    sideWingTop.position.set(20, 12, 0);
-    sideWingBottom.position.set(20, -3, 0);
-    this.mesh.add(sideWingTop);
-    this.mesh.add(sideWingBottom);
-
-    const geomWindshield = new THREE.BoxGeometry(3, 15, 20);
-    const matWindshield = new THREE.MeshPhongMaterial({ color: Colors.white, transparent: true, opacity: 0.3, flatShading: true });
-    const windshield = new THREE.Mesh(geomWindshield, matWindshield);
-    windshield.position.set(5, 27, 0);
-
-    windshield.castShadow = true;
-    windshield.receiveShadow = true;
-
-    this.mesh.add(windshield);
-
-    const geomPropeller = new THREE.BoxGeometry(20, 10, 10);
-    this.modifyVertices(geomPropeller, [
-      { index: 4, y: -5, z: 5 },
-      { index: 5, y: -5, z: -5 },
-      { index: 6, y: 5, z: 5 },
-      { index: 7, y: 5, z: -5 }
-    ]);
-    const matPropeller = new THREE.MeshPhongMaterial({ color: Colors.brown, flatShading: true });
-    this.propeller = new THREE.Mesh(geomPropeller, matPropeller);
-    this.propeller.castShadow = true;
-    this.propeller.receiveShadow = true;
-
-    const geomBlade1 = new THREE.BoxGeometry(1, 100, 10);
-    const geomBlade2 = new THREE.BoxGeometry(1, 10, 100);
-    const matBlade = new THREE.MeshPhongMaterial({ color: Colors.brownDark, flatShading: true });
-
-    const blade1 = new THREE.Mesh(geomBlade1, matBlade);
-    blade1.position.set(8, 0, 0);
-    blade1.castShadow = true;
-    blade1.receiveShadow = true;
-
-    const blade2 = new THREE.Mesh(geomBlade2, matBlade);
-    blade2.position.set(8, 0, 0);
-    blade2.castShadow = true;
-    blade2.receiveShadow = true;
-    this.propeller.add(blade1, blade2);
-    this.propeller.position.set(50, 0, 0);
-    this.mesh.add(this.propeller);
-
-    const wheelProtecGeom = new THREE.BoxGeometry(30, 15, 10);
-    const wheelProtecMat = new THREE.MeshPhongMaterial({ color: Colors.white, flatShading: true });
-    const wheelProtecR = new THREE.Mesh(wheelProtecGeom, wheelProtecMat);
-    wheelProtecR.position.set(25, -20, 25);
-    this.mesh.add(wheelProtecR);
-
-    const wheelTireGeom = new THREE.BoxGeometry(24, 24, 4);
-    const wheelTireMat = new THREE.MeshPhongMaterial({ color: Colors.brownDark, flatShading: true });
-    const wheelTireR = new THREE.Mesh(wheelTireGeom, wheelTireMat);
-    wheelTireR.position.set(25, -28, 25);
-
-    const wheelAxisGeom = new THREE.BoxGeometry(10, 10, 6);
-    const wheelAxisMat = new THREE.MeshPhongMaterial({ color: Colors.brown, flatShading: true });
-    const wheelAxis = new THREE.Mesh(wheelAxisGeom, wheelAxisMat);
-    wheelTireR.add(wheelAxis);
-
-    this.mesh.add(wheelTireR);
-
-    const wheelProtecL = wheelProtecR.clone();
-    wheelProtecL.position.z = -wheelProtecR.position.z;
-    this.mesh.add(wheelProtecL);
-
-    const wheelTireL = wheelTireR.clone();
-    wheelTireL.position.z = -wheelTireR.position.z;
-    this.mesh.add(wheelTireL);
-
-    const wheelTireB = wheelTireR.clone();
-    wheelTireB.scale.set(0.5, 0.5, 0.5);
-    wheelTireB.position.set(-35, -5, 0);
-    this.mesh.add(wheelTireB);
-
-    const suspensionGeom = new THREE.BoxGeometry(4, 20, 4);
-    suspensionGeom.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 10, 0));
-    const suspensionMat = new THREE.MeshPhongMaterial({ color: Colors.red, flatShading: true });
-    const suspension = new THREE.Mesh(suspensionGeom, suspensionMat);
-    suspension.position.set(-35, -5, 0);
-    suspension.rotation.z = -0.3;
-    this.mesh.add(suspension);
-  }
-
-  modifyVertices(geometry, modifications) {
-    const positionAttribute = geometry.attributes.position;
-    modifications.forEach(mod => {
-      positionAttribute.setY(mod.index, positionAttribute.getY(mod.index) + mod.y);
-      positionAttribute.setZ(mod.index, positionAttribute.getZ(mod.index) + mod.z);
-    });
-    positionAttribute.needsUpdate = true;
-  }
-}
-
-
-let land, sky,orbit,forest,sun,airplane;
+let land, sky,orbit,forest,sun;
 const offSet = -600;
 
 function createWorld() {
@@ -494,13 +352,6 @@ function createForest(){
   forest.mesh.position.y = offSet;
   scene.add(forest.mesh);
 }
-function createPlane(){
-  airplane = new AirPlane();
-  airplane.mesh.scale.set(.35,.35,.35);
-  airplane.mesh.position.set(-40,110,-250);
-  // airplane.mesh.rotation.z = Math.PI/15;
-  scene.add(airplane.mesh);
-}
 
 function loop() {
   land.mesh.rotation.z += 0.003;
@@ -529,6 +380,8 @@ function render() {
   width: 85%;
   height: 80%;
   overflow: hidden;
-  background: linear-gradient(#e4e0ba, #f7d9aa);
+  background: linear-gradient(#b0d5df, #e9d789);
 }
+
+
 </style>
