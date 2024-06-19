@@ -9,6 +9,23 @@
             </el-breadcrumb>
         </div>
         <div class="r-content">
+            <!--            <el-dropdown @command="handleClick">-->
+            <!--                <span class="el-dropdown-link">-->
+            <!--                    <img class="user" src="../assets/images/admin.jpeg" alt="">-->
+
+            <!--                </span>-->
+            <!--                <el-dropdown-menu slot="dropdown">-->
+            <!--                    <el-dropdown-item>个人信息</el-dropdown-item>-->
+            <!--                    <el-dropdown-item command="logout">退出</el-dropdown-item>-->
+            <!--                </el-dropdown-menu>-->
+            <!--            </el-dropdown>-->
+
+            <!-- <el-select v-model="theme" size="mini" style="width: 100px;margin-right: 20px;" @change="toggleTheme">
+                <el-option value="black" label="暗黑"></el-option>
+                <el-option value="blue" label="鲸蓝"></el-option>
+                <el-option value="green" label="橄榄绿"></el-option>
+                <el-option value="red" label="浅红"></el-option>
+            </el-select> -->
             <el-button type="primary" size="mini" icon="el-icon-orange" @click="dialogVisible = true"></el-button>
             <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
         </div>
@@ -28,7 +45,6 @@
                 <!-- <el-button type="primary" @click="confirm">确 定</el-button> -->
             </span>
         </el-dialog>
-
     </div>
 </template>
 
@@ -61,19 +77,21 @@ export default {
         }
     },
     methods: {
+        handleClose(done) {
+            done();
+        },
         handleMenu() {
             // 相当于调用这个方法
             this.$store.commit('CollapseMenu')
         },
         handleClick() {
+            // if (command === 'logout') {
+            //     Cookie.remove('token')
+            //     this.$router.push('/login')
+            // }
             Cookie.remove('token')
-            Cookie.remove('netId')
-            Cookie.remove('Role')
-            Cookie.remove('sid')
-            this.$store.commit('setMenu', [])
             this.$router.push('/login')
         },
-        // 确认主题
         confirm(name) {
             this.theme = name
             this.toggleTheme()
@@ -141,7 +159,7 @@ export default {
 }
 
 .header-container {
-    background-color: #333;
+    background-color: var(--main-color); //#333;
     height: 60px;
 
     // 让按钮和头像居中
@@ -190,23 +208,33 @@ export default {
 }
 
 .custom-button {
-  background-color: #ff4d4f; /* 自定义背景颜色 */
-  border-radius: 10px; /* 圆角 */
-  color: white; /* 字体颜色 */
-  padding: 10px 20px; /* 内边距 */
-  border: none; /* 去掉边框 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-  transition: background-color 0.3s, box-shadow 0.3s; /* 过渡效果 */
+    background-color: #ff4d4f;
+    /* 自定义背景颜色 */
+    border-radius: 10px;
+    /* 圆角 */
+    color: white;
+    /* 字体颜色 */
+    padding: 10px 20px;
+    /* 内边距 */
+    border: none;
+    /* 去掉边框 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 阴影效果 */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* 过渡效果 */
 }
 
 .custom-button:hover {
-  background-color: #ff7875; /* 悬停时的背景颜色 */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 悬停时的阴影效果 */
+    background-color: #ff7875;
+    /* 悬停时的背景颜色 */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    /* 悬停时的阴影效果 */
 }
 
 .custom-button:active {
-  background-color: #d9363e; /* 点击时的背景颜色 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 点击时的阴影效果 */
+    background-color: #d9363e;
+    /* 点击时的背景颜色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* 点击时的阴影效果 */
 }
-
 </style>

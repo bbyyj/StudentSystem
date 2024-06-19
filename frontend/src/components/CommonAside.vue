@@ -1,6 +1,8 @@
 <template>
+    <!-- background-color="#545c64" -->
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-        :collapse="isCollapse" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+        :collapse="isCollapse" text-color="#fff" active-text-color="#ffd04b"
+        style="background-color: var(--left-menu-color)">
         <!-- 要放到导航栏里面 -->
         <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
         <!-- 观察数据,我们发现name是唯一标识 -->
@@ -39,6 +41,29 @@
         color: #fff;
         font-size: 16px;
         font-weight: 400;
+    }
+}
+
+.el-menu-item i {
+    color: #fff;
+}
+
+.el-submenu__title i {
+    color: #fff;
+}
+
+.el-menu-item.is-active i {
+    color: inherit;
+}
+
+.el-menu-item:focus,
+.el-menu-item:hover {
+    background-color: var(--main-color) !important
+}
+
+::v-deep {
+    .el-submenu__title:hover {
+        background-color: var(--main-color) !important
     }
 }
 </style>
