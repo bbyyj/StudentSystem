@@ -44,6 +44,7 @@
 <script>
 import axios from 'axios';
 
+import Cookie from 'js-cookie'
 
 export default {
     data() {
@@ -69,13 +70,37 @@ export default {
 
             currentItem: {},
             isEditMode: false,
+
+          params: {
+            classId: '', // 班级id
+            year: '', // 年份id
+            isUndergraduate: true, // 是否本科
+          },
+          identity: '', // 角色
+
         };
     },
     created() {
         this.getList();
+
+        this.identity = Cookie.get('Role');
+        this.params.classId = Cookie.get('classId') === '0' ? '' : Cookie.get('classId');
+
+        let admissionYear = Cookie.get('admissionYear');
+        this.params.year = (admissionYear === 'null' || admissionYear === undefined) ? '' : admissionYear;
+        this.params.isUndergraduate = Cookie.get("undergraduate");
     },
 
     methods: {
+        // initID(){
+        //   this.identity = Cookie.get('Role');
+        //   this.params.classId = Cookie.get('classId') === '0' ? '' : Cookie.get('classId');
+        //
+        //   let admissionYear = Cookie.get('admissionYear');
+        //   this.params.year = (admissionYear === 'null' || admissionYear === undefined) ? '' : admissionYear;
+        //   this.params.isUndergraduate = Cookie.get("undergraduate");
+        //
+        // },
         // 变化多少条每页
         handleSizeChange(pageSize) {
             this.pageSize = pageSize;
@@ -93,9 +118,9 @@ export default {
             let id = this.id;
 
             // 班长携带的信息
-            let isUndergraduate = 1;
-            let admission_year = 2020;
-            let classId = 1;
+            let isUndergraduate = this.params.isUndergraduate === false? 1:0;
+            let admission_year = this.params.year;
+            let classId = this.params.classId;
 
             // 将页码增加1，并确保page和size是字符串
             let nextPage = parseInt(page) - 1; // 确保页码是计算后再转为字符串
@@ -114,6 +139,7 @@ export default {
         // 搜索
         search() {
             this.getListByCondition()
+            console.log(this.params)
         },
         // 获取列表数据
         getListByCondition(page = this.currentPage, size = this.pageSize) {
@@ -121,9 +147,13 @@ export default {
             let id = this.id;
 
             // 班长携带的信息
-            let isUndergraduate = 1;
-            let admission_year = 2020;
-            let classId = 1;
+            // let isUndergraduate = 1;
+            // let admission_year = 2020;
+            // let classId = 1;
+
+            let isUndergraduate = this.params.isUndergraduate === false? 1:0;
+            let admission_year = this.params.year;
+            let classId = this.params.classId;
 
             // 检索的条件 通过组件进行获取
             let state = this.searchTerms.state;

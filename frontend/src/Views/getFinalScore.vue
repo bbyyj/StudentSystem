@@ -64,7 +64,7 @@ export default {
     data() {
         return {
             // 综测发布id，后续可能从路由处进行获取
-            compID: 1,
+            compID: parseInt(this.$route.params.id), // 当前学年的综测,
 
             //正常使用的数据
             Students: [],

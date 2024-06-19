@@ -31,6 +31,12 @@ const routes = [
         name: "compAssReview",
         component: () => import("@/Views/compAssReview.vue"),
       },
+        {
+            // 管理员跳转到不同年份的综测查看
+            path: "/getFinalScore/:id/:name",
+            name: "getFinalScore",
+            component: () => import("@/Views/getFinalScore.vue"),
+        },
     ],
   },
   {
