@@ -6,6 +6,8 @@ import router from './router/index'
 import store from './store/index'
 import './api/mock'
 
+import "@/styles/theme.css";
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 

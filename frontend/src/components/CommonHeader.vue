@@ -9,8 +9,26 @@
             </el-breadcrumb>
         </div>
         <div class="r-content">
+            <el-button type="primary" size="mini" icon="el-icon-orange" @click="dialogVisible = true"></el-button>
             <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
         </div>
+
+        <el-dialog title="选择主题" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+            <div class="color-box">
+                <div class="color-item" :class="{ active: theme == item.name, [item.name]: true }" v-for="item in colorList"
+                    :key="item.id" @click="confirm(item.name)">
+                    <i class="el-icon-check" v-if="theme == item.name"></i>
+                </div>
+                <!-- <div class="color-item blue"></div>
+                <div class="color-item green"></div>
+                <div class="color-item red"></div> -->
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">关 闭</el-button>
+                <!-- <el-button type="primary" @click="confirm">确 定</el-button> -->
+            </span>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -18,6 +36,30 @@
 import { mapState } from 'vuex'
 import Cookie from 'js-cookie'
 export default {
+    data() {
+        return {
+            colorList: [{
+                id: 1,
+                name: 'black'
+            }, {
+                id: 2,
+                name: 'green'
+            }, {
+                id: 3,
+                name: 'blue'
+            }, {
+                id: 4,
+                name: 'red'
+            }, ],
+            dialogVisible: false,
+            theme: 'black'
+        }
+    },
+    watch: {
+        theme() {
+            this.toggleTheme()
+        }
+    },
     methods: {
         handleMenu() {
             // 相当于调用这个方法
@@ -30,18 +72,74 @@ export default {
             Cookie.remove('sid')
             this.$store.commit('setMenu', [])
             this.$router.push('/login')
-                
+        },
+        // 确认主题
+        confirm(name) {
+            this.theme = name
+            this.toggleTheme()
+        },
+        //切换主题
+        toggleTheme() {
+            localStorage.setItem('theme', this.theme)
+            //获取根元素并设置属性
+            document.documentElement.setAttribute('data-theme', this.theme)
         }
     },
     computed: {
         ...mapState({
             tags: state => state.tab.tabList
         })
+    },
+    created() {
+        console.log('header created', localStorage.getItem('theme'))
+        this.theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : 'black'
     }
 }
 </script>
 
 <style lang="less" scoped>
+.color-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.color-item {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #fff;
+    font-size: 20px;
+
+    &.active {}
+
+    &:hover {
+        filter: brightness(150%)
+    }
+}
+
+.black {
+    background-color: #333;
+}
+
+.green {
+    background-color: #358f09;
+}
+
+.blue {
+    background-color: #0000ff;
+}
+
+.red {
+    background-color: #fa3f3f;
+}
+
 .header-container {
     background-color: #333;
     height: 60px;

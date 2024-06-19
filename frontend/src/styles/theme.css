@@ -1,0 +1,25 @@
+/* 黑色主题 */
+html[data-theme="black"] {
+    --main-color: #333;
+    --left-menu-color: #545c64;
+    
+}
+/* 蓝色主题 */
+html[data-theme="blue"] {
+    --main-color: #0000ff;
+    --left-menu-color: #4c4cff;
+    
+}
+/* 绿色主题 */
+html[data-theme="green"] {
+    --main-color: #358f09;
+    --left-menu-color: #67c23a;
+    
+}
+
+/* 红色主题 */
+html[data-theme="red"] {
+    --main-color: #fa3f3f;
+    --left-menu-color: #F56C6C;
+    
+}
