@@ -329,9 +329,8 @@ export default {
         this.searchStudents(this.currentPage, this.pageSize);
       }
       else{
-        his.loadStudents(this.pageSize, this.currentPage);
+        this.loadStudents(this.pageSize, this.currentPage);
       }
-      t
     },
     // 处理当前页变化
     handleCurrentChange(currentPage) {
