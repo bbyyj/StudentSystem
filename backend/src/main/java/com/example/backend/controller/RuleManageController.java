@@ -78,6 +78,11 @@ public class RuleManageController {
 
     }
 
+    @GetMapping("/student/getAllRule")
+    public RuleDetailAllResponse  getAllRule(){
+        List<RuleDetailListResponse>  ruleDetailList = ruleManageService.getAllRule();
+        return new RuleDetailAllResponse(ruleDetailList);}
+
 
 
 }

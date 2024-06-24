@@ -42,6 +42,7 @@ public interface RuleManageService {
     float getRuleScore(String rule_type,String rule_detail);
     @Transactional
     Page<Map<String,Object>> getRuleDetailByCondition(String type,String detail,int page, int size);
-
+    @Transactional
+    List<RuleDetailListResponse> getAllRule();
 
 }

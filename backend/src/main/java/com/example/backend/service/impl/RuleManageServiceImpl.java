@@ -140,4 +140,26 @@ public class RuleManageServiceImpl implements RuleManageService {
         Pageable pageable= PageRequest.of(page, size);
         return ruleDetailRepository.getRuleDetailByCondition(type,detail,pageable);
     }
+
+    @Override
+    public List<RuleDetailListResponse> getAllRule() {
+        List<Integer> ruleTypeIds = ruleTypeRepository.findAllIds();
+        System.out.println(ruleTypeIds);
+        List<RuleDetailListResponse> responseList = new ArrayList<>();
+
+        for (Integer ruleTypeId : ruleTypeIds) {
+            RuleDetailListResponse ruleDetailListResponse = new RuleDetailListResponse();
+            System.out.println(ruleDetailRepository.findAllByTid(ruleTypeId));
+            List<RuleDetail> ruleDetailList = ruleDetailRepository.findAllByTid(ruleTypeId);
+            String type = ruleTypeRepository.findById(ruleTypeId).get().getType();
+            ruleDetailListResponse.setTitle(type);
+            ruleDetailListResponse.setTid(ruleTypeId);
+            ruleDetailListResponse.setRuleDetailList(ruleDetailList);
+            responseList.add(ruleDetailListResponse);
+
+        }
+
+
+        return responseList;
+    }
 }

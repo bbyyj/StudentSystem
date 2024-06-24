@@ -18,8 +18,8 @@ public interface RuleDetailRepository extends JpaRepository<RuleDetail, Integer>
     @Query(value="select rd.rid,rt.type,rd.detail,rd.score from rule_detail rd join rule_type rt on  rd.tid = rt.tid where rt.type = ?1 and rd.detail like %?2% ", nativeQuery = true)
     Page<Map<String, Object>> getRuleDetailByCondition(String type,String detail,Pageable pageable);
 
-//    @Query("select new com.example.backend.entities.RuleDetail(rd.rid, rd.tid, rd.score, rd.detail) from RuleDetail rd where rd.tid = ?1")
-//    List<RuleDetail> findAllByTid(Integer tid);
+    @Query("select rd from RuleDetail rd where rd.tid = ?1")
+    List<RuleDetail> findAllByTid(Integer tid);
 
     @Modifying
     @Query("update RuleDetail set score = ?2,title = ?3 where rid = ?1 ")
