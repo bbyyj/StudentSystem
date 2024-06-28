@@ -1,14 +1,9 @@
 <template>
-    <!-- background-color="#545c64" -->
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
         :collapse="isCollapse" text-color="#fff" active-text-color="#ffd04b"
         style="background-color: var(--left-menu-color)">
-        <!-- 要放到导航栏里面 -->
         <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
-        <!-- 观察数据,我们发现name是唯一标识 -->
-        <!-- 查看文档,index是唯一标识 -->
         <el-menu-item @click="clickItem(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
-            <!-- 这里是字体图标,用模板字符串拼接,注意要动态绑定 -->
             <i :class="`el-icon-${item.icon}`"></i>
             <span slot="title">{{ item.label }}</span>
         </el-menu-item>
@@ -32,8 +27,8 @@
 
 .el-menu {
     height: 100vh;
-    // Aside和Header之间没有边框缝隙
     border-right: none;
+    background-color: var(--left-menu-color) !important;
 
     h3 {
         text-align: center;
@@ -44,10 +39,13 @@
     }
 }
 
-.el-menu-item i {
-    color: #fff;
+.el-menu-item,
+.el-submenu__title,
+.el-menu-item-group {
+    background-color: var(--left-menu-color) !important;
 }
 
+.el-menu-item i,
 .el-submenu__title i {
     color: #fff;
 }
@@ -57,14 +55,15 @@
 }
 
 .el-menu-item:focus,
-.el-menu-item:hover {
-    background-color: var(--main-color) !important
+.el-menu-item:hover,
+.el-submenu__title:hover,
+.el-menu-item-group:hover {
+    background-color: var(--main-color) !important;
 }
 
-::v-deep {
-    .el-submenu__title:hover {
-        background-color: var(--main-color) !important
-    }
+.el-menu-item-group {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 </style>
 
@@ -72,9 +71,7 @@
 import cookie from 'js-cookie'
 export default {
     data() {
-        return {
-
-        };
+        return {};
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -84,29 +81,24 @@ export default {
             console.log(key, keyPath);
         },
         clickItem(item) {
-            // 防止自己跳自己的报错
             if (this.$route.path !== item.path && !(this.$route.path === '/home' && (item.path === '/'))) {
-                this.$router.push(item.path)
+                this.$router.push(item.path);
             }
-            // 面包屑
-            this.$store.commit('SelectMenu', item)
+            this.$store.commit('SelectMenu', item);
         }
     },
     computed: {
         noChildren() {
-            // 如果没有children则返回true,会被过滤器留下
-            return this.MenuData.filter(item => !item.children)
+            return this.MenuData.filter(item => !item.children);
         },
         hasChildren() {
-            return this.MenuData.filter(item => item.children)
+            return this.MenuData.filter(item => item.children);
         },
-        // 要放到计算属性,自动计算
         isCollapse() {
-            return this.$store.state.tab.isCollapse
+            return this.$store.state.tab.isCollapse;
         },
-        // 获取菜单
         MenuData() {
-            return JSON.parse(cookie.get('menu')) || this.$store.state.tab.menu
+            return JSON.parse(cookie.get('menu')) || this.$store.state.tab.menu;
         }
     }
 }
