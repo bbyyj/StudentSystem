@@ -86,7 +86,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import { getUser, createUser, deleteUser, updateUser } from '../api/index'
 export default {
@@ -220,7 +220,7 @@ export default {
   }
 }
 </script>
-  
+
 <style lang="less" scoped>
 .manage {
   height: 100%;
@@ -237,7 +237,7 @@ export default {
 
     .pager {
       position: absolute;
-      right:20px;
+      right: 20px;
       bottom: 0;
     }
   }
