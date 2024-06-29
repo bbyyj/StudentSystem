@@ -208,4 +208,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 
     @Query("SELECT s FROM Student s WHERE s.studentRole = :keyword AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
     Page<Student> findByStudentRoleClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+    @Query("SELECT s FROM Student s WHERE s.sex = :keyword AND s.isUndergraduate = :isUndergraduate AND s.admissionYear = :admissionYear AND s.classId = :classId")
+    Page<Student> findBySexClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
+    @Query("SELECT s FROM Student s WHERE s.sex = :keyword")
+    Page<Student> findBySex(String keyword, Pageable pageable);
 }

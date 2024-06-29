@@ -57,6 +57,7 @@ public class Student implements UserDetails {
     private String urgentName;
     private String wechat;
     private String email;
+    private String sex;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

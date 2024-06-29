@@ -381,6 +381,8 @@ public class StuInfoServiceImpl implements StuInfoService {
                 return studentRepository.findByIsUndergraduate(Boolean.parseBoolean(keyword), pageable);
             case "studentRole":
                 return studentRepository.findByStudentRole(keyword, pageable);
+            case "sex":
+                return studentRepository.findBySex(keyword, pageable);
             default:
                 throw new IllegalArgumentException("Invalid keyname: " + keyname);
         }
@@ -469,7 +471,9 @@ public class StuInfoServiceImpl implements StuInfoService {
                 return studentRepository.findByEmailKeywordClass(keyword, pageable, isUndergraduate, admissionYear, classId);
             case "studentRole":
                 return studentRepository.findByStudentRoleClass(keyword, pageable, isUndergraduate, admissionYear, classId);
-            default:
+            case "sex":
+                return studentRepository.findBySexClass(keyword, pageable, isUndergraduate, admissionYear, classId);
+                default:
                 throw new IllegalArgumentException("Invalid keyname: " + keyname);
         }
     }
