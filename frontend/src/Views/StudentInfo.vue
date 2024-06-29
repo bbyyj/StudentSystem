@@ -80,6 +80,7 @@ import Cookie from 'js-cookie'
           { model: 'name', label: '姓名' },
           { model: 'type', label: '学生类别' },
           { model: 'netId', label: 'netID' },
+          { model: 'sex', label: '性别' },
           { model: 'nation', label: '民族' },
           { model: 'sid', label: '学号' },
           { model: 'pid', label: '身份证号' },
@@ -263,21 +264,33 @@ import Cookie from 'js-cookie'
   width: 100%;
   display: flex; 
   flex-wrap: wrap; 
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .elinput{
-    max-block-size: 10px;
+  max-width: 100%;
 }
 .ftype{
     font-size: small;
 }
 
-
 .blockitem{
     height: 100px;
-    width: 30%; 
+    width: calc(33.333% - 60px);
     margin-bottom: 15px;
+    margin-right: 30px; 
+}
+
+/* 移除最后一个块元素的右外边距，以避免整体右侧多出空白 */
+.blockitem:last-child {
+  margin-right: 0;
+}
+
+/* 辅助元素 让未满三个元素的行对齐 */
+.wrapper::after {
+  content: "";
+  width: calc(33.333% - 30px);
+  height: 0;
 }
 
 </style>
