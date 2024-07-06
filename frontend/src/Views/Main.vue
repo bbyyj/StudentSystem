@@ -37,7 +37,4 @@ export default {
     padding: 0;
 }
 
-.el-main {
-    background-color: var(--main-color) !important;
-}
 </style>
