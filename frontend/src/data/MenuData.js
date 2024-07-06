@@ -392,13 +392,13 @@ const MenuData= [
       label: "综测",
       icon: "location",
       children: [
-        {
-          path: "/compAssessment/compAssManage",
-          name: "compAssManage",
-          label: "综测表",
-          icon: "setting",
-          url: "compAssManage.vue",
-        },
+        // {
+        //   path: "/compAssessment/compAssManage",
+        //   name: "compAssManage",
+        //   label: "综测表",
+        //   icon: "setting",
+        //   url: "compAssManage.vue",
+        // },
         {
           path: "/compAssessment/compAssBegin",
           name: "compAssBegin",

@@ -81,14 +81,13 @@ export default {
         };
     },
     created() {
-        this.getList();
-
         this.identity = Cookie.get('Role');
         this.params.classId = Cookie.get('classId') === '0' ? '' : Cookie.get('classId');
-
         let admissionYear = Cookie.get('admissionYear');
         this.params.year = (admissionYear === 'null' || admissionYear === undefined) ? '' : admissionYear;
         this.params.isUndergraduate = Cookie.get("undergraduate");
+            
+        this.getList();
     },
 
     methods: {
