@@ -1,5 +1,5 @@
 <template>
-    <duv>
+    <div>
         <div class="background">
             <home-airplane></home-airplane>
         </div>
@@ -25,7 +25,7 @@
             </el-form>
         </div>
         
-    </duv>
+    </div>
     
 </template>
 
