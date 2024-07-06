@@ -42,7 +42,7 @@
       
     <!-- 查看图片 -->
     <el-dialog :visible.sync="photoDialogVisible" title="图片预览">
-      <img v-if="imageUrl" :src="imageUrl" alt="图片预览" />
+      <img v-if="imageUrl" :src="imageUrl" alt="图片预览" style="max-width: 70%; max-height: 70%;" />
     </el-dialog>
 
     <!-- 查看详细信息 -->
@@ -194,9 +194,9 @@ export default {
             return;
           }
           const data = response.data;
-          const infoList = data.data;
+          const infoList = data.data.combinedCAList;
 
-          this.totalInfos = infoList.length; 
+          this.totalInfos = data.data.totalNum; 
           this.Infos = infoList; 
           
         })
