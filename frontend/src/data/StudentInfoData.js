@@ -7,7 +7,8 @@ const StudentInfoData = [
             { fieldName: 'name', label: '姓名', width: '100px', controlType: 'input' },
             { fieldName: 'studentRole', label: '学生职位', width: '100px', controlType: 'select' },
             { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
-            { fieldName: 'netId', label: 'netId', width: '60px',  controlType: 'input' },
+            { fieldName: 'netId', label: 'netId', width: '100px',  controlType: 'input' },
+            { fieldName: 'sex', label: '性别', width: '70px',  controlType: 'select' },
             { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
             { fieldName: 'sid', label: '学号', width: '100px', controlType: 'input' },
             { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
@@ -35,6 +36,10 @@ const StudentInfoData = [
                 { value: 'NOT_MONITOR', label: '学生' },
                 { value: 'MONITOR', label: '班长' },
             ],
+            sex: [
+                { value: '男', label: '男' },
+                { value: '女', label: '女' },
+            ],
             type: [
                 { value: '港澳台生', label: '港澳台生' },
                 { value: '境内生', label: '境内生' },
@@ -58,16 +63,9 @@ const StudentInfoData = [
             { fieldName: 'admissionYear', label: '入学年份', width: '70px', controlType: 'input' },
             { fieldName: 'classId', label: '班级', width: '70px', controlType: 'select' },
             { fieldName: 'name', label: '姓名', width: '100px', controlType: 'input' },
-            // { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
             { fieldName: 'netId', label: 'netId', width: '60px',  controlType: 'input' },
-            // { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
             { fieldName: 'sid', label: '学号', width: '100px', controlType: 'input' },
-            // { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
-            // { fieldName: 'birth', label: '出生年月', width: '100px', controlType: 'datepicker' },
             { fieldName: 'undergraduate', label: '培养层次', width: '100px', controlType: 'select' },
-            // { fieldName: 'politics', label: '政治面貌', width: '90px', controlType: 'select' },
-            // { fieldName: 'nativePlace', label: '籍贯', width: '150px', controlType: 'input' },
-            // { fieldName: 'dormitory', label: '宿舍', width: '150px', controlType: 'input' },
         ],
         selectOptions: {
             classId: [
@@ -77,21 +75,10 @@ const StudentInfoData = [
                 { value: '3', label: '3班' },
                 { value: '4', label: '4班' },
             ],
-            // type: [
-            //     { value: '港澳台生', label: '港澳台生' },
-            //     { value: '境内生', label: '境内生' },
-            //     { value: '国际生', label: '国际生' },
-            // ],
             undergraduate: [
                 { value: 'true', label: '本科生' },
                 { value: 'false', label: '研究生' },
             ],
-            // politics: [
-            //     { value: '共青团员', label: '共青团员' },
-            //     { value: '群众', label: '群众' },
-            //     { value: '无', label: '无' },
-            // ]
-        
         },
     },
     // 2 top管理员-搜索
@@ -103,6 +90,7 @@ const StudentInfoData = [
             { fieldName: 'studentRole', label: '学生职位' },
             { fieldName: 'type', label: '学生类别' },
             { fieldName: 'netId', label: 'netId' },
+            { fieldName: 'sex', label: '性别' },
             { fieldName: 'nation', label: '民族' },
             { fieldName: 'sid', label: '学号' },
             { fieldName: 'pid', label: '身份证号' },
@@ -125,6 +113,7 @@ const StudentInfoData = [
             { fieldName: 'name', label: '姓名' },
             { fieldName: 'type', label: '学生类别' },
             { fieldName: 'netId', label: 'netId' },
+            { fieldName: 'sex', label: '性别' },
             { fieldName: 'nation', label: '民族' },
             { fieldName: 'sid', label: '学号' },
             { fieldName: 'pid', label: '身份证号' },
@@ -146,6 +135,7 @@ const StudentInfoData = [
         items:[
             { fieldName: 'name', label: '姓名' },
             { fieldName: 'type', label: '学生类别' },
+            { fieldName: 'sex', label: '性别' },
             { fieldName: 'nation', label: '民族' },
             { fieldName: 'sid', label: '学号' },
             { fieldName: 'birth', label: '出生年月' },
@@ -166,6 +156,7 @@ const StudentInfoData = [
             { fieldName: 'classId', label: '班级', width: '70px' },
             { fieldName: 'name', label: '姓名', width: '100px' },
             { fieldName: 'type', label: '学生类别', width: '90px' },
+            { fieldName: 'sex', label: '性别', width: '100px' },
             { fieldName: 'nation', label: '民族', width: '60px' },
             { fieldName: 'sid', label: '学号', width: '100px' },
             { fieldName: 'birth', label: '出生年月', width: '100px' },
@@ -185,7 +176,8 @@ const StudentInfoData = [
             { fieldName: 'name', label: '姓名', width: '100px', controlType: 'input' },
             { fieldName: 'studentRole', label: '学生职位', width: '100px', controlType: 'select' },
             { fieldName: 'type', label: '学生类别', width: '90px', controlType: 'select' },
-            { fieldName: 'netId', label: 'netId', width: '60px',  controlType: 'input' },
+            { fieldName: 'netId', label: 'netId', width: '100px',  controlType: 'input' },
+            { fieldName: 'sex', label: '性别', width: '70px',  controlType: 'select' },
             { fieldName: 'nation', label: '民族', width: '60px', controlType: 'input' },
             { fieldName: 'sid', label: '学号', width: '100px', controlType: 'input' },
             { fieldName: 'pid', label: '身份证号', width: '200px', controlType: 'input' },
@@ -211,6 +203,10 @@ const StudentInfoData = [
                 { value: '港澳台生', label: '港澳台生' },
                 { value: '境内生', label: '境内生' },
                 { value: '国际生', label: '国际生' },
+            ],
+            sex: [
+                { value: '男', label: '男' },
+                { value: '女', label: '女' },
             ],
             undergraduate: [
                 { value: 'true', label: '本科生' },

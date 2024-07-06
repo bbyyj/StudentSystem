@@ -1,23 +1,32 @@
 <template>
-    <el-form ref="form" class="login_container" :model="login" status-icon :rules="rules" label-width="70px">
-        <!-- 此处不想要radio的样式所以使用了el-tabs -->
-        <el-tabs v-model="identity" style="margin-left: 90px; margin-right: 90px;">
-            <el-tab-pane label="学生" name="student"></el-tab-pane>
-            <el-tab-pane label="教师" name="teacher"></el-tab-pane>
-        </el-tabs>
-        <!-- prop对应rules里的键 -->
-        <el-form-item label="netId" prop="netId">
-            <el-input v-model="login.netId" autocomplete="off"></el-input>
-        </el-form-item>
+    <div>
+        <div class="background">
+            <home-airplane></home-airplane>
+        </div>
+        <div style="opacity: 0.92;">
+            <el-form ref="form" class="login_container" :model="login" status-icon :rules="rules" label-width="70px">
+                <!-- 此处不想要radio的样式所以使用了el-tabs -->
+                <el-tabs v-model="identity" style="margin-left: 90px; margin-right: 90px;">
+                    <el-tab-pane label="学生" name="student"></el-tab-pane>
+                    <el-tab-pane label="教师" name="teacher"></el-tab-pane>
+                </el-tabs>
+                <!-- prop对应rules里的键 -->
+                <el-form-item label="netId" prop="netId">
+                    <el-input v-model="login.netId" autocomplete="off"></el-input>
+                </el-form-item>
 
-        <el-form-item label="密码" prop="password">
-            <el-input type="password" v-model="login.password" autocomplete="off"></el-input>
-        </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input type="password" v-model="login.password" autocomplete="off"></el-input>
+                </el-form-item>
 
-        <el-form-item>
-            <el-button @click="submit" type="primary" style="margin-left:30px;margin-top:10px">提交</el-button>
-        </el-form-item>
-    </el-form>
+                <el-form-item>
+                    <el-button @click="submit" type="primary" style="margin-left:30px;margin-top:10px">提交</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        
+    </div>
+    
 </template>
 
 <script>
@@ -25,7 +34,12 @@ import axios from 'axios';
 import Cookie from 'js-cookie'
 import { logIn } from '../api/index'
 import MenuData from '@/data/MenuData.js';
+import HomeAirplane from './HomeAirplane.vue';
+
 export default {
+    components: {
+        HomeAirplane
+    },
     data() {
         return {
             identity: 'student', // 默认选中学生选项
@@ -129,7 +143,7 @@ export default {
 
     border-radius: 15px;
     background-color: #fff;
-    box-shadow: 0 0 25px #cac6c6;
+    box-shadow: 0 0 10px #cac6c6;
 
     .login_title {
         color: #505458;
@@ -141,5 +155,15 @@ export default {
     .el-input {
         width: 198px;
     }
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: -1;
 }
 </style>

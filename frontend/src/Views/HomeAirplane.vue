@@ -41,8 +41,10 @@ onBeforeUnmount(() => {
 });
 
 function createScene() {
-  HEIGHT = window.innerHeight*0.8;
-  WIDTH = window.innerWidth*0.85;
+  // HEIGHT = window.innerHeight*0.8;
+  // WIDTH = window.innerWidth*0.85;
+  HEIGHT = window.innerHeight;
+  WIDTH = window.innerWidth;
 
   scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0xf9f4dc, 100, 1250);
@@ -377,8 +379,10 @@ function render() {
 
 #world {
   position: absolute;
-  width: 85%;
-  height: 80%;
+  /* width: 85%;
+  height: 80%; */
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background: linear-gradient(#b0d5df, #e9d789);
 }
