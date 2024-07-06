@@ -296,19 +296,19 @@ const MenuData= [
             // },
         ]
     },
-    {
-        label: '综测',
-        icon: 'location',
-        children: [
-            {
-                path: '/compAssessment/compAssCommit',
-                name: 'compAssManage',
-                label: '综测提交',
-                icon: 'setting',
-                url: 'compAssCommit.vue'
-            },
-        ]
-    },
+    // {
+    //     label: '综测',
+    //     icon: 'location',
+    //     children: [
+    //         {
+    //             path: '/compAssessment/compAssCommit',
+    //             name: 'compAssManage',
+    //             label: '综测提交',
+    //             icon: 'setting',
+    //             url: 'compAssCommit.vue'
+    //         },
+    //     ]
+    // },
     {
         path: '/InfoSubmissionRecord/record',
         name: 'InfoSubmissionRecord',
