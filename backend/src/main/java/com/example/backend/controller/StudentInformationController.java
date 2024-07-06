@@ -4,6 +4,7 @@ import com.example.backend.dao.request.MyInfoModifyRequest;
 import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.response.CombinedCA;
+import com.example.backend.dao.response.StudentCAResponse;
 import com.example.backend.dao.response.StudentListResponse;
 import com.example.backend.entities.Student;
 import com.example.backend.service.StuInfoService;
@@ -90,9 +91,9 @@ public class StudentInformationController {
     }
 
     @GetMapping("/student/getMyCA")//返回单个学生的全部综测
-    public List<CombinedCA> getMyCA(@RequestParam String sid,
-                                    @RequestParam(defaultValue = "0") int page,
-                                    @RequestParam(defaultValue = "5") int size) {
+    public StudentCAResponse getMyCA(@RequestParam String sid,
+                                     @RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "5") int size) {
         return stuInfoService.getMyCA(sid, page, size);
     }
 }

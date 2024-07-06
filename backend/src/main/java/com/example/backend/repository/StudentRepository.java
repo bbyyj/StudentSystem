@@ -62,6 +62,11 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     @Query("UPDATE Student s SET s.nativePlace = :nativePlace WHERE s.sid = :sid")
     void updateNativePlaceBySid(String sid, String nativePlace);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE Student s SET s.sex = :sex WHERE s.sid = :sid")
+    void updateSexBySid(String sid, String sex);
+
     List<Student> findAll();
 
     Page<Student> findByIsUndergraduateAndAdmissionYearAndClassId(Boolean isUndergraduate, Year admissionYear, Integer classId, Pageable pageable);
@@ -212,4 +217,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Page<Student> findBySexClass(String keyword, Pageable pageable, Boolean isUndergraduate, Year admissionYear, Integer classId);
     @Query("SELECT s FROM Student s WHERE s.sex = :keyword")
     Page<Student> findBySex(String keyword, Pageable pageable);
+
+
 }

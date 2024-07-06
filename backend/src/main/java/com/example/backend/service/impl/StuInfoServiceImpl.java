@@ -6,6 +6,7 @@ import com.example.backend.dao.request.StuUpdateExcelRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.request.StuUpdateExcelRequest;
 import com.example.backend.dao.response.CombinedCA;
+import com.example.backend.dao.response.StudentCAResponse;
 import com.example.backend.entities.*;
 import com.example.backend.repository.*;
 import com.example.backend.service.StuInfoService;
@@ -109,6 +110,12 @@ public class StuInfoServiceImpl implements StuInfoService {
         }
     }
 
+    private void updateSexInDatabase(List<StuUpdateExcelRequest> updates) {
+        for (StuUpdateExcelRequest update : updates) {
+            studentRepository.updateSexBySid(update.getSid(), update.getSex());
+        }
+    }
+
     public ResponseEntity<String> modifyStuInfoExcel(MultipartFile file) {
         if (!file.getContentType().equals("application/vnd.ms-excel") &&
                 !file.getContentType().equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")) {
@@ -142,6 +149,7 @@ public class StuInfoServiceImpl implements StuInfoService {
             int birthIndex = getColumnIndex(headerRow, "出生年月");
             int politicsIndex = getColumnIndex(headerRow, "政治面貌");
             int nativePlaceIndex = getColumnIndex(headerRow, "籍贯");
+            int sexIndex = getColumnIndex(headerRow, "性别");
 
             if(sidIndex != 10000)
             {
@@ -153,7 +161,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String dormitory = dataFormatter.formatCellValue(row.getCell(dormitoryIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, dormitory, "","","","","","","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, dormitory, "","","","","","","","");
                         updates.add(update);
                     }
                     updateDormitoriesInDatabase(updates);
@@ -166,7 +174,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String name = dataFormatter.formatCellValue(row.getCell(nameIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", name,"","","","","","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", name,"","","","","","","");
                         updates.add(update);
                     }
                     updateNamesInDatabase(updates);
@@ -181,7 +189,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         String type = dataFormatter.formatCellValue(row.getCell(typeIndex), formulaEvaluator);
                         System.out.println(sid);
                         System.out.println(type);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "",type,"","","","","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "",type,"","","","","","");
                         updates.add(update);
                     }
                     updateTypesInDatabase(updates);
@@ -194,7 +202,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String nation = dataFormatter.formatCellValue(row.getCell(nationIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","",nation,"","","","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","",nation,"","","","","");
                         updates.add(update);
                     }
                     updateNationsInDatabase(updates);
@@ -207,7 +215,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String pid = dataFormatter.formatCellValue(row.getCell(pidIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","",pid,"","","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","",pid,"","","","");
                         updates.add(update);
                     }
                     updatePidsInDatabase(updates);
@@ -220,7 +228,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String birth = dataFormatter.formatCellValue(row.getCell(birthIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","",birth,"","");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","",birth,"","","");
                         updates.add(update);
                     }
                     updateBirthsInDatabase(updates);
@@ -233,7 +241,7 @@ public class StuInfoServiceImpl implements StuInfoService {
                         }
                         String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
                         String politics = dataFormatter.formatCellValue(row.getCell(politicsIndex), formulaEvaluator);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","","",politics,"");
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","","",politics,"","");
                         updates.add(update);
                     }
                     updatePoliticssInDatabase(updates);
@@ -248,10 +256,23 @@ public class StuInfoServiceImpl implements StuInfoService {
                         String nativePlace = dataFormatter.formatCellValue(row.getCell(nativePlaceIndex), formulaEvaluator);
                         System.out.println(sid);
                         System.out.println(nativePlace);
-                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","","","",nativePlace);
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","","","",nativePlace,"");
                         updates.add(update);
                     }
                     updateNativePlacesInDatabase(updates);
+                }
+                if(sexIndex != 10000)
+                {
+                    for (Row row : sheet) {
+                        if (row.getRowNum() == 0) {
+                            continue;
+                        }
+                        String sid = dataFormatter.formatCellValue(row.getCell(sidIndex), formulaEvaluator);
+                        String sex = dataFormatter.formatCellValue(row.getCell(sexIndex), formulaEvaluator);
+                        StuUpdateExcelRequest update = new StuUpdateExcelRequest(sid, "", "","","","","","","",sex);
+                        updates.add(update);
+                    }
+                    updateSexInDatabase(updates);
                 }
             }
 
@@ -389,7 +410,7 @@ public class StuInfoServiceImpl implements StuInfoService {
     }
 
 
-    public List<CombinedCA> getMyCA(String sid, int page, int size) {
+    public StudentCAResponse getMyCA(String sid, int page, int size) {
         ConvertEntityUtil Converter = new ConvertEntityUtil();
 
         List<Competition> competitions = competitionRepository.getCompetitionsBySid(sid);
@@ -427,9 +448,14 @@ public class StuInfoServiceImpl implements StuInfoService {
                 ).flatMap(combinedCAList -> combinedCAList.stream())
                 .collect(Collectors.toList());
 
+        int totalNum = allCAs.size();
+
         List<CombinedCA> pagedCAs = ConvertEntityUtil.getPage(allCAs, size, page);
 
-        return pagedCAs;
+        return StudentCAResponse.builder()
+                .combinedCAList(pagedCAs)
+                .totalNum(totalNum)
+                .build();
 
     }
 

@@ -4,6 +4,7 @@ import com.example.backend.dao.request.MyInfoModifyRequest;
 import com.example.backend.dao.request.StuInfoModifyRequest;
 import com.example.backend.dao.request.StudentSigninRequest;
 import com.example.backend.dao.response.CombinedCA;
+import com.example.backend.dao.response.StudentCAResponse;
 import com.example.backend.entities.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public interface StuInfoService {
 
     ResponseEntity<String> modifyStuInfoExcel(MultipartFile file);
 
-    List<CombinedCA> getMyCA(String sid, int page, int size);
+    StudentCAResponse getMyCA(String sid, int page, int size);
 
     Page<Student> searchClassStuInfo(Boolean isUndergraduate, Year admissionYear, Integer classId, String keyname, String keyword, int page, int size);
 }

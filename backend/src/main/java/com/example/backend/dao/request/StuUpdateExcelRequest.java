@@ -19,5 +19,5 @@ public class StuUpdateExcelRequest {
     private String birth;
     private String politics;
     private String nativePlace;
-
+    private String sex;
 }
