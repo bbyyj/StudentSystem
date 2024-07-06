@@ -1,15 +1,15 @@
 <template>
     <el-container>
         <!-- width自适应,不然header与aside有间隔 -->
-        <el-aside width="auto">
-            <common-aside />
+        <el-aside width="auto" >
+            <common-aside style="height: 100%;" />
         </el-aside>
         <el-container>
             <el-header>
                 <common-header />
             </el-header>
             <common-tags />
-            <el-main>
+            <el-main style="min-height: calc(100vh - 112px)">
                 <router-view></router-view>
             </el-main>
         </el-container>
