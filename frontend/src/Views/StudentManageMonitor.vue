@@ -2,21 +2,29 @@
     <div>
     <el-card>
       <!-- 搜索部分 -->
-      <el-row style="margin-bottom: 20px;">
-        <el-col :span="4">
-          <el-select v-model="searchKeyword" placeholder="请选择查询条件">
-            <el-option value="全部">全部</el-option>
-            <el-option v-for="item in studentSearchForm.items" :key="item.fieldName" :label="item.label" :value="item.fieldName" />
-          </el-select>    
-        </el-col>
-        <el-col :span="4">
-          <el-input v-model="searchvalue" placeholder="请输入查询内容" />
-        </el-col>
-        <el-col :span="4">
-          <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search">查询</el-button>
-        </el-col>
-      </el-row>
-  
+<!--      <el-row style="margin-bottom: 20px;">-->
+<!--        <el-col :span="4">-->
+<!--          <el-select v-model="searchKeyword" placeholder="请选择查询条件">-->
+<!--            <el-option value="全部">全部</el-option>-->
+<!--            <el-option v-for="item in studentSearchForm.items" :key="item.fieldName" :label="item.label" :value="item.fieldName" />-->
+<!--          </el-select>    -->
+<!--        </el-col>-->
+<!--        <el-col :span="4">-->
+<!--          <el-input v-model="searchvalue" placeholder="请输入查询内容" />-->
+<!--        </el-col>-->
+<!--        <el-col :span="4">-->
+<!--          <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search">查询</el-button>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+
+      <el-input placeholder="请输入查询内容" v-model="searchvalue" class="search-with-select" size="small" clearable style="margin-bottom: 20px;">
+        <el-select v-model="searchKeyword" slot="prepend" placeholder="请选择查询条件" class="search-with-select2">
+          <el-option value="全部">全部</el-option>
+          <el-option v-for="item in studentSearchForm.items" :key="item.fieldName" :label="item.label" :value="item.fieldName" />
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="searchStudents(1, pageSize)"></el-button>
+      </el-input>
+
       <!-- 表格部分 -->
       <el-table :data="Students" style="width: 100%" size="small">
           <el-table-column v-for="item in studentForm.items" 
@@ -32,7 +40,7 @@
         :page-sizes="[5, 10, 20]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalStudents">
+        :total="totalStudents" size ="small" class="pagination">
       </el-pagination>
       
     </el-card>
@@ -218,8 +226,18 @@
     height: auto;
     margin-bottom: 2%;
   }
-  
-  
+
+  .pagination{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .search-with-select{
+    width: 400px;
+  }
+  .search-with-select2{
+    width: 160px;
+  }
   </style>
   
   

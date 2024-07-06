@@ -1,8 +1,15 @@
 <template>
   <div class="compAssTable">
     <div class="compAssTable-header">
+      <!-- 搜索框-->
+      <el-input placeholder="请输入加分条件" v-model="searchForm.detail"  size="small" class="search-with-select2" clearable>
+        <el-select v-model="selectedRuleType" slot="prepend" placeholder="请选择综测类别" class="search-with-select">
+          <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.label" :label="item1.label"></el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+      </el-input>
       <!-- 新增按钮 -->
-      <el-button type="primary" @click="handlecreate">+ 新增综测加分条件</el-button>
+      <el-button type="primary" @click="handlecreate" size="small" class="filter-btn">+ 新增综测加分条件</el-button>
 
       <!-- 对话框:点击新增或编辑才会弹出表单 -->
       <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
@@ -12,52 +19,52 @@
         <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px">
 
           <!-- 每一项表单域:el-form-item -->
-          <el-form-item label="综测类别" prop="RuleType">
+          <el-form-item label="综测类别" prop="RuleType" size="small">
             <el-select v-model="form.RuleType">
               <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.value"
                 :label="item1.label"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="加分条件" prop="RuleType">
+          <el-form-item label="加分条件" prop="RuleType" size="small">
             <el-input v-model="form.RuleDetail"></el-input>
           </el-form-item>
-          <el-form-item label="加分分值" prop="RuleScore">
+          <el-form-item label="加分分值" prop="RuleScore" size="small">
             <el-input v-model="form.RuleScore"></el-input>
           </el-form-item>
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="submit">确 定</el-button>
+          <el-button @click="closeDialog" size="small">取 消</el-button>
+          <el-button type="primary" @click="submit" size="small">确 定</el-button>
         </div>
       </el-dialog>
 
       <!-- 搜索框 -->
-      <el-form :inline="true">
-        <!--需要检索的综测类别-->
-        <el-form-item>
-          <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="100px">
-            <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.label"
-              :label="item1.label"></el-option>
-          </el-select>
-        </el-form-item>
+<!--      <el-form :inline="true">-->
+<!--        &lt;!&ndash;需要检索的综测类别&ndash;&gt;-->
+<!--        <el-form-item>-->
+<!--          <el-select v-model="selectedRuleType" placeholder="请选择综测类别" width="130px" size="small">-->
+<!--            <el-option v-for="item1 in RootCategory" :key="item1.id" :value="item1.label"-->
+<!--              :label="item1.label"></el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
+<!--        &lt;!&ndash;需要的加分条件&ndash;&gt;-->
+<!--        <el-form-item>-->
+<!--          <el-input v-model="searchForm.detail" placeholder="请输入加分条件" size="small"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item>-->
+<!--          <el-button type="primary" @click="search" size="small">查询</el-button>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
 
-        <!--需要的加分条件-->
-        <el-form-item>
-          <el-input v-model="searchForm.detail" placeholder="请输入加分条件"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
-        </el-form-item>
 
-      </el-form>
     </div>
 
 
 
     <div class="common-table">
       <!-- 数据表格 -->
-      <el-table :data="tableData" stripe style="width: 100%" height="90%">
+      <el-table :data="tableData" style="width: 100%" height="90%" size="small">
         <el-table-column prop="type" label="综测类别">
         </el-table-column>
         <el-table-column prop="detail" label="加分条件">
@@ -67,15 +74,15 @@
         <!-- 操作列 -->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button type="primary" @click="handleEdit(scope.row)" size="small">编辑</el-button>
+            <el-button type="danger" @click="handleDelete(scope.row)" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-        :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
-        :total="total" class="pagination">
+        :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :total="total" class="pagination" size="small">
       </el-pagination>
 
     </div>
@@ -134,7 +141,7 @@ export default {
 
       // 分页相关属性
       currentPage: 1, // 当前所在的页数
-      pageSize: 5,  // 每个页请求的数量（1条/页、2条/页、5条/页、10条/页）
+      pageSize: 10,  // 每个页请求的数量（1条/页、2条/页、5条/页、10条/页）
       total: 0, // 全部的条数
 
       // 搜索框表单
@@ -337,12 +344,13 @@ export default {
 
   .compAssTable-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    //justify-content: space-between;
+    //align-items: center;
   }
 
   .common-table {
-    height: 90%;
+    padding: 10px;
+    height: 87%;
     position: relative;
 
     .pager {
@@ -361,5 +369,20 @@ export default {
   /* 纵向居中对齐 */
   justify-content: space-between;
   /* 分散对齐，可以根据需要调整为space-around等 */
+}
+
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.search-with-select{
+  width: 190px;
+}
+.search-with-select2{
+  width: 450px;
+}
+.filter-btn{
+  margin-left: 15px;
 }
 </style>

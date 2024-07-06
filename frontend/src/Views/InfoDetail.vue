@@ -2,16 +2,16 @@
   <div>
     <div class="competition-award">
       <div class="filter-search">
-        <el-input placeholder="请输入内容" v-model="params.search" class="search-with-select" size="mini" clearable>
+        <el-input placeholder="请输入内容" v-model="params.search" class="search-with-select" size="small" clearable>
           <el-select v-model="selectedText" slot="prepend" placeholder="请选择" ref="select" filterable @change="handleSelectChange">
             <el-option v-for="(column, index) in displayedOptions" :label="column.label" :key="index" :value="index"></el-option>
           </el-select>
           <el-button slot="append" icon="el-icon-search" @click="loadingData"></el-button>
         </el-input>
 
-        <el-button @click="clearAll" type="primary" size="mini" class="filter-del-btn">清空</el-button>
-        <el-button type="success" size="mini" class="filter-del-btn" @click="handleSelectAllChange">一键全选</el-button>
-        <el-button type="success" size="mini" class="filter-del-btn" @click="expData">批量导出</el-button>
+        <el-button @click="clearAll" type="primary" size="small" class="filter-del-btn">清空</el-button>
+        <el-button type="primary" size="small" class="filter-del-btn" @click="handleSelectAllChange">一键全选</el-button>
+        <el-button type="primary" size="small" class="filter-del-btn" @click="expData">批量导出</el-button>
       </div>
 
       <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick"
@@ -282,7 +282,7 @@ export default {
       this.$refs.filterTable.clearSelection();
       this.initID();
 
-      this.$message.success(this.params.classId +" " + this.params.year + " " +this.params.isUndergraduate);
+      // this.$message.success(this.params.classId +" " + this.params.year + " " +this.params.isUndergraduate);
 
       this.loadingData();
     },

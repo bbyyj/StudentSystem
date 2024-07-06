@@ -1,41 +1,41 @@
 <template>
     <div>
-        <el-form inline class="search-form" @submit.native.prevent="getList">
-            <el-form-item label="审核状态">
-                <el-select v-model="searchTerms.state" placeholder="选择审核状态">
-                    <el-option label="已审核" value="已审核"></el-option>
-                    <el-option label="未审核" value="未审核"></el-option>
+        <el-form inline @submit.native.prevent="getList" class="search-form">
+            <el-form-item size="small">
+                <el-select v-model="searchTerms.state" placeholder="请选择审核状态" >
+                    <el-option label="已审核" value="已审核" size="small"></el-option>
+                    <el-option label="未审核" value="未审核" size="small"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="学号">
-                <el-input v-model="searchTerms.sid" placeholder="请输入学号"></el-input>
+            <el-form-item size="small">
+                <el-input v-model="searchTerms.sid" placeholder="请输入学号" style="margin-right: 0"></el-input>
             </el-form-item>
-            <el-form-item label="姓名">
+            <el-form-item size="small">
                 <el-input v-model="searchTerms.sname" placeholder="请输入姓名"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="search">搜索</el-button>
+              <el-button type="primary" @click="search" size="small">搜索</el-button>
             </el-form-item>
         </el-form>
 
-        <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%" size="small">
             <el-table-column prop="student_id" label="学号"></el-table-column>
             <el-table-column prop="student_name" label="姓名"></el-table-column>
             <el-table-column prop="score" label="分数"></el-table-column>
 
             <el-table-column label="操作">
                 <template #default="scope">
-                    <el-button type="primary" size="mini" @click="goReview(scope.row)"
+                    <el-button type="primary" size="small" @click="goReview(scope.row)"
                         v-if="scope.row.state === '未审核'">审核</el-button>
-                    <el-button type="danger" size="mini" @click="goReview(scope.row)" v-else>重新审核</el-button>
+                    <el-button type="danger" size="small" @click="goReview(scope.row)" v-else>重新审核</el-button>
                 </template>
             </el-table-column>
 
         </el-table>
         <!--分页相关-->
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-            :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
-            :total="total" class="pagination">
+            :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+            :total="total" class="pagination" size="small">
         </el-pagination>
 
     </div>
@@ -65,7 +65,7 @@ export default {
 
             // 分页相关属性
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 10,
             total: 0,
 
             currentItem: {},
@@ -183,3 +183,15 @@ export default {
     },
 };
 </script>
+
+<style lang="less" scoped>
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.search-form {
+  display: flex;
+  align-items: center; /* 垂直居中对齐 */
+}
+</style>
