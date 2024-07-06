@@ -1,8 +1,46 @@
 /* 黑色主题 */
 html[data-theme="black"] {
-    --main-color: #333;
-    --left-menu-color: #545c64;
-    
+    --main-color: #7F9FCA;
+    --left-menu-color: #425E8C;
+    --text-color: #eaedf2;
+    --active-text-color: #95C4E7;
+    --logout-color: #daafbd;
+    .el-button--primary {
+        background-color: #868c9c;
+        border-color: #868c9c;
+    }
+    .el-button--danger {
+        background-color: #b55a65;
+        border-color: #b55a65;
+    }
+    .el-dropdown-menu {
+        background-color: #7F9FCA;
+    }
+    .el-dropdown-menu__item:hover{
+        background-color:#e0e5ed;
+    }
+    .el-pagination__total{
+        color: #7F9FCA;
+    }
+    .el-pager .number:hover, .el-pager .number:active{
+        color: #7F9FCA;
+    }
+    .el-pager .number{
+        color: #7F9FCA;
+    }
+    .btn-prev:hover{
+         color: #7F9FCA;
+     }
+    .btn-next:hover{
+        color: #7F9FCA;
+    }
+    .el-pagination__jump{
+        color: #7F9FCA;
+    }
+    .el-select-dropdown__item.selected{
+        color: #7F9FCA;
+    }
+
 }
 /* 蓝色主题 */
 html[data-theme="blue"] {

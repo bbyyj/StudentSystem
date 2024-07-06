@@ -1,6 +1,6 @@
 <template>
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-        :collapse="isCollapse" text-color="#fff" active-text-color="#ffd04b"
+        :collapse="isCollapse" text-color=var(--text-color) active-text-color=var(--active-text-color)
         style="background-color: var(--left-menu-color)">
         <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
         <el-menu-item @click="clickItem(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
@@ -32,9 +32,9 @@
 
     h3 {
         text-align: center;
-        line-height: 48px;
+        line-height: 60px;
         color: #fff;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 400;
     }
 }
@@ -42,12 +42,14 @@
 .el-menu-item,
 .el-submenu__title,
 .el-menu-item-group {
-    background-color: var(--left-menu-color) !important;
+  font-weight: 600 !important;
+  background-color: var(--left-menu-color) !important;
 }
 
 .el-menu-item i,
 .el-submenu__title i {
-    color: #fff;
+  font-weight: 600 !important;
+  color: var(--text-color) !important;
 }
 
 .el-menu-item.is-active i {
@@ -64,6 +66,10 @@
 .el-menu-item-group {
     margin: 0 !important;
     padding: 0 !important;
+}
+/deep/ .el-menu-item-group__title {
+  padding: 0 !important;
+  display: none !important;
 }
 </style>
 

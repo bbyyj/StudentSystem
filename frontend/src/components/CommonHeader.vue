@@ -3,10 +3,10 @@
         <div class="l-content">
             <el-button @click="handleMenu" icon="el-icon-menu" size="mini"></el-button>
             <!-- 面包屑 -->
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item v-for="item in tags" :key="item.path" :to="{ path: item.path }">{{ item.label }}
-                </el-breadcrumb-item>
-            </el-breadcrumb>
+<!--            <el-breadcrumb separator="/">-->
+<!--                <el-breadcrumb-item v-for="item in tags" :key="item.path" :to="{ path: item.path }">{{ item.label }}-->
+<!--                </el-breadcrumb-item>-->
+<!--            </el-breadcrumb>-->
         </div>
         <div class="r-content">
             <!--            <el-dropdown @command="handleClick">-->
@@ -143,7 +143,7 @@ export default {
 }
 
 .black {
-    background-color: #333;
+    background-color: #7F9FCA;
 }
 
 .green {
@@ -208,7 +208,6 @@ export default {
 }
 
 .custom-button {
-    background-color: #ff4d4f;
     /* 自定义背景颜色 */
     border-radius: 10px;
     /* 圆角 */
@@ -225,14 +224,14 @@ export default {
 }
 
 .custom-button:hover {
-    background-color: #ff7875;
+    background-color: var(--logout-color) !important;
     /* 悬停时的背景颜色 */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
     /* 悬停时的阴影效果 */
 }
 
 .custom-button:active {
-    background-color: #d9363e;
+    background-color: var(--logout-color) !important;
     /* 点击时的背景颜色 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     /* 点击时的阴影效果 */
