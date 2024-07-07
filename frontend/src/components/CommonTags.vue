@@ -51,6 +51,7 @@ export default {
         margin-right: 15px;
         // 鼠标悬停:小手
         cursor: pointer;
+      font-size: 14px;
     }
 }
 </style>

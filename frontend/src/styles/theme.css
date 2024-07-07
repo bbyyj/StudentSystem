@@ -6,13 +6,13 @@ html[data-theme="black"] {
     --active-text-color: #95C4E7;
     --logout-color: #daafbd;
     --checked-color: #faf8f4;
-    --nochecked-color: #e9f3ea;
+    --nochecked-color: #e9eff3;
     .el-button--primary {
         background-color: #868c9c;
         border-color: #868c9c;
     }
     .el-button--text {
-        color: #90A796;
+        color: #7F9FCA;
         font-weight: 600;
     }
     .el-button--danger {
@@ -20,8 +20,8 @@ html[data-theme="black"] {
         border-color: #b55a65;
     }
     .el-button--success {
-        background-color: #90A796;
-        border-color: #90A796;
+        background-color: #19325f;
+        border-color: #19325f;
     }
     .el-dropdown-menu {
         background-color: #7F9FCA;
@@ -72,20 +72,221 @@ html[data-theme="black"] {
 }
 /* 蓝色主题 */
 html[data-theme="blue"] {
-    --main-color: #0000ff;
-    --left-menu-color: #4c4cff;
+    --main-color: #d3ccd6;
+    --left-menu-color: #afa4bd;
+    --text-color: #f9f3de;
+    --active-text-color: #ece093;
+    --logout-color: #fcf9f1;
+    --checked-color: #faf8f4;
+    --nochecked-color: #eae9f3;
+    .el-button--primary {
+        background-color: #a4abd6;
+        border-color: #a4abd6;
+    }
+    .el-button--text {
+        color: #a4abd6;
+        font-weight: 600;
+    }
+    .el-button--danger {
+        background-color: #d9a0b3;
+        border-color: #d9a0b3;
+    }
+    .el-button--success {
+        background-color: #5f479a;
+        border-color: #5f479a;
+    }
+    .el-dropdown-menu {
+        background-color: #afa4bd;
+    }
+    .el-dropdown-menu__item:hover{
+        background-color:#e0e5ed;
+    }
+    .el-pagination__total{
+        color: #d3ccd6;
+    }
+    .el-pager .number:hover, .el-pager .number:active{
+        color: #d3ccd6;
+    }
+    .el-pager .number{
+        color: #d3ccd6;
+    }
+    .btn-prev:hover{
+        color: #d3ccd6;
+    }
+    .btn-next:hover{
+        color: #d3ccd6;
+    }
+    .el-pagination__jump{
+        color: #d3ccd6;
+    }
+    .el-select-dropdown__item.selected{
+        color: #d3ccd6;
+    }
+    .el-tabs__item.is-active, .el-tabs__item:hover{
+        color: #d3ccd6;
+    }
+    .el-tabs__active-bar{
+        background-color: #d3ccd6;
+    }
+    .el-button:focus, .el-button:hover {
+        color: #afa4bd;
+        border-color: #d3ccd6;
+        background-color: #fcf9f1;
+    }
+    .el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner {
+        border-color: #d3ccd6;
+    }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+        color: #FFF;
+        background-color: #d3ccd6;
+        border-color: #d3ccd6;
+    }
     
 }
 /* 绿色主题 */
 html[data-theme="green"] {
-    --main-color: #358f09;
-    --left-menu-color: #67c23a;
+    --main-color: #a8bf8f;
+    --left-menu-color: #4e6548;
+    --text-color: #f5f3f2;
+    --active-text-color: #ece093;
+    --logout-color: #fcf9f1;
+    --checked-color: #faf8f4;
+    --nochecked-color: #edf3e9;
+    .el-button--primary {
+        background-color: #f6cec1;
+        border-color: #f6cec1;
+    }
+    .el-button--text {
+        color: #a8bf8f;
+        font-weight: 600;
+    }
+    .el-button--danger {
+        background-color: #ec9bad;
+        border-color: #ec9bad;
+    }
+    .el-button--success {
+        background-color: #eb507e;
+        border-color: #eb507e;
+    }
+    .el-dropdown-menu {
+        background-color: #4e6548;
+    }
+    .el-dropdown-menu__item:hover{
+        background-color:#A5B071;
+    }
+    .el-pagination__total{
+        color: #a8bf8f;
+    }
+    .el-pager .number:hover, .el-pager .number:active{
+        color: #a8bf8f;
+    }
+    .el-pager .number{
+        color: #a8bf8f;
+    }
+    .btn-prev:hover{
+        color: #a8bf8f;
+    }
+    .btn-next:hover{
+        color: #a8bf8f;
+    }
+    .el-pagination__jump{
+        color: #a8bf8f;
+    }
+    .el-select-dropdown__item.selected{
+        color: #a8bf8f;
+    }
+    .el-tabs__item.is-active, .el-tabs__item:hover{
+        color: #a8bf8f;
+    }
+    .el-tabs__active-bar{
+        background-color: #a8bf8f;
+    }
+    .el-button:focus, .el-button:hover {
+        color: #4e6548;
+        border-color: #a8bf8f;
+        background-color: #fcf9f1;
+    }
+    .el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner {
+        border-color: #a8bf8f;
+    }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+        color: #FFF;
+        background-color: #a8bf8f;
+        border-color: #a8bf8f;
+    }
+
     
 }
 
 /* 红色主题 */
 html[data-theme="red"] {
-    --main-color: #fa3f3f;
-    --left-menu-color: #F56C6C;
-    
+    --main-color: #b04f5a;
+    --left-menu-color: #770a10;
+    --text-color: #eeead9;
+    --active-text-color: #ece093;
+    --logout-color: #fcf9f1;
+    --checked-color: #faf8f4;
+    --nochecked-color: #f3e9eb;
+    .el-button--primary {
+        background-color: #99bcac;
+        border-color: #99bcac;
+    }
+    .el-button--text {
+        color: #99bcac;
+        font-weight: 600;
+    }
+    .el-button--danger {
+        background-color: #d5b45c;
+        border-color: #d5b45c;
+    }
+    .el-button--success {
+        background-color: #576470;
+        border-color: #576470;
+    }
+    .el-dropdown-menu {
+        background-color: #b04f5a;
+    }
+    .el-dropdown-menu__item:hover{
+        background-color:#fcf9f1;
+    }
+    .el-pagination__total{
+        color: #b04f5a;
+    }
+    .el-pager .number:hover, .el-pager .number:active{
+        color: #b04f5a;
+    }
+    .el-pager .number{
+        color: #b04f5a;
+    }
+    .btn-prev:hover{
+        color: #b04f5a;
+    }
+    .btn-next:hover{
+        color: #b04f5a;
+    }
+    .el-pagination__jump{
+        color: #b04f5a;
+    }
+    .el-select-dropdown__item.selected{
+        color: #b04f5a;
+    }
+    .el-tabs__item.is-active, .el-tabs__item:hover{
+        color: #b04f5a;
+    }
+    .el-tabs__active-bar{
+        background-color: #b04f5a;
+    }
+    .el-button:focus, .el-button:hover {
+        color: #770a10;
+        border-color: #b04f5a;
+        background-color: #fcf9f1;
+    }
+    .el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner {
+        border-color: #b04f5a;
+    }
+    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+        color: #FFF;
+        background-color: #b04f5a;
+        border-color: #b04f5a;
+    }
 }

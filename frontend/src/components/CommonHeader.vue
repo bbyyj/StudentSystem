@@ -26,8 +26,8 @@
                 <el-option value="green" label="橄榄绿"></el-option>
                 <el-option value="red" label="浅红"></el-option>
             </el-select> -->
-            <el-button type="primary" size="mini" icon="el-icon-orange" @click="dialogVisible = true"></el-button>
-            <el-button type="danger" class="custom-button" @click="handleClick" size="mini">退出</el-button>
+            <el-button type="primary" size="small" @click="dialogVisible = true">一键换肤</el-button>
+            <el-button type="danger" class="custom-button" @click="handleClick" size="small">退出</el-button>
         </div>
 
         <el-dialog title="选择主题" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -41,7 +41,7 @@
                 <div class="color-item red"></div> -->
             </div>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">关 闭</el-button>
+                <el-button @click="dialogVisible = false" size="small">关 闭</el-button>
                 <!-- <el-button type="primary" @click="confirm">确 定</el-button> -->
             </span>
         </el-dialog>
@@ -122,10 +122,10 @@ export default {
 }
 
 .color-item {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 20px;
     margin-bottom: 10px;
     cursor: pointer;
     display: flex;
@@ -147,15 +147,15 @@ export default {
 }
 
 .green {
-    background-color: #358f09;
+  background-color: #a8bf8f;
 }
 
 .blue {
-    background-color: #0000ff;
+    background-color: #d3ccd6;
 }
 
 .red {
-    background-color: #fa3f3f;
+    background-color: #b04f5a;
 }
 
 .header-container {
@@ -171,7 +171,7 @@ export default {
 
     .el-dropdown-link {
         cursor: pointer;
-        color: #409EFF;
+        color: var(--main-color) !important;
 
         .user {
             width: 40px;
