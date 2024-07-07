@@ -1,22 +1,7 @@
 <template>
     <div class="record-detail" style="height: calc(100vh - 160px) !important">
         <!-- 申请单详情 -->
-        <el-card class="box-card" shadow="never" style="border: 0;">
-            <!-- <div slot="header" class="clearfix">
-                <span>综测详情</span>
-            </div> -->
-            <el-form label-position="top" class="student-info-form" :model="record" :disabled="true" inline>
-                <el-form-item label="学号" size="small">
-                    <el-input v-model="record.studentID"></el-input>
-                </el-form-item>
-                <el-form-item label="姓名" size="small">
-                    <el-input v-model="record.name"></el-input>
-                </el-form-item>
-                <el-form-item label="综测总分" size="small">
-                    <el-input v-model="record.score"></el-input>
-                </el-form-item>
-            </el-form>
-        </el-card>
+    
 
         <!-- 综测信息列表 -->
         <el-card class="box-card" shadow="never" style="border: 0;">
