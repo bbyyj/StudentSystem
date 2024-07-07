@@ -436,6 +436,22 @@ export default {
 
     addStudent() {
       // 单个学生导入
+      this.studentAddOrEditForm = {
+        admissionYear: '',
+        classId: '',
+        name: '',
+        studentRole: '',
+        type: '',
+        netId: '',
+        nation: '',
+        sid: '',
+        pid: '',
+        birth: '',
+        undergraduate: '',
+        politics: '',
+        nativePlace: '',
+        dormitory:''
+      }
       this.addDialogVisible = true;
     },
     importStudents() {
