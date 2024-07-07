@@ -2,7 +2,7 @@
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
         :collapse="isCollapse" text-color=var(--text-color) active-text-color=var(--active-text-color)
         style="background-color: var(--left-menu-color)">
-        <h3>{{ isCollapse ? "后台" : "通用后台管理系统" }}</h3>
+        <h3>{{ isCollapse ? " 软工" : "学生管理系统" }}</h3>
         <el-menu-item @click="clickItem(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
             <i :class="`el-icon-${item.icon}`"></i>
             <span slot="title">{{ item.label }}</span>
