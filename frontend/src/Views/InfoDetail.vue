@@ -36,7 +36,7 @@
 
           <!--        表格里的其他项-->
           <el-table-column label="ID" prop="id"></el-table-column>
-          <el-table-column label="提交时间" prop="submit_time" sortable></el-table-column>
+<!--          <el-table-column label="提交时间" prop="submit_time" sortable></el-table-column>-->
           <el-table-column label="审核状态" prop="check_status" sortable :sort-method="sortByState" :filters="[{text: '已审核', value:'已审核'}, {text: '未审核', value: '未审核'}]"
                            :filter-multiple=false :filter-method="filterHandle">
             <!--          <template slot-scope="scope">-->
