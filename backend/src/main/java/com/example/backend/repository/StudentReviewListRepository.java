@@ -27,7 +27,7 @@ public interface StudentReviewListRepository extends JpaRepository<StudentReview
     Page<StudentReviewList> findByReviewIdAndCondition(int review_id, boolean isUndergraduate, Year admission_year, Integer classId, String state,String sid,String sname,Pageable  pageable);
     @Query("SELECT r FROM StudentReviewList r where r.review_id=?1 ")
     Page<StudentReviewList> findAll(int review_id, Pageable  pageable);
-    @Query("SELECT r FROM StudentReviewList r where r.review_id=?1 and r.isUndergraduate=?2 and r.admission_year=?3  ")
+    @Query("SELECT r FROM StudentReviewList r where r.review_id=?1 and r.isUndergraduate=?2 and r.admission_year=?3 order by r.final_score desc ")
     Page<StudentReviewList> findByYear(int review_id, boolean isUndergraduate, Year admission_year,  Pageable  pageable);
     @Modifying
     @Query("UPDATE StudentReviewList r SET r.exam_score=?1,r.final_score=?2 where r.review_id=?3 and r.student_id=?4")

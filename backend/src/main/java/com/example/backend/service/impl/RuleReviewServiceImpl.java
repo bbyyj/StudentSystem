@@ -45,9 +45,24 @@ public class RuleReviewServiceImpl implements RuleReviewService {
         review.setStart_time(Date.valueOf(request.getStart_time()));
         review.setEnd_time(Date.valueOf(request.getEnd_time()));
         review = reviewRepository.saveAndFlush(review);
+
+
         int id = review.getId();
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put("id", id);
+
+        List<Student>  students = studentRepository.findAll();
+        for(Student student:students){
+            StudentReviewList studentReviewList = new StudentReviewList();
+            studentReviewList.setReview_id(id);
+            studentReviewList.setStudent_id(student.getSid());
+            studentReviewList.setStudent_name(student.getName());
+            studentReviewList.setUndergraduate(student.isUndergraduate());
+            studentReviewList.setAdmission_year(student.getAdmissionYear());
+            studentReviewList.setClassId(student.getClassId());
+            studentReviewList.setState("未审核");
+            studentReviewListRepository.saveAndFlush(studentReviewList);
+        }
 
         return jsonResponse;
     }
@@ -89,6 +104,7 @@ public class RuleReviewServiceImpl implements RuleReviewService {
                 studentReviewList.setUndergraduate(student.isUndergraduate());
                 studentReviewList.setAdmission_year(student.getAdmissionYear());
                 studentReviewList.setClassId(student.getClassId());
+                studentReviewList.setState("未审核");
                 studentReviewListRepository.saveAndFlush(studentReviewList);
             }
 

@@ -19,8 +19,6 @@ import java.util.Optional;
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByNetId(String netId);
 
-    @Query("SELECT s FROM Student s")
-    Page<Student> findByPage(Pageable pageable);
 
     @Modifying
     @Transactional
