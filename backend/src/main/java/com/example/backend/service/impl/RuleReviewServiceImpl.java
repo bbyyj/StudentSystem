@@ -84,7 +84,7 @@ public class RuleReviewServiceImpl implements RuleReviewService {
             for(Student student:students){
                 StudentReviewList studentReviewList = new StudentReviewList();
                 studentReviewList.setReview_id(request.getId());
-                studentReviewList.setStudent_id(student.getNetId());
+                studentReviewList.setStudent_id(student.getSid());
                 studentReviewList.setStudent_name(student.getName());
                 studentReviewList.setUndergraduate(student.isUndergraduate());
                 studentReviewList.setAdmission_year(student.getAdmissionYear());
