@@ -11,6 +11,10 @@ html[data-theme="black"] {
         background-color: #868c9c;
         border-color: #868c9c;
     }
+    .el-button--text {
+        color: #90A796;
+        font-weight: 600;
+    }
     .el-button--danger {
         background-color: #b55a65;
         border-color: #b55a65;

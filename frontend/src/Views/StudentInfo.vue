@@ -1,10 +1,10 @@
 <template>
-    <div>
-      <el-card class="ftype">
+    <div style="font-size: small;">
+<!--      <el-card class="ftype">-->
         
         <h1>基本信息</h1>
 
-        <el-form :model="info1" ref="basicInfoForm" label-position="top">
+        <el-form :model="info1" ref="basicInfoForm" label-position="top" size="small">
           <div class="wrapper">
             <el-form-item 
               v-for="(item, index) in items1" 
@@ -21,7 +21,7 @@
 
         <hr>
 
-        <h1>联系方式</h1>
+        <h1>修改联系方式</h1>
 
         <el-form :model="info2" ref="contactForm" label-position="top">
           <div class="wrapper">
@@ -30,7 +30,7 @@
               :key="index" 
               :label="item.label" 
               :prop="item.model" 
-              class="blockitem">
+              class="blockitem" size="small">
 
               <el-input class="elinput" v-model="info2[item.model]"></el-input>
               
@@ -38,21 +38,21 @@
           </div>
         </el-form>
 
-        <el-button type="primary" round style="margin-bottom: 20px;" @click="submitContactForm">提交</el-button>
+        <el-button type="primary" style="margin-bottom: 5px;" @click="submitContactForm" size="small">提交</el-button>
 
 
         <hr>
 
         <h1>修改密码</h1>
         <div class="wrapper">
-          <el-form :model="passwordForm" :rules="rules" ref="form">
+          <el-form :model="passwordForm" :rules="rules" ref="form" size="small">
 
-            <el-form-item label="新密码" prop="newPassword">
+            <el-form-item label="新密码：" prop="newPassword" label-width="100px">
               <el-input class="elinput" type="password" v-model="passwordForm.newPassword" show-password>
               </el-input>
             </el-form-item>
 
-            <el-form-item label="确认密码" prop="confirmPassword">
+            <el-form-item label="确认密码：" prop="confirmPassword" label-width="100px">
               <el-input class="elinput" type="password" v-model="passwordForm.confirmPassword" show-password>
               </el-input>
             </el-form-item>
@@ -60,9 +60,9 @@
           </el-form>
         </div>
 
-        <el-button type="primary" round @click="submitPasswordChange" :loading="isSubmitting" style="margin-top: 20px;">提交</el-button>
+        <el-button type="primary" @click="submitPasswordChange" :loading="isSubmitting" size="small">提交</el-button>
 
-      </el-card>
+<!--      </el-card>-->
     </div>
   </template>
   
@@ -268,17 +268,20 @@ import Cookie from 'js-cookie'
 }
 
 .elinput{
-  max-width: 100%;
+  //max-width: 100%;
+  display: flex;
+  align-items: center;
 }
+
 .ftype{
     font-size: small;
 }
 
 .blockitem{
-    height: 100px;
-    width: calc(33.333% - 60px);
-    margin-bottom: 15px;
-    margin-right: 30px; 
+    height: 70px;
+    width: calc(17% - 60px);
+    margin-bottom: 10px;
+    margin-right: 15px;
 }
 
 /* 移除最后一个块元素的右外边距，以避免整体右侧多出空白 */

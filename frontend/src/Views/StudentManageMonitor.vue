@@ -241,7 +241,7 @@
   .common-table{
     height: 500px;
     position: relative;
-
+    overflow: auto;
   }
   </style>
   

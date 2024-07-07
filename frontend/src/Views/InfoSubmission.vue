@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card>
-            <el-form style="margin-top: 20px;" :model="ruleData" :rules="rulesValid" ref="ruleData">
+            <el-form style="margin-top: 20px;" :model="ruleData" :rules="rulesValid" ref="ruleData" size="small">
                 <el-form-item v-if="showRules" prop="rule_type" required label="综测大类" class="item">
                     <el-select v-model="ruleData.rule_type" @change="loadRuleDetails">
                         <el-option 
@@ -25,7 +25,7 @@
                 </el-form-item>
             </el-form>
 
-            <el-form style="margin-top: 20px;" :model="formData" :rules="formRules" ref="formData">
+            <el-form style="margin-top: 20px;" :model="formData" :rules="formRules" ref="formData" size="small">
                 <el-form-item v-for="field in currentData.items" 
                             :prop="field.fieldName"  
                             :key="field.fieldName" 

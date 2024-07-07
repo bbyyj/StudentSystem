@@ -1,8 +1,8 @@
 <template>
     <div>
-    <el-card>
+<!--    <el-card>-->
       <!-- 表格部分 -->
-      <el-table :data="Infos" style="width: 100%" size="mini">
+      <el-table :data="Infos" style="width: 100%" size="small" class="common-table">
         <el-table-column v-for="item in recordForm" 
           :key="item.fieldName" 
           :prop="item.fieldName" 
@@ -35,10 +35,10 @@
         :page-sizes="[5, 10, 20, 50]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="totalInfos">
+        :total="totalInfos" class="pagination">
       </el-pagination>
   
-    </el-card>
+<!--    </el-card>-->
       
     <!-- 查看图片 -->
     <el-dialog :visible.sync="photoDialogVisible" title="图片预览">
@@ -47,7 +47,7 @@
 
     <!-- 查看详细信息 -->
     <el-dialog title="详细信息" :visible.sync="dialogVisible" >
-      <el-form :model="Info" label-width="170px" class="wrapper">
+      <el-form :model="Info" label-width="170px" class="wrapper" size="small">
         <el-form-item 
           v-for="item in detailForm" 
           :label="item.label" 
@@ -63,7 +63,7 @@
       </el-form>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false" size="medium">取 消</el-button>
       </span>
 
     </el-dialog>
@@ -301,10 +301,18 @@ export default {
   justify-content: space-between;
 }
 .blockitem {
-  width: 50%; 
+  width: 50%;
   height: auto;
   margin-bottom: 2%;
 }
-
-
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.common-table{
+  height: 500px;
+  position: relative;
+  overflow: auto;
+}
 </style>
