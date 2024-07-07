@@ -5,6 +5,8 @@ html[data-theme="black"] {
     --text-color: #eaedf2;
     --active-text-color: #95C4E7;
     --logout-color: #daafbd;
+    --checked-color: #faf8f4;
+    --nochecked-color: #e9f3ea;
     .el-button--primary {
         background-color: #868c9c;
         border-color: #868c9c;
@@ -12,6 +14,10 @@ html[data-theme="black"] {
     .el-button--danger {
         background-color: #b55a65;
         border-color: #b55a65;
+    }
+    .el-button--success {
+        background-color: #90A796;
+        border-color: #90A796;
     }
     .el-dropdown-menu {
         background-color: #7F9FCA;
@@ -39,6 +45,12 @@ html[data-theme="black"] {
     }
     .el-select-dropdown__item.selected{
         color: #7F9FCA;
+    }
+    .el-tabs__item.is-active, .el-tabs__item:hover{
+        color: #7F9FCA;
+    }
+    .el-tabs__active-bar{
+        background-color: #7F9FCA;
     }
 
 }

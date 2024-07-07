@@ -14,54 +14,57 @@
         <el-button type="primary" size="small" class="filter-del-btn" @click="expData">批量导出</el-button>
       </div>
 
-      <el-table :data="tableData" style="width: 100%" size="mini" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick"
-                @selection-change="handleSelectionChange" :row-key="getRowKeys">
-<!--      展开项-->
-        <el-table-column type="expand" width="1">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="table-expand" size="mini">
-              <el-form-item v-for="(column, index) in tableColumns" :label="column.label" :key="index" v-if="index > 0">
-                <span>{{ props.row[column.prop]  }}</span>
-              </el-form-item>
-              <el-form-item v-if="props.row.check_status === '已审核' && index === 0" v-for="(column, index) in tableColumns" :label="column.label" :key="index">
-                <span>{{ props.row[column.prop] }}</span>
-              </el-form-item>
+      <div class="table-container">
+        <el-table :data="tableData" style="width: 100%" height="95%" size="small" :row-class-name="RowState" ref="filterTable"  @filter-change="filterChange" @row-click="handleRowClick"
+                  @selection-change="handleSelectionChange" :row-key="getRowKeys">
+          <!--      展开项-->
+          <el-table-column type="expand" width="1">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="table-expand" size="mini">
+                <el-form-item v-for="(column, index) in tableColumns" :label="column.label" :key="index" v-if="index > 0">
+                  <span>{{ props.row[column.prop]  }}</span>
+                </el-form-item>
+                <el-form-item v-if="props.row.check_status === '已审核' && index === 0" v-for="(column, index) in tableColumns" :label="column.label" :key="index">
+                  <span>{{ props.row[column.prop] }}</span>
+                </el-form-item>
 
-            </el-form>
-          </template>
-        </el-table-column>
+              </el-form>
+            </template>
+          </el-table-column>
 
-        <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+          <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
 
-<!--        表格里的其他项-->
-        <el-table-column label="ID" prop="id"></el-table-column>
-        <el-table-column label="提交时间" prop="submit_time" sortable></el-table-column>
-        <el-table-column label="审核状态" prop="check_status" sortable :sort-method="sortByState" :filters="[{text: '已审核', value:'已审核'}, {text: '未审核', value: '未审核'}]"
-                         :filter-multiple=false :filter-method="filterHandle">
-<!--          <template slot-scope="scope">-->
-<!--            {{ formatStatus(scope.row.check_status) }}-->
-<!--          </template>-->
-        </el-table-column>
-        <el-table-column v-for="(column, index) in tableColumns" :key="index" :prop="column.prop" :label="column.label" v-if="index > 0 && index < 5"></el-table-column>
+          <!--        表格里的其他项-->
+          <el-table-column label="ID" prop="id"></el-table-column>
+          <el-table-column label="提交时间" prop="submit_time" sortable></el-table-column>
+          <el-table-column label="审核状态" prop="check_status" sortable :sort-method="sortByState" :filters="[{text: '已审核', value:'已审核'}, {text: '未审核', value: '未审核'}]"
+                           :filter-multiple=false :filter-method="filterHandle">
+            <!--          <template slot-scope="scope">-->
+            <!--            {{ formatStatus(scope.row.check_status) }}-->
+            <!--          </template>-->
+          </el-table-column>
+          <el-table-column v-for="(column, index) in tableColumns" :key="index" :prop="column.prop" :label="column.label" v-if="index > 0 && index < 5"></el-table-column>
 
-        <el-table-column label="操作" fixed="right">
-          <template slot-scope="scope">
-            <el-popconfirm v-if="scope.row.check_status === '未审核' && identity === 'MONITOR'" title="该记录审核通过？" confirm-button-text='是的'
-                           cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="submitCheck(scope.row.id,'已审核')">
-              <el-button type="info" slot="reference" size="mini" class="btn-examined" @click.native.stop>审核</el-button>
-            </el-popconfirm>
+          <el-table-column label="操作" fixed="right">
+            <template slot-scope="scope">
+              <el-popconfirm v-if="scope.row.check_status === '未审核' && identity === 'MONITOR'" title="该记录审核通过？" confirm-button-text='是的'
+                             cancel-button-text='存在问题，不通过' @cancel="showDialogReject(scope.row.id)" @confirm="submitCheck(scope.row.id,'已审核')">
+                <el-button type="info" slot="reference" size="small" class="btn-examined" @click.native.stop>审核</el-button>
+              </el-popconfirm>
 
-            <el-popconfirm v-else-if="scope.row.check_status === '已审核' && identity === 'TOP_ADMIN'" title="确认删除？" @confirm="deleteItems(scope.row.id)">
-              <el-button type="danger" slot="reference" size="mini" class="btn-examined" @click.native.stop>删除</el-button>
-            </el-popconfirm>
-            <el-button @click.stop="showRichText(scope.row.url)" type="primary" size="mini" class="btn-examined">查看附件</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+              <el-popconfirm v-else-if="scope.row.check_status === '已审核' && identity === 'TOP_ADMIN'" title="确认删除？" @confirm="deleteItems(scope.row.id)">
+                <el-button type="danger" slot="reference" size="small" class="btn-examined" @click.native.stop>删除</el-button>
+              </el-popconfirm>
+              <el-button @click.stop="showRichText(scope.row.url)" type="primary" size="small" class="btn-examined">查看附件</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
 
 <!--      分页-->
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageNum"
-                     :page-sizes="[1, 2, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+                     :page-sizes="[5, 10, 15, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
                      :total="total" class="pagination">
       </el-pagination>
 
@@ -379,13 +382,13 @@ export default {
 .pagination{
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 8px;
 }
 .el-table .warning-row {
-  background: oldlace;
+  background: var(--nochecked-color) !important;
 }
 .el-table .success-row {
-  background: #f0f9eb;
+  background: var(--checked-color) !important;;
 }
 
 .el-table-filter{
@@ -423,5 +426,8 @@ export default {
 .el-table__expand-icon {
   visibility:hidden !important;
 }
-
+.table-container {
+  height: 500px;
+  position: relative;
+}
 </style>

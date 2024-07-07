@@ -1,30 +1,30 @@
 <template>
     <div class="record-detail" style="height: calc(100vh - 160px) !important">
         <!-- 申请单详情 -->
-        <el-card class="box-card" shadow="never">
+        <el-card class="box-card" shadow="never" style="border: 0;">
             <!-- <div slot="header" class="clearfix">
                 <span>综测详情</span>
             </div> -->
             <el-form label-position="top" class="student-info-form" :model="record" :disabled="true" inline>
-                <el-form-item label="学号">
+                <el-form-item label="学号" size="small">
                     <el-input v-model="record.studentID"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名">
+                <el-form-item label="姓名" size="small">
                     <el-input v-model="record.name"></el-input>
                 </el-form-item>
-                <el-form-item label="综测总分">
+                <el-form-item label="综测总分" size="small">
                     <el-input v-model="record.score"></el-input>
                 </el-form-item>
             </el-form>
         </el-card>
 
         <!-- 综测信息列表 -->
-        <el-card class="box-card" shadow="never">
+        <el-card class="box-card" shadow="never" style="border: 0;">
             <div slot="header" class="clearfix">
-                <span>以下是学生的综测申请项目，请参照综测表进行不合规分值的修改</span>
+                <span style="font-weight: bold;font-size: 16px;">以下是学生的综测申请项目，请参照综测表进行不合规分值的修改:</span>
             </div>
 
-            <el-table :data="record.tableData" style="width: 100%">
+            <el-table :data="record.tableData" style=" width: 100%" size="small">
                 <el-table-column prop="rule_type" label="综测大类">
                     <template #default="scope">
                         {{ scope.row.rule_type === null ? "空" : scope.row.rule_type }}
@@ -59,8 +59,8 @@
 
 
                 <el-table-column label="操作">
-                    <template #default="scope">
-                        <el-button size="mini" type="success" @click="showModifyDialog(scope.row)">修改分值</el-button>
+                    <template #default="scope" >
+                        <el-button size="small" type="success" @click="showModifyDialog(scope.row)">修改分值</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -72,10 +72,10 @@
         <!-- 审批操作按钮 -->
         <el-row type="flex" class="row-bg" justify="end">
             <el-col :span="3">
-                <el-button type="success" @click="approveApplication">审核完毕</el-button>
+                <el-button type="success" @click="approveApplication" size="small">审核完毕</el-button>
             </el-col>
             <el-col :span="3">
-                <el-button type="primary" @click="goBack">返回</el-button>
+                <el-button type="primary" @click="goBack" size="small">返回</el-button>
             </el-col>
         </el-row>
 
