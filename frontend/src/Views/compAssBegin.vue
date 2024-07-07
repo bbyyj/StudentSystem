@@ -1,12 +1,12 @@
 <template>
     <div class="compAssBegin">
         <div class="compAssBegin-header">
-          <!-- 搜索框 -->
-          <el-input placeholder="请输入综测名称" v-model="searchForm.name" class="search-with-select" size="small" clearable>
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-          </el-input>
+            <!-- 搜索框 -->
+            <el-input placeholder="请输入综测名称" v-model="searchForm.name" class="search-with-select" size="small" clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
             <!-- 新增按钮 -->
-            <el-button type="primary" @click="handlecreate" size="small"class="filter-btn">+ 新增综测</el-button>
+            <el-button v-if="identity === 'TOP_ADMIN'" type="primary" @click="handlecreate" size="small" class="filter-btn">+ 新增综测</el-button>
 
             <!-- 对话框:点击新增或编辑才会弹出表单 -->
             <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
@@ -20,7 +20,7 @@
                     <el-form-item label="综测名称" prop="name" size="small">
                         <el-input placeholder="请输入综测名称" v-model="form.compAssName"></el-input>
                     </el-form-item>
-                    <el-form-item label="开始时间" >
+                    <el-form-item label="开始时间">
                         <el-form-item prop="start_time" size="small">
                             <el-date-picker v-model="form.compAssBeginTime" type="date" placeholder="选择日期"
                                 format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd">
@@ -43,14 +43,14 @@
             </el-dialog>
 
             <!-- 搜索框 -->
-<!--            <el-form :inline="true">-->
-<!--                <el-form-item>-->
-<!--                    <el-input v-model="searchForm.name" placeholder="请输入综测名称" size="small"></el-input>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item>-->
-<!--                    <el-button type="primary" @click="search" size="small">查询</el-button>-->
-<!--                </el-form-item>-->
-<!--            </el-form>-->
+            <!--            <el-form :inline="true">-->
+            <!--                <el-form-item>-->
+            <!--                    <el-input v-model="searchForm.name" placeholder="请输入综测名称" size="small"></el-input>-->
+            <!--                </el-form-item>-->
+            <!--                <el-form-item>-->
+            <!--                    <el-button type="primary" @click="search" size="small">查询</el-button>-->
+            <!--                </el-form-item>-->
+            <!--            </el-form>-->
         </div>
 
         <div class="common-table">
@@ -67,7 +67,7 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button type="primary" @click="gotoReview(scope.row)" size="small">查看</el-button>
-                        <el-button @click="handleEdit(scope.row)" size="small">编辑</el-button>
+                        <el-button v-if="identity === 'TOP_ADMIN'" @click="handleEdit(scope.row)" size="small">编辑</el-button>
                     </template>
                 </el-table-column>
 
@@ -92,7 +92,7 @@ export default {
         return {
             // 表单绑定的数据
             form: {
-                compAssId:'',
+                compAssId: '',
                 compAssName: '',
                 compAssBeginTime: '',
                 compAssEndTime: '',
@@ -130,8 +130,21 @@ export default {
             // 搜索框表单 用来根据特定条件进行检索
             searchForm: {
                 compAssName: ''
-            }
+            },
+            params: {
+                classId: '', // 班级id
+                year: '', // 年份id
+                isUndergraduate: true, // 是否本科
+            },
+            identity: '', // 角色
         }
+    },
+    created() {
+        this.identity = Cookie.get('Role');
+        this.params.classId = Cookie.get('classId') === '0' ? '' : Cookie.get('classId');
+        let admissionYear = Cookie.get('admissionYear');
+        this.params.year = (admissionYear === 'null' || admissionYear === undefined) ? '' : admissionYear;
+        this.params.isUndergraduate = Cookie.get("undergraduate");
     },
     methods: {
         handleSizeChange(pageSize) {
@@ -213,7 +226,7 @@ export default {
                     } else {
                         // 编辑综测
                         axios.put(`http://127.0.0.1:8080/ruleReview/updateReview`, updateReviewData).then((response) => {
-                            if(response.data.code ==200){
+                            if (response.data.code == 200) {
                                 this.$message({
                                     type: 'success',
                                     message: '修改成功!'
@@ -254,7 +267,7 @@ export default {
         handlecreate() {
             this.modalType = 0;
             this.form.compAssName = ''
-            this.form.compAssBeginTime =''
+            this.form.compAssBeginTime = ''
             this.form.compAssEndTime = ''
             this.openForm();
         },
@@ -302,16 +315,18 @@ export default {
         }
     }
 }
-.pagination{
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
 }
 
-.search-with-select{
-  width: 300px;
+.search-with-select {
+    width: 300px;
 }
-.filter-btn{
-  margin-left: 15px;
+
+.filter-btn {
+    margin-left: 15px;
 }
 </style>

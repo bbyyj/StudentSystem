@@ -117,7 +117,7 @@ export default {
             let id = this.id;
 
             // 班长携带的信息
-            let isUndergraduate = this.params.isUndergraduate === false? 1:0;
+            let isUndergraduate = this.params.isUndergraduate === false? 0:1;
             let admission_year = this.params.year;
             let classId = this.params.classId;
 
@@ -150,7 +150,7 @@ export default {
             // let admission_year = 2020;
             // let classId = 1;
 
-            let isUndergraduate = this.params.isUndergraduate === false? 1:0;
+            let isUndergraduate = this.params.isUndergraduate === false? 0:1;
             let admission_year = this.params.year;
             let classId = this.params.classId;
 

@@ -164,13 +164,16 @@
           return;
         }
   
-        const params = {  keyname: selectedKeyword, 
+        const params = {  isUndergraduate: Cookies.get('undergraduate'),
+                          admissionYear: Cookies.get('admissionYear'),
+                          classId: Cookies.get('classId'),
+                          keyname: selectedKeyword, 
                           keyword: searchContent, 
                           page: currentPage - 1, 
                           size: pageSize
                         };
   
-        axios.get( 'http://127.0.0.1:8080/headTeacher/searchStuInfo', { params })
+        axios.get( 'http://127.0.0.1:8080/headTeacher/searchClassStuInfo', { params })
           .then(response => {
             const data = response.data;
             const studentList = data.data.content;
