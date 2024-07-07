@@ -1,28 +1,28 @@
 <template>
   <div>
-  <el-card>
+<!--  <el-card>-->
     <!-- 搜索部分 -->
     <el-row style="margin-bottom: 20px;">
       <el-col :span="4">
-        <el-select v-model="searchKeyword" placeholder="请选择查询条件">
+        <el-select v-model="searchKeyword" placeholder="请选择查询条件" size="small">
           <el-option value="全部">全部</el-option>
           <el-option v-for="item in studentSearchForm.items" :key="item.fieldName" :label="item.label" :value="item.fieldName" />
         </el-select>    
       </el-col>
       <el-col :span="4">
-        <el-input v-model="searchvalue" placeholder="请输入查询内容" />
+        <el-input v-model="searchvalue" size="small" style="margin-left: 10px"placeholder="请输入查询内容" />
       </el-col>
-      <el-col :span="4">
-        <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search">查询</el-button>
+      <el-col :span="2.5">
+        <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search" style="margin-left: 20px" size="small"> 查询</el-button>
       </el-col>
 
       <el-col :span="8" >
         <el-popover
           placement="bottom"
           width="auto"
-          trigger="click">
+          trigger="click" style="margin-left: 10px">
           <el-radio-group v-model="selectedType" @change="handleActionChange" size="mini" style="margin-bottom: 5px;">
-            <el-radio-button label="1" >批量生成学生</el-radio-button>
+            <el-radio-button label="1">批量生成学生</el-radio-button>
             <el-radio-button label="2" >仅更新资料</el-radio-button>
           </el-radio-group>
           
@@ -38,14 +38,14 @@
             <el-button size="small" type="plain">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
           </el-upload>
-          <el-button slot="reference" type="primary" round @click="importStudents">批量导入</el-button>
+          <el-button slot="reference" type="primary" @click="importStudents" size="small">批量导入</el-button>
         </el-popover>
-        <el-button type="primary" round  @click="addStudent">单个导入</el-button>
+        <el-button type="primary"  @click="addStudent" size="small" style="margin-left: 8px">单个导入</el-button>
       </el-col>
     </el-row>
 
     <!-- 表格部分 -->
-    <el-table :data="Students" style="width: 100%" size="mini">
+    <el-table :data="Students" style="width: 100%" size="mini" class="common-table">
       <el-table-column v-for="item in studentForm.items" 
         :key="item.fieldName" :prop="item.fieldName" :label="item.label" :width="item.width" />
 
@@ -67,10 +67,10 @@
       :page-sizes="[5, 10, 20]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="totalStudents">
+      :total="totalStudents" class="pagination">
     </el-pagination>
     
-  </el-card>
+<!--  </el-card>-->
     
   <el-dialog title="编辑学生信息" :visible.sync="dialogVisible" >
     <el-form :model="studentAddOrEditForm" label-width="80px"  class="wrapper" >
@@ -225,7 +225,7 @@ export default {
       uploadUrl: 'http://127.0.0.1:8080/auth/signupStudentExcel', // 批批处理批量生成的默认接口
       // 分页相关属性
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       totalStudents: 0,
     };
   },
@@ -614,7 +614,15 @@ export default {
   height: auto;
   margin-bottom: 2%;
 }
-
-
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.common-table{
+  height: 500px;
+  position: relative;
+  overflow: auto;
+}
 </style>
 

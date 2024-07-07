@@ -1,8 +1,12 @@
 <template>
   <div class="compAssBegin">
     <div class="compAssBegin-header">
+      <!-- 搜索框 -->
+      <el-input placeholder="请输入综测名称" v-model="searchForm.name" class="search-with-select" size="small" clearable>
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+      </el-input>
       <!-- 新增按钮 -->
-      <el-button type="primary" @click="handlecreate">+ 新增综测</el-button>
+      <el-button type="primary" @click="handlecreate" size="small" class="filter-btn">+ 新增综测</el-button>
 
       <!-- 对话框:点击新增或编辑才会弹出表单 -->
       <!-- :before-close="closeDialog" 点击关闭的x之前要做的事情 -->
@@ -10,7 +14,7 @@
                  :before-close="closeDialog">
         <!-- 表单Form -->
         <!-- ref=form:为了通过this.$refs调用组件的方法 -->
-        <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px">
+        <el-form :inline="true" :model="form" :rules="rules" ref="form" label-width="80px"  size="small">
 
           <!-- 每一项表单域:el-form-item -->
           <el-form-item label="综测名称" prop="name">
@@ -33,25 +37,25 @@
 
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="submit">确 定</el-button>
+          <el-button @click="closeDialog"  size="small">取 消</el-button>
+          <el-button type="primary" @click="submit"  size="small">确 定</el-button>
         </div>
       </el-dialog>
 
       <!-- 搜索框 -->
-      <el-form :inline="true">
-        <el-form-item>
-          <el-input v-model="searchForm.name" placeholder="请输入综测名称"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
-        </el-form-item>
-      </el-form>
+<!--      <el-form :inline="true">-->
+<!--        <el-form-item>-->
+<!--          <el-input v-model="searchForm.name" placeholder="请输入综测名称"></el-input>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item>-->
+<!--          <el-button type="primary" @click="search">查询</el-button>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
     </div>
 
     <div class="common-table">
       <!-- 用户数据Table -->
-      <el-table :data="tableData" stripe style="width: 100%" height="90%">
+      <el-table :data="tableData" style="width: 100%" height="90%"  size="small">
         <el-table-column prop="name" label="综测名称">
         </el-table-column>
         <el-table-column prop="start_time" label="综测开始时间">
@@ -62,15 +66,15 @@
         <!-- 自定义列 -->
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button type="primary" @click="gotoReview(scope.row)">查看</el-button>
-            <el-button @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="primary" @click="gotoReview(scope.row)"  size="small">查看</el-button>
+            <el-button @click="handleEdit(scope.row)"  size="small">编辑</el-button>
           </template>
         </el-table-column>
 
       </el-table>
       <!-- 分页 -->
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                     :current-page="currentPage" :page-sizes="[1, 2, 5, 10]" :page-size="pageSize"
+                     :current-page="currentPage" :page-sizes="[5, 10, 15, 20]" :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper" :total="total" class="pagination">
       </el-pagination>
 
@@ -120,7 +124,7 @@ export default {
       modalType: 0,
       // 分页相关属性
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       total: 0,
 
       // 搜索框表单 用来根据特定条件进行检索
@@ -283,7 +287,7 @@ export default {
 
   .compAssBegin-header {
     display: flex;
-    justify-content: space-between;
+    //justify-content: space-between;
     align-items: center;
   }
 
@@ -296,6 +300,18 @@ export default {
       right: 20px;
       bottom: 0;
     }
+  }
+  .search-with-select{
+    width: 300px;
+  }
+  .filter-btn{
+    margin-left: 15px;
+  }
+
+  .pagination{
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
   }
 }
 </style>

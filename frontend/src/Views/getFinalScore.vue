@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-card>
+<!--        <el-card>-->
             <!-- 搜索部分 -->
             <el-row style="margin-bottom: 20px;">
                 <el-col :span="4">
-                    <el-select v-model="isUndergraduate" placeholder="请选择学生身份">
+                    <el-select v-model="isUndergraduate" placeholder="请选择学生身份"  size="small">
                         <el-option value="全部">全部</el-option>
                         <el-option v-for="item in studentType" :key="item.key" :label="item.label"
                             :value="item.value" />
@@ -12,18 +12,18 @@
                 </el-col>
 
                 <el-col :span="4">
-                    <el-select v-model="admission_year" placeholder="请选择入学年份">
+                    <el-select v-model="admission_year" placeholder="请选择入学年份"  size="small" class="search-with-select">
                         <el-option value="全部">全部</el-option>
                         <el-option v-for="item in AllAdmissionYear" :key="item.key" :label="item.label"
                             :value="item.value" />
                     </el-select>
                 </el-col>
 
-                <el-col :span="4">
-                    <el-button @click="searchStudents" icon="el-icon-search">查询</el-button>
+                <el-col :span="2.5">
+                    <el-button @click="searchStudents" icon="el-icon-search" size="small" class="search-with-select">查询</el-button>
                 </el-col>
 
-                <el-col :span="8">
+                <el-col :span="4">
                     <el-popover placement="bottom" width="auto" trigger="click">
                         <el-upload :action="uploadUrl" :multiple="false" :limit="1" :file-list="fileList"
                             :show-file-list="true" accept="xlsx" :on-exceed="handleExceed" :on-error="handleError"
@@ -33,13 +33,13 @@
                             <div slot="tip" class="el-upload__tip">只能上传单个.xlsx格式的Excel文件</div>
                         </el-upload>
 
-                        <el-button slot="reference" type="primary" round @click="importStudents">导入学生绩点</el-button>
+                        <el-button slot="reference" type="primary" @click="importStudents" size="small" class="search-with-select">导入学生绩点</el-button>
                     </el-popover>
                 </el-col>
             </el-row>
 
             <!-- 表格部分 -->
-            <el-table :data="Students" style="width: 100%" size="mini">
+            <el-table :data="Students" style="width: 100%" size="small" class="common-table">
                 <el-table-column v-for="item in studentForm" :key="item.model" :prop="item.model" :label="item.label"
                     :width="item.width" />
             </el-table>
@@ -47,10 +47,10 @@
             <!-- 分页 -->
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                 :current-page="currentPage" :page-sizes="[5, 10, 20]" :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper" :total="totalStudents">
+                layout="total, sizes, prev, pager, next, jumper" :total="totalStudents" class="pagination">
             </el-pagination>
 
-        </el-card>
+<!--        </el-card>-->
 
 
 
@@ -270,5 +270,19 @@ export default {
     width: 45%;
     height: auto;
     margin-bottom: 2%;
+}
+.search-with-select{
+  //width: 140px;
+  margin-left: 8px;
+}
+.pagination{
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+}
+.common-table{
+  height: 500px;
+  position: relative;
+  overflow: auto;
 }
 </style>
