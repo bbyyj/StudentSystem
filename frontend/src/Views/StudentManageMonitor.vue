@@ -81,7 +81,7 @@
         isseraching: false,
         // 分页相关属性
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 10,
         totalStudents: 0,
       };
     },
@@ -126,9 +126,8 @@
           this.searchStudents(this.currentPage, this.pageSize);
         }
         else{
-          his.loadStudents(this.pageSize, this.currentPage);
+          this.loadStudents(this.pageSize, this.currentPage);
         }
-        t
       },
       // 处理当前页变化
       handleCurrentChange(currentPage) {
