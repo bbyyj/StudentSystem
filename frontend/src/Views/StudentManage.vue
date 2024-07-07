@@ -10,7 +10,7 @@
         </el-select>    
       </el-col>
       <el-col :span="4">
-        <el-input v-model="searchvalue" size="small" style="margin-left: 10px"placeholder="请输入查询内容" />
+        <el-input v-model="searchvalue" size="small" style="margin-left: 10px" placeholder="请输入查询内容" />
       </el-col>
       <el-col :span="2.5">
         <el-button @click="searchStudents(1, pageSize)" icon="el-icon-search" style="margin-left: 20px" size="small"> 查询</el-button>
