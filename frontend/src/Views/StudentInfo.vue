@@ -19,7 +19,7 @@
           </div>
         </el-form>
 
-        <hr>
+        <el-divider></el-divider>
 
         <h1>修改联系方式</h1>
 
@@ -41,7 +41,7 @@
         <el-button type="primary" style="margin-bottom: 5px;" @click="submitContactForm" size="small">提交</el-button>
 
 
-        <hr>
+        <el-divider></el-divider>
 
         <h1>修改密码</h1>
         <div class="wrapper">
@@ -268,7 +268,7 @@ import Cookie from 'js-cookie'
 }
 
 .elinput{
-  //max-width: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
 }
@@ -279,21 +279,11 @@ import Cookie from 'js-cookie'
 
 .blockitem{
     height: 70px;
-    width: calc(17% - 60px);
-    margin-bottom: 10px;
+    width: calc(28% - 60px);
+    margin-bottom: 15px;
     margin-right: 15px;
 }
 
-/* 移除最后一个块元素的右外边距，以避免整体右侧多出空白 */
-.blockitem:last-child {
-  margin-right: 0;
-}
 
-/* 辅助元素 让未满三个元素的行对齐 */
-.wrapper::after {
-  content: "";
-  width: calc(33.333% - 30px);
-  height: 0;
-}
 
 </style>
