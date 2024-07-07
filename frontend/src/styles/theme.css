@@ -102,31 +102,31 @@ html[data-theme="blue"] {
         background-color:#e0e5ed;
     }
     .el-pagination__total{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-pager .number:hover, .el-pager .number:active{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-pager .number{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .btn-prev:hover{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .btn-next:hover{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-pagination__jump{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-select-dropdown__item.selected{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-tabs__item.is-active, .el-tabs__item:hover{
-        color: #d3ccd6;
+        color: #afa4bd;
     }
     .el-tabs__active-bar{
-        background-color: #d3ccd6;
+        background-color: #afa4bd;
     }
     .el-button:focus, .el-button:hover {
         color: #afa4bd;
@@ -134,12 +134,12 @@ html[data-theme="blue"] {
         background-color: #fcf9f1;
     }
     .el-range-editor.is-active, .el-range-editor.is-active:hover, .el-select .el-input.is-focus .el-input__inner {
-        border-color: #d3ccd6;
+        border-color: #afa4bd;
     }
     .el-radio-button__orig-radio:checked+.el-radio-button__inner {
         color: #FFF;
-        background-color: #d3ccd6;
-        border-color: #d3ccd6;
+        background-color: #afa4bd;
+        border-color: #afa4bd;
     }
     
 }
