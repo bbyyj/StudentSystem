@@ -1,6 +1,6 @@
 <template>
     <div>
-    <el-card>
+<!--    <el-card>-->
       <!-- 搜索部分 -->
 <!--      <el-row style="margin-bottom: 20px;">-->
 <!--        <el-col :span="4">-->
@@ -26,7 +26,7 @@
       </el-input>
 
       <!-- 表格部分 -->
-      <el-table :data="Students" style="width: 100%" size="small">
+      <el-table :data="Students" style="width: 100%"  size="small" class="common-table">
           <el-table-column v-for="item in studentForm.items" 
           :key="item.fieldName" :prop="item.fieldName" :label="item.label" :width="item.width" />
   
@@ -43,7 +43,7 @@
         :total="totalStudents" size ="small" class="pagination">
       </el-pagination>
       
-    </el-card>
+<!--    </el-card>-->
     </div>
   </template>
   
@@ -237,6 +237,11 @@
   }
   .search-with-select2{
     width: 160px;
+  }
+  .common-table{
+    height: 500px;
+    position: relative;
+
   }
   </style>
   
